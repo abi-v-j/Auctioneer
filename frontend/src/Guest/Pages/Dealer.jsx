@@ -1,30 +1,77 @@
 import { Box, Button, Card, InputLabel, MenuItem, Select, Stack, FormControl, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 
-const CheckerRegistration = () => {
+const DealerRegistration = () => {
+    const [Name, setName] = useState("")
+    const [Email, setEmail] = useState("")
+    const [Password, setPassword] = useState("")
+    const [Contact, setContact] = useState("")
+    const [Photo, setPhoto] = useState("")
+    const [Proof, setProof] = useState("")
+    const [District, setDistrict] = useState("")
+    const [Place, setPlace] = useState("")
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        const data = {
+            Name,
+            Email,
+            Password,
+            Contact,
+            Proof,
+            Photo,
+            District,
+            Place,
+        }
+        axios.post('http://localhost:5000/Dealer', data).then((response) => {
+            console.log(response.data)
+            setName('')
+            setEmail('')
+            setPassword('')
+            setContact('')
+            setProof('')
+            setPhoto('')
+            setDistrict('')
+            setPlace('')
+        })
+    }
+
+
     return (
         <div>
-            <Box sx={{ width: '100%', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+
+                component={'form'}
+                onSubmit={handleSubmit}
+
+            >
 
                 <Card sx={{ p: 5, backgroundColor: 'lightblue' }}>
-                    <Typography>CheckerRegistration</Typography>
+                    <Typography>Dealer Registration</Typography>
                     <Stack>
-                        <TextField id="standard-basic" label="Name" variant="standard" />
+                        <TextField id="standard-basic" label="Name" variant="standard" 
+                        onChange={(event) => setName(event.target.value)} />
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Email" variant="standard" />
+                        <TextField id="standard-basic" label="Email" variant="standard" 
+                        onChange={(event) => setEmail(event.target.value)} />
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Photo" variant="standard" />
+                        <TextField id="standard-basic" label="Photo" variant="standard" 
+                        onChange={(event) => setPhoto(event.target.value)} />
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Contact" variant="standard" />
+                        <TextField id="standard-basic" label="Contact" variant="standard" 
+                        onChange={(event) => setContact(event.target.value)} />
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Password" variant="standard" />
+                        <TextField id="standard-basic" label="Password" variant="standard" 
+                        onChange={(event) => setPassword(event.target.value)} />
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Proof" variant="standard" />
+                        <TextField id="standard-basic" label="Proof" variant="standard" 
+                        onChange={(event) => setProof(event.target.value)} />
                     </Stack>
 
 
@@ -36,6 +83,7 @@ const CheckerRegistration = () => {
                                 id="demo-simple-select-standard"
 
                                 label="District"
+                                onChange={(event) => setDistrict(event.target.value)}
                             >
                                 <MenuItem value="">
                                     <em>None</em>
@@ -54,6 +102,7 @@ const CheckerRegistration = () => {
                                 id="demo-simple-select-standard"
 
                                 label="Place"
+                                onChange={(event) => setPlace(event.target.value)}
                             >
                                 <MenuItem value="">
                                     <em>None</em>
@@ -65,8 +114,8 @@ const CheckerRegistration = () => {
                         </FormControl>
                     </Stack>
 
-                    <Stack spacing={5} sx={{mt:3}}direction='row'>
-                        <Button sx={{ px: 5 }} variant="contained">Save</Button>
+                    <Stack spacing={5} sx={{ mt: 3 }} direction='row'>
+                        <Button sx={{ px: 5 }} type='submit' variant="contained">Submit</Button>
 
                     </Stack>
 
@@ -76,4 +125,4 @@ const CheckerRegistration = () => {
     )
 }
 
-export default CheckerRegistration
+export default DealerRegistration

@@ -8,6 +8,7 @@ const State = () => {
       event.preventDefault()
       const data = {
          stateName,
+         
       }
       axios.post('http://localhost:5000/State', data).then((response) => {
          console.log(response.data)

@@ -231,6 +231,31 @@ app.delete('/User/:id', async (req, res) => {
    }
 })
 
+
+//User update
+
+app.put("/updateUser/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { name, email, password } = req.body;
+      const updatedUser = await User.findByIdAndUpdate(
+         id,
+         {
+            name, email, password, photo, contact, proof,
+         },
+         { new: true }
+      );
+      res.json(updatedUser)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
 //Dealer Schema
 
 const dealerSchemastructure = new mongoose.Schema({
@@ -325,6 +350,31 @@ app.delete('/Dealer/:id', async (req, res) => {
    }
 })
 
+//Dealer update
+
+app.put("/updateDealer/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { name, email, password } = req.body;
+      const updatedDealer = await Dealer.findByIdAndUpdate(
+         id,
+         {
+            name, email, password, photo, contact, proof,
+         },
+         { new: true }
+      );
+      res.json(updatedDealer)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
+
 //Lot Schema
 
 const lotSchemastructure = new mongoose.Schema({
@@ -384,6 +434,38 @@ app.get('/Lot', async (req, res) => {
    res.send({ lot })
 })
 
+
+//Lot update
+
+app.put("/updateLot/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { name, price, minprice, antique, quantity, datetime } = req.body;
+      const updatedLot = await Lot.findByIdAndUpdate(
+         id,
+         {
+            name,
+            price,
+            minprice,
+            antique,
+            quantity,
+            datetime,
+         },
+         { new: true }
+      );
+      res.json(updatedLot)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
+
+
 //AuctionHead Schema
 
 const auctionheadSchemastructure = new mongoose.Schema({
@@ -432,6 +514,35 @@ app.get('/Auctionhead', async (req, res) => {
    const auctionhead = await Auctionhead.find()
    res.send({ auctionhead })
 })
+
+
+//Auction head update
+
+app.put("/updateAuctionhead/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { price, token, date, } = req.body;
+      const updatedAuctionhead = await Auctionhead.findByIdAndUpdate(
+         id,
+         {
+            price,
+            token,
+            date,
+         },
+         { new: true }
+      );
+      res.json(updatedAuctionhead)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
+
 
 //Category Schema
 
@@ -560,6 +671,31 @@ app.get('/Feedback', async (req, res) => {
    res.send({ feedback })
 })
 
+//Feesback update
+
+app.put("/updateFeedback/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { content } = req.body;
+      const updatedFeedback = await Feedback.findByIdAndUpdate(
+         id,
+         {
+            content
+         },
+         { new: true }
+      );
+      res.json(updatedFeedback)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
+
 //Complaint Schema
 
 const complaintSchemastructure = new mongoose.Schema({
@@ -599,6 +735,31 @@ app.get('/Complaint', async (req, res) => {
    const complaint = await Complaint.find()
    res.send({ complaint })
 })
+
+//Complaint update
+
+app.put("/updateComplaint/:id", async (req, res) => {
+   const id = req.params.id
+   try {
+      const { content, replay } = req.body;
+      const updatedComplaint = await Complaint.findByIdAndUpdate(
+         id,
+         {
+            content, replay
+         },
+         { new: true }
+      );
+      res.json(updatedComplaint)
+   }
+   catch (err) {
+      console.error(err.message);
+      res.status(500).send("server error");
+
+
+
+   }
+});
+
 
 //State Schema
 
@@ -652,7 +813,7 @@ const districtSchemastructure = new mongoose.Schema({
 
 const District = mongoose.model('districtSchema', districtSchemastructure)
 app.post('/District', async (req, res) => {
-   const { districtName, stateId  } = req.body
+   const { districtName, stateId } = req.body
    try {
       let district = new District({
          districtName,
@@ -672,17 +833,10 @@ app.post('/District', async (req, res) => {
 
 app.get('/District/:Id', async (req, res) => {
    const Id = req.params.Id
-   const district = await District.find({stateId:Id})
+   const district = await District.find({ stateId: Id })
    res.send({ district })
 })
 
-// select District
-
-app.get('/District', async (req, res) => {
-   const Id = req.params.Id
-   const district = await District.find()
-   res.send({ district })
-})
 
 //Place Schema
 
@@ -718,7 +872,7 @@ app.post('/Place', async (req, res) => {
    }
 })
 
-// select Lot
+// select Place
 
 app.get('/Place', async (req, res) => {
    const place = await Place.find()
@@ -762,5 +916,5 @@ app.get('/Gallery', async (req, res) => {
 
 
 app.get('/Login', async (req, res) => {
-  
+
 })
