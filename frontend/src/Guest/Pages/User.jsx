@@ -10,9 +10,16 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Registration = () => {
+  const [Name, setName] = useState("")
+  const [Email, setEmail] = useState("")
+  const [Password, setPassword] = useState("")
+  const [Contact, setContact] = useState("")
+  const [Proof, setProof] = useState("")
+  const [Photo, setPhoto] = useState("")
+
   return (
     <div>
       <Box
@@ -27,10 +34,10 @@ const Registration = () => {
         <Card sx={{ p: 5, backgroundColor: 'lightblue', width: '20vw' }}>
           <Typography>User Registration</Typography>
           <Stack sx={{ mt: 1 }}>
-            <TextField id="standard-basic" label="Name" variant="standard" />
+            <TextField id="standard-basic" label="Name" variant="standard" onChange={(event) => setName(event.target.value)} />
           </Stack>
           <Stack sx={{ mt: 1 }}>
-            <TextField id="standard-basic" label="Email" variant="standard" />
+            <TextField id="standard-basic" label="Email" variant="standard" onChange={(event) => setEmail(event.target.value)} />
           </Stack>
           <Stack sx={{ mt: 1 }}>
             <TextField id="standard-basic" label="Photo" variant="standard" />
