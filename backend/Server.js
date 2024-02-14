@@ -1,15 +1,11 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const argon2 = require('argon2')
 const { createServer } = require('http')
 const { Server } = require('socket.io')
 const mongoose = require('mongoose')
 const multer = require('multer')
-const path = require('path')
-const fs = require('fs')
 
-const { connect, Schema, model } = require('mongoose')
 
 const app = express()
 const port = 5000
@@ -20,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://auctioneer:auctioneer%40123@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://auctioneer123:auctioneer%40123@cluster0.4teukan.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -32,7 +28,7 @@ const io = new Server(httpServer, {
 httpServer.listen(port, async () => {
    console.log('server is Running')
    try {
-      await connect(db)
+      await mongoose.connect(db)
       console.log('DB connection established')
    } catch (err) {
       console.error(err.message)
@@ -86,8 +82,8 @@ const Admin = mongoose.model('adminSchema', adminSchemaStucture)
 // Admin Insert
 
 app.post('/Admin', async (req, res) => {
-   const { name, email, password } = req.body
    try {
+      const { name, email, password } = req.body
       // let admin = await Admin.findOne({ email })
 
       // if (admin) {
