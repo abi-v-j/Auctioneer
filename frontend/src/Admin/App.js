@@ -10,6 +10,8 @@ import Place from "./Pages/Place";
 import State from "./Pages/State";
 import Sidebar from "./components/sidebar/Sidebar";
 import Navbar from "./components/navbar/Navbar";
+import ViewLot from "./Pages/ViewLot";
+import { Box } from "@mui/material";
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
@@ -20,17 +22,18 @@ function App() {
         <Sidebar />
         <div className="homeContainer">
           <Navbar />
-          <div>
+          <Box sx={{m:5}}>
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path=":userId" element={<Single />} />
+            {/* <Route path=":userId" element={<Single />} /> */}
             <Route path='/Category' element={<Category />} />
             <Route path='/District' element={<District />} />
             <Route path='/Place' element={<Place />} />
             <Route path='/State' element={<State />} />
+            <Route path='/ViewLot' element={<ViewLot />} />
           </Routes>
-          </div>
+          </Box>
         </div>
       </div>
     </div>

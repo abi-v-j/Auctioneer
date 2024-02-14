@@ -5,6 +5,9 @@ const argon2 = require('argon2')
 const { createServer } = require('http')
 const { Server } = require('socket.io')
 const mongoose = require('mongoose')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs')
 
 const { connect, Schema, model } = require('mongoose')
 
@@ -14,6 +17,7 @@ const port = 5000
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static('./public'))
 
 const db =
    'mongodb+srv://auctioneer:auctioneer%40123@cluster0.4teukan.mongodb.net/dbAuctioneer'
@@ -43,6 +47,19 @@ io.on('connection', (socket) => {
          status: 'ok',
       })
    })
+})
+
+const PATH = './public/images'
+const upload = multer({
+   storage: multer.diskStorage({
+      destination: PATH,
+      filename: function (req, file, cb) {
+         let origialname = file.originalname
+         let ext = origialname.split('.').pop()
+         let filename = origialname.split('.').slice(0, -1).join('.')
+         cb(null, filename + '.' + ext)
+      },
+   }),
 })
 
 //Admin Schema
@@ -170,39 +187,60 @@ const userSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
+   placeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'districtSchema',
+      required: true,
+   },
 })
 // Insert User
 const User = mongoose.model('userSchema', userSchemastructure)
 
-app.post('/User', async (req, res) => {
-   const { name, email, password, photo, contact, proof, status } = req.body
-   try {
-      // let admin = await User.findOne({ email })
+app.post(
+   '/User',
+   upload.fields([
+      { name: 'Photo', maxCount: 1 },
+      { name: 'Proof', maxCount: 1 },
+   ]),
+   async (req, res) => {
+      const { Name, Email, Password, Contact, Place } = req.body
+      try {
+         // let admin = await User.findOne({ email })
 
-      // if (user) {
-      //     return res
-      //         .status(400)
-      //         .json({ errors: [{ msg: 'User already exists' }] })
-      // }
+         // if (user) {
+         //     return res
+         //         .status(400)
+         //         .json({ errors: [{ msg: 'User already exists' }] })
+         // }
+         // if (!req.files || !req.files['photo'] || !req.files['proof']) {
+         //    return res.status(400).json({
+         //       errors: [{ msg: 'Photo and proof files are required' }],
+         //    })
+         // }
 
-      let user = new User({
-         name,
-         email,
-         password,
-         photo,
-         contact,
-         proof,
-         status,
-      })
+         var fileValue = JSON.parse(JSON.stringify(req.files))
+         var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Photo[0].filename}`
+         var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Proof[0].filename}`
 
-      await user.save()
+         let user = new User({
+            name: Name,
+            email: Email,
+            password: Password,
+            photo: profileimgsrc,
+            contact: Contact,
+            proof: proofimgsrc,
+            placeId: Place,
+         })
 
-      res.json({ message: 'user inserted successfully' })
-   } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
+         await user.save()
+
+         res.json({ message: 'user inserted successfully' })
+      } catch (err) {
+         console.error(err.message)
+         res.status(500).send('Server error')
+      }
    }
-})
+)
 
 // select User
 
@@ -231,61 +269,60 @@ app.delete('/User/:id', async (req, res) => {
    }
 })
 
-
 //User update
 
-app.put("/updateUser/:id", async (req, res) => {
+app.put('/updateUser/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, email, password } = req.body;
+      const { name, email, password } = req.body
       const updatedUser = await User.findByIdAndUpdate(
          id,
          {
-            name, email, password, photo, contact, proof,
+            name,
+            email,
+            password,
+            photo,
+            contact,
+            proof,
          },
          { new: true }
-      );
+      )
       res.json(updatedUser)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-
-
-
-   }
-});
+})
 
 //Dealer Schema
 
 const dealerSchemastructure = new mongoose.Schema({
-   name: {
+   Name: {
       type: String,
       require: true,
    },
-   email: {
+   Email: {
       type: String,
       require: true,
    },
-   password: {
+   Password: {
       type: String,
       require: true,
    },
-   contact: {
+   Contact: {
       type: String,
       require: true,
    },
-   proof: {
+   proofimgsrc: {
       type: String,
       require: true,
    },
-   photo: {
+   profileimgsrc: {
       type: String,
       require: true,
    },
    status: {
       type: String,
-      require: true,
    },
 })
 
@@ -293,8 +330,12 @@ const dealerSchemastructure = new mongoose.Schema({
 
 const Dealer = mongoose.model('dealerSchema', dealerSchemastructure)
 
-app.post('/Dealer', async (req, res) => {
-   const { name, email, password, photo, contact, proof, status } = req.body
+app.post('/Dealer',
+upload.fields([
+   { name: 'Photo', maxCount: 1 },
+   { name: 'Proof', maxCount: 1 },
+]), async (req, res) => {
+   const { Name, Email, Password, Contact } = req.body
    try {
       // let dealer = await Dealer.findOne({ email })
 
@@ -304,14 +345,17 @@ app.post('/Dealer', async (req, res) => {
       //         .json({ errors: [{ msg: 'dealer already exists' }] })
       // }
 
+      var fileValue = JSON.parse(JSON.stringify(req.files))
+      var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Photo[0].filename}`
+      var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Proof[0].filename}`
+
       let dealer = new Dealer({
-         name,
-         email,
-         password,
-         photo,
-         contact,
-         proof,
-         status,
+         Name,
+         Email,
+         Password,
+         profileimgsrc,
+         Contact,
+         proofimgsrc,
       })
 
       await dealer.save()
@@ -352,28 +396,28 @@ app.delete('/Dealer/:id', async (req, res) => {
 
 //Dealer update
 
-app.put("/updateDealer/:id", async (req, res) => {
+app.put('/updateDealer/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, email, password } = req.body;
+      const { name, email, password } = req.body
       const updatedDealer = await Dealer.findByIdAndUpdate(
          id,
          {
-            name, email, password, photo, contact, proof,
+            name,
+            email,
+            password,
+            photo,
+            contact,
+            proof,
          },
          { new: true }
-      );
+      )
       res.json(updatedDealer)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-
-
-
-   }
-});
-
+})
 
 //Lot Schema
 
@@ -390,7 +434,7 @@ const lotSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
-   antique: {
+   antiqueimgsrc: {
       type: String,
       require: true,
    },
@@ -407,14 +451,20 @@ const lotSchemastructure = new mongoose.Schema({
 
 const Lot = mongoose.model('lotSchema', lotSchemastructure)
 
-app.post('/Lot', async (req, res) => {
-   const { name, price, minprice, antique, quantity, datetime } = req.body
+app.post('/Lot',
+upload.fields([
+   { name: 'antique', maxCount: 1 },
+]), async (req, res) => {
+
+   var fileValue = JSON.parse(JSON.stringify(req.files))
+   var antiqueimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
+
+   const { name, minprice, quantity, datetime } = req.body
    try {
       let lot = new Lot({
          name,
-         price,
          minprice,
-         antique,
+         antiqueimgsrc,
          quantity,
          datetime,
       })
@@ -434,13 +484,12 @@ app.get('/Lot', async (req, res) => {
    res.send({ lot })
 })
 
-
 //Lot update
 
-app.put("/updateLot/:id", async (req, res) => {
+app.put('/updateLot/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, price, minprice, antique, quantity, datetime } = req.body;
+      const { name, price, minprice, antique, quantity, datetime } = req.body
       const updatedLot = await Lot.findByIdAndUpdate(
          id,
          {
@@ -452,19 +501,39 @@ app.put("/updateLot/:id", async (req, res) => {
             datetime,
          },
          { new: true }
-      );
+      )
       res.json(updatedLot)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
+})
 
 
+//Lot update
 
+app.put('/acceptLot/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      const { name, price, minprice, antique, quantity, datetime } = req.body
+      const updatedLot = await Lot.findByIdAndUpdate(
+         id,
+         {
+            name,
+            price,
+            minprice,
+            antique,
+            quantity,
+            datetime,
+         },
+         { new: true }
+      )
+      res.json(updatedLot)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-});
-
-
+})
 
 //AuctionHead Schema
 
@@ -515,13 +584,12 @@ app.get('/Auctionhead', async (req, res) => {
    res.send({ auctionhead })
 })
 
-
 //Auction head update
 
-app.put("/updateAuctionhead/:id", async (req, res) => {
+app.put('/updateAuctionhead/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { price, token, date, } = req.body;
+      const { price, token, date } = req.body
       const updatedAuctionhead = await Auctionhead.findByIdAndUpdate(
          id,
          {
@@ -530,19 +598,13 @@ app.put("/updateAuctionhead/:id", async (req, res) => {
             date,
          },
          { new: true }
-      );
+      )
       res.json(updatedAuctionhead)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-
-
-
-   }
-});
-
-
+})
 
 //Category Schema
 
@@ -673,28 +735,23 @@ app.get('/Feedback', async (req, res) => {
 
 //Feesback update
 
-app.put("/updateFeedback/:id", async (req, res) => {
+app.put('/updateFeedback/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { content } = req.body;
+      const { content } = req.body
       const updatedFeedback = await Feedback.findByIdAndUpdate(
          id,
          {
-            content
+            content,
          },
          { new: true }
-      );
+      )
       res.json(updatedFeedback)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-
-
-
-   }
-});
-
+})
 
 //Complaint Schema
 
@@ -738,28 +795,24 @@ app.get('/Complaint', async (req, res) => {
 
 //Complaint update
 
-app.put("/updateComplaint/:id", async (req, res) => {
+app.put('/updateComplaint/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { content, replay } = req.body;
+      const { content, replay } = req.body
       const updatedComplaint = await Complaint.findByIdAndUpdate(
          id,
          {
-            content, replay
+            content,
+            replay,
          },
          { new: true }
-      );
+      )
       res.json(updatedComplaint)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
    }
-   catch (err) {
-      console.error(err.message);
-      res.status(500).send("server error");
-
-
-
-   }
-});
-
+})
 
 //State Schema
 
@@ -804,7 +857,7 @@ const districtSchemastructure = new mongoose.Schema({
    },
    stateId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "stateSchema",
+      ref: 'stateSchema',
       required: true,
    },
 })
@@ -817,7 +870,7 @@ app.post('/District', async (req, res) => {
    try {
       let district = new District({
          districtName,
-         stateId
+         stateId,
       })
 
       await district.save()
@@ -837,7 +890,6 @@ app.get('/District/:Id', async (req, res) => {
    res.send({ district })
 })
 
-
 //Place Schema
 
 const placeSchemastructure = new mongoose.Schema({
@@ -847,7 +899,7 @@ const placeSchemastructure = new mongoose.Schema({
    },
    districtId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "districtSchema",
+      ref: 'districtSchema',
       required: true,
    },
 })
@@ -860,7 +912,7 @@ app.post('/Place', async (req, res) => {
    try {
       let place = new Place({
          placeName,
-         districtId
+         districtId,
       })
 
       await place.save()
@@ -876,6 +928,14 @@ app.post('/Place', async (req, res) => {
 
 app.get('/Place', async (req, res) => {
    const place = await Place.find()
+   res.send({ place })
+})
+
+// select Place
+
+app.get('/Place/:Id', async (req, res) => {
+   const Id = req.params.Id
+   const place = await Place.find({ districtId: Id })
    res.send({ place })
 })
 
@@ -914,7 +974,34 @@ app.get('/Gallery', async (req, res) => {
    res.send({ gallery })
 })
 
+app.post('/Login', async (req, res) => {
+   try {
+      const { email, password } = req.body
+      const user = await User.findOne({ email })
+      const dealer = await Dealer.findOne({ Email:email })
+      const admin = await Admin.findOne({ email })
 
-app.get('/Login', async (req, res) => {
-
+      if (!user && !dealer && !admin) {
+         return res.status(400).json({ error: 'Invalid credential' })
+      }
+      if (user) {
+         res.send({
+            id: user._id,
+            login: 'user',
+         })
+      } else if (dealer) {
+         res.send({
+            id: dealer._id,
+            login: 'dealer',
+         })
+      } else if (admin) {
+         res.send({
+            id: admin._id,
+            login: 'admin',
+         })
+      }
+      else{
+     console.log("hey ");
+      }
+   } catch (error) {}
 })
