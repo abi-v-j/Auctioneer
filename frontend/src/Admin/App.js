@@ -12,7 +12,7 @@ import Sidebar from "./components/sidebar/Sidebar";
 import Navbar from "./components/navbar/Navbar";
 import ViewLot from "./Pages/ViewLot";
 import { Box } from "@mui/material";
-
+import AssignAuction from "./Pages/AssignAuction";
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -32,6 +32,7 @@ function App() {
             <Route path='/Place' element={<Place />} />
             <Route path='/State' element={<State />} />
             <Route path='/ViewLot' element={<ViewLot />} />
+            <Route path='/AssignAuction/:id' element={<AssignAuction />} />
           </Routes>
           </Box>
         </div>

@@ -5,7 +5,7 @@ const { createServer } = require('http')
 const { Server } = require('socket.io')
 const mongoose = require('mongoose')
 const multer = require('multer')
-
+const moment = require('moment')
 
 const app = express()
 const port = 5000
@@ -326,42 +326,45 @@ const dealerSchemastructure = new mongoose.Schema({
 
 const Dealer = mongoose.model('dealerSchema', dealerSchemastructure)
 
-app.post('/Dealer',
-upload.fields([
-   { name: 'Photo', maxCount: 1 },
-   { name: 'Proof', maxCount: 1 },
-]), async (req, res) => {
-   const { Name, Email, Password, Contact } = req.body
-   try {
-      // let dealer = await Dealer.findOne({ email })
+app.post(
+   '/Dealer',
+   upload.fields([
+      { name: 'Photo', maxCount: 1 },
+      { name: 'Proof', maxCount: 1 },
+   ]),
+   async (req, res) => {
+      const { Name, Email, Password, Contact } = req.body
+      try {
+         // let dealer = await Dealer.findOne({ email })
 
-      // if (dealer) {
-      //     return res
-      //         .status(400)
-      //         .json({ errors: [{ msg: 'dealer already exists' }] })
-      // }
+         // if (dealer) {
+         //     return res
+         //         .status(400)
+         //         .json({ errors: [{ msg: 'dealer already exists' }] })
+         // }
 
-      var fileValue = JSON.parse(JSON.stringify(req.files))
-      var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Photo[0].filename}`
-      var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Proof[0].filename}`
+         var fileValue = JSON.parse(JSON.stringify(req.files))
+         var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Photo[0].filename}`
+         var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.Proof[0].filename}`
 
-      let dealer = new Dealer({
-         Name,
-         Email,
-         Password,
-         profileimgsrc,
-         Contact,
-         proofimgsrc,
-      })
+         let dealer = new Dealer({
+            Name,
+            Email,
+            Password,
+            profileimgsrc,
+            Contact,
+            proofimgsrc,
+         })
 
-      await dealer.save()
+         await dealer.save()
 
-      res.json({ message: 'dealer inserted successfully' })
-   } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
+         res.json({ message: 'dealer inserted successfully' })
+      } catch (err) {
+         console.error(err.message)
+         res.status(500).send('Server error')
+      }
    }
-})
+)
 
 // select Dealer
 
@@ -447,32 +450,32 @@ const lotSchemastructure = new mongoose.Schema({
 
 const Lot = mongoose.model('lotSchema', lotSchemastructure)
 
-app.post('/Lot',
-upload.fields([
-   { name: 'antique', maxCount: 1 },
-]), async (req, res) => {
+app.post(
+   '/Lot',
+   upload.fields([{ name: 'antique', maxCount: 1 }]),
+   async (req, res) => {
+      var fileValue = JSON.parse(JSON.stringify(req.files))
+      var antiqueimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
 
-   var fileValue = JSON.parse(JSON.stringify(req.files))
-   var antiqueimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
+      const { name, minprice, quantity, datetime } = req.body
+      try {
+         let lot = new Lot({
+            name,
+            minprice,
+            antiqueimgsrc,
+            quantity,
+            datetime,
+         })
 
-   const { name, minprice, quantity, datetime } = req.body
-   try {
-      let lot = new Lot({
-         name,
-         minprice,
-         antiqueimgsrc,
-         quantity,
-         datetime,
-      })
+         await lot.save()
 
-      await lot.save()
-
-      res.json({ message: 'lot inserted successfully' })
-   } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
+         res.json({ message: 'lot inserted successfully' })
+      } catch (err) {
+         console.error(err.message)
+         res.status(500).send('Server error')
+      }
    }
-})
+)
 // select Lot
 
 app.get('/Lot', async (req, res) => {
@@ -505,25 +508,29 @@ app.put('/updateLot/:id', async (req, res) => {
    }
 })
 
-
 //Lot update
 
 app.put('/acceptLot/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, price, minprice, antique, quantity, datetime } = req.body
-      const updatedLot = await Lot.findByIdAndUpdate(
-         id,
-         {
-            name,
-            price,
-            minprice,
-            antique,
-            quantity,
-            datetime,
-         },
-         { new: true }
-      )
+      let lot = await Lot.findOne({ _id: id })
+      lot.__v = 1
+      const updatedLot = await Lot.findByIdAndUpdate(id, lot, { new: true })
+      res.json(updatedLot)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
+//Lot update
+
+app.put('/rejectLot/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      let lot = await Lot.findOne({ _id: id })
+      lot.__v = 2
+      const updatedLot = await Lot.findByIdAndUpdate(id, lot, { new: true })
       res.json(updatedLot)
    } catch (err) {
       console.error(err.message)
@@ -536,7 +543,6 @@ app.put('/acceptLot/:id', async (req, res) => {
 const auctionheadSchemastructure = new mongoose.Schema({
    token: {
       type: String,
-      require: true,
    },
    date: {
       type: String,
@@ -545,6 +551,11 @@ const auctionheadSchemastructure = new mongoose.Schema({
    price: {
       type: String,
       require: true,
+   },
+   lotId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'lotSchema',
+      required: true,
    },
 })
 
@@ -556,17 +567,41 @@ const Auctionhead = mongoose.model(
 )
 
 app.post('/Auctionhead', async (req, res) => {
-   const { token, date, price } = req.body
    try {
-      let auctionhead = new Auctionhead({
-         price,
-         token,
-         date,
+      const { Id } = req.body
+
+      // Find the latest assigned day
+      const latestAssignedDay = await Auctionhead.findOne({})
+         .sort({ date: -1 }) // Sort by date in descending order to get the latest date
+         .select('date')
+
+      // If no records found, set the latest assigned day to today
+      let dateToAssign = latestAssignedDay
+         ? moment(latestAssignedDay.date)
+         : moment()
+
+      // Add a day to the latest assigned day
+      dateToAssign.add(1, 'day')
+
+      // If the day to assign is Sunday, move to the next day
+      if (dateToAssign.day() === 0) {
+         dateToAssign.add(1, 'day')
+      }
+      lotCount = await Auctionhead.countDocuments({
+         date: dateToAssign.format('YYYY-MM-DD')
+      });
+
+      // Create a new Auctionhead document with the chosen date
+      const auctionhead = new Auctionhead({
+         lotId: Id,
+         date: dateToAssign.format('YYYY-MM-DD'),
+         token:lotCount + 1
       })
 
+      // Save the Auctionhead document
       await auctionhead.save()
 
-      res.json({ message: 'auctionhead  inserted successfully' })
+      res.json({ message: 'Auctionhead inserted successfully' })
    } catch (err) {
       console.error(err.message)
       res.status(500).send('Server error')
@@ -974,7 +1009,7 @@ app.post('/Login', async (req, res) => {
    try {
       const { email, password } = req.body
       const user = await User.findOne({ email })
-      const dealer = await Dealer.findOne({ Email:email })
+      const dealer = await Dealer.findOne({ Email: email })
       const admin = await Admin.findOne({ email })
 
       if (!user && !dealer && !admin) {
@@ -995,9 +1030,8 @@ app.post('/Login', async (req, res) => {
             id: admin._id,
             login: 'admin',
          })
-      }
-      else{
-     console.log("hey ");
+      } else {
+         console.log('hey ')
       }
    } catch (error) {}
 })
