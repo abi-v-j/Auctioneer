@@ -47,7 +47,7 @@ const District = () => {
          component={'form'}
          onSubmit={handleSubmit}
       >
-         <Card sx={{ p: 5, backgroundColor: 'lightblue' }}>
+         <Card sx={{ p: 5, backgroundColor: 'aliceblue' }}>
             <Typography variant='h5'>District</Typography>
             <Stack
                spacing={5}
@@ -93,7 +93,7 @@ const District = () => {
                   value={districtName}
                />
                <Button
-                  sx={{ px: 5 }}
+                  sx={{ px: 5}}
                   variant='contained'
                   type='submit'
                >

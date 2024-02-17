@@ -106,7 +106,7 @@ const Registration = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', width: '20vw' }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: '20vw' }}>
                <Typography>User Registration</Typography>
                <Stack sx={{ mt: 1 }}>
                   <TextField
