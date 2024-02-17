@@ -1,31 +1,27 @@
+import axios from "axios";
 import Post from "../post/Post";
 import "./posts.scss";
+import { useEffect, useState } from "react";
 
 const Posts = () => {
-  //TEMPORARY
-  const posts = [
-    {
-      id: 1,
-      name: "John Doe",
-      userId: 1,
-      profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-      img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      userId: 2,
-      profilePic:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      desc: "Tenetur iste voluptates dolorem rem commodi voluptate pariatur, voluptatum, laboriosam consequatur enim nostrum cumque! Maiores a nam non adipisci minima modi tempore.",
-    },
-  ];
+  const [rows, setRows] = useState([])
 
+
+  const fetchLot = () => {
+    axios.get('http://localhost:5000/Auctionhead').then((response) => {
+       console.log(response.data.auctionhead)
+       setRows(response.data.auctionhead)
+    })
+ }
+
+ useEffect(() => {
+  fetchLot()
+}, [])
+
+  
   return <div className="posts">
-    {posts.map(post=>(
-      <Post post={post} key={post.id}/>
+    {rows && rows.map((post,key)=>(
+      <Post post={post} key={key}/>
     ))}
   </div>;
 };

@@ -3,12 +3,14 @@ import { Route, Routes } from 'react-router-dom';
 
 import MyProfile from './Pages/MyProfile';
 import AddLot from './Pages/AddLot';
+import AddLotImages from './Pages/AddLotImages';
 
 const App = () => {
     return (
         <Routes>
             <Route path='/MyProfile' element={<MyProfile />} />
             <Route path='/AddLot' element={<AddLot />} />
+            <Route path='/AddImage/:Id' element={<AddLotImages />} />
         </Routes>
     )
 }

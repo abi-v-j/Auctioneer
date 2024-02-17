@@ -19,22 +19,22 @@ const Post = ({ post }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.profilePic} alt="" />
+            <img src={post.lotId.antiqueimgsrc} alt="" />
             <div className="details">
-              <Link
+              {/* <Link
                 to={`/profile/${post.userId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <span className="name">{post.name}</span>
-              </Link>
+              > */}
+                <span className="name">{post.lotId.name}</span>
+              {/* </Link> */}
               <span className="date">1 min ago</span>
             </div>
           </div>
           <MoreHorizIcon />
         </div>
         <div className="content">
-          <p>{post.desc}</p>
-          <img src={post.img} alt="" />
+          <p>{post.lotId.quantity}</p>
+          <img src={post.lotId.antiqueimgsrc} alt="" />
         </div>
         <div className="info">
           <div className="item">

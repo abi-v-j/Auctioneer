@@ -445,6 +445,11 @@ const lotSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
+   dealerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'dealerSchema',
+      required: true,
+   },
 })
 //Insert lot
 
@@ -457,7 +462,7 @@ app.post(
       var fileValue = JSON.parse(JSON.stringify(req.files))
       var antiqueimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
 
-      const { name, minprice, quantity, datetime } = req.body
+      const { name, minprice, quantity, datetime, dealerId } = req.body
       try {
          let lot = new Lot({
             name,
@@ -465,6 +470,7 @@ app.post(
             antiqueimgsrc,
             quantity,
             datetime,
+            dealerId,
          })
 
          await lot.save()
@@ -477,6 +483,11 @@ app.post(
    }
 )
 // select Lot
+
+app.get('/LotVerification', async (req, res) => {
+   const lot = await Lot.find({ __v: 0 })
+   res.send({ lot })
+})
 
 app.get('/Lot', async (req, res) => {
    const lot = await Lot.find()
@@ -574,28 +585,30 @@ app.post('/Auctionhead', async (req, res) => {
       const latestAssignedDay = await Auctionhead.findOne({})
          .sort({ date: -1 }) // Sort by date in descending order to get the latest date
          .select('date')
-
-      // If no records found, set the latest assigned day to today
+      // If no records found, set the latest assigned day to tomorrow
       let dateToAssign = latestAssignedDay
          ? moment(latestAssignedDay.date)
-         : moment()
+         : moment().add(1, 'day')
+
+      const lotCount = await Auctionhead.countDocuments({
+         date: dateToAssign.format('YYYY-MM-DD'),
+      })
 
       // Add a day to the latest assigned day
-      dateToAssign.add(1, 'day')
+      if (lotCount === 9) {
+         dateToAssign.add(1, 'day')
+      }
 
       // If the day to assign is Sunday, move to the next day
       if (dateToAssign.day() === 0) {
          dateToAssign.add(1, 'day')
       }
-      lotCount = await Auctionhead.countDocuments({
-         date: dateToAssign.format('YYYY-MM-DD')
-      });
 
       // Create a new Auctionhead document with the chosen date
       const auctionhead = new Auctionhead({
          lotId: Id,
          date: dateToAssign.format('YYYY-MM-DD'),
-         token:lotCount + 1
+         token: lotCount,
       })
 
       // Save the Auctionhead document
@@ -611,7 +624,7 @@ app.post('/Auctionhead', async (req, res) => {
 // select Auction Head
 
 app.get('/Auctionhead', async (req, res) => {
-   const auctionhead = await Auctionhead.find()
+   const auctionhead = await Auctionhead.find().populate('lotId')
    res.send({ auctionhead })
 })
 
@@ -973,30 +986,43 @@ app.get('/Place/:Id', async (req, res) => {
 //Gallery Schema
 
 const gallerySchemastructure = new mongoose.Schema({
-   image: {
+   lotImgsrc: {
       type: String,
       require: true,
+   },
+   lotId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'lotSchema',
+      required: true,
    },
 })
 
 //Insert gallery
 
 const Gallery = mongoose.model('gallerySchema', gallerySchemastructure)
-app.post('/Gallery', async (req, res) => {
-   const { image } = req.body
-   try {
-      let gallery = new Gallery({
-         image,
-      })
+app.post(
+   '/Gallery',
+   upload.fields([{ name: 'lotImg', maxCount: 1 }]),
+   async (req, res) => {
+      var fileValue = JSON.parse(JSON.stringify(req.files))
+      var lotImgsrc = `http://127.0.0.1:${port}/images/${fileValue.lotImg[0].filename}`
 
-      await gallery.save()
+      const { lotId } = req.body
+      try {
+         let gallery = new Gallery({
+            lotImgsrc,
+            lotId,
+         })
 
-      res.json({ message: 'gallery inserted successfully' })
-   } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
+         await gallery.save()
+
+         res.json({ message: 'gallery inserted successfully' })
+      } catch (err) {
+         console.error(err.message)
+         res.status(500).send('Server error')
+      }
    }
-})
+)
 
 // select Gallery
 

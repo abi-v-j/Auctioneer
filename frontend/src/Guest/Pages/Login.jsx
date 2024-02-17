@@ -14,12 +14,14 @@ const Login = () => {
       }
       axios.post('http://localhost:5000/Login', data).then((response) => {
          const data = response.data
-         sessionStorage.setItem('Id', data.id)
          if (data.login === 'admin') {
+            sessionStorage.setItem('aId', data.id)
             navigate('../../Admin')
          } else if (data.login === 'user') {
+            sessionStorage.setItem('uId', data.id)
             navigate('../../User')
          } else if (data.login === 'dealer') {
+            sessionStorage.setItem('dId', data.id)
             navigate('../../Dealer')
          }
       })

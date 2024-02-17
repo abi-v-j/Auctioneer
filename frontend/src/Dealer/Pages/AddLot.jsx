@@ -1,6 +1,11 @@
-import { Box, Button, Card, Stack, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { Avatar, Box, Button, Card, Stack, TextField } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { DataGrid } from '@mui/x-data-grid'
+import { Link } from 'react-router-dom'
+
+
+
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import styled from '@emotion/styled';
 
@@ -17,11 +22,65 @@ const VisuallyHiddenInput = styled('input')({
    width: 1,
 })
 
+
 const AddLot = () => {
    const [Name, setName] = useState('')
    const [Price, setPrice] = useState('')
    const [Antique, setAntique] = useState('')
    const [Quantity, setQuantity] = useState('')
+   const [rows, setRows] = useState([])
+
+   const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }))
+   const columns = [
+      { field: '_id', headerName: 'ID', flex: 3 },
+      {
+         field: 'antiqueimgsrc',
+         headerName: 'Photo',
+         flex: 3,
+         renderCell: (params) => {
+            console.log(params)
+            return (
+               <>
+                  <Avatar
+                     src={params.row.antiqueimgsrc}
+                     // onClick={() => deleteData(params.row.ward_id)}
+                  />
+               </>
+            )
+         },
+      },
+      {
+         field: 'name',
+         headerName: 'Name',
+         flex: 3,
+      },
+      {
+         field: 'quantity',
+         headerName: 'Quality',
+         flex: 3,
+      },
+      {
+         field: 'Action',
+         headerName: 'Action',
+
+         flex: 4,
+         renderCell: (params) => {
+            return (
+               <Box sx={{ display: 'flex', gap: 3 }}>
+                  <Link variant='outlined' to={`/Dealer/AddImage/${params.row._id}`}>Add Image</Link>
+                  <Button variant='outlined'>Reject</Button>
+               </Box>
+            )
+         },
+      },
+   ]
+
+   const fetchLot = () => {
+      axios.get('http://localhost:5000/Lot').then((response) => {
+         console.log(response.data.lot)
+         setRows(response.data.lot)
+      })
+   }
 
    const handleSubmit = (event) => {
       event.preventDefault()
@@ -30,19 +89,20 @@ const AddLot = () => {
       frm.append('price', Price)
       frm.append('antique', Antique)
       frm.append('quantity', Quantity)
+      frm.append('dealerId', sessionStorage.getItem('dId'))
 
-    
       axios.post('http://localhost:5000/Lot', frm).then((response) => {
          console.log(response.data)
          setName('')
          setPrice('')
-         setAntique('')
          setQuantity('')
       })
    }
-
+   useEffect(() => {
+      fetchLot()
+   }, [])
    return (
-      <div>
+      <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
          <Box
             sx={{
                width: '100%',
@@ -121,8 +181,26 @@ const AddLot = () => {
                </Stack>
             </Card>
          </Box>
-      </div>
+         <Box sx={{ height: 400, width: '80%' }}>
+            <DataGrid
+               rows={rowsWithId}
+               columns={columns}
+               initialState={{
+                  pagination: {
+                     paginationModel: {
+                        pageSize: 5,
+                     },
+                  },
+               }}
+               pageSizeOptions={[5]}
+               checkboxSelection
+               disableRowSelectionOnClick
+            />
+         </Box>
+      </Box>
    )
 }
 
 export default AddLot
+
+

@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import { Avatar, Box, Button } from '@mui/material'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 
 const ViewLot = () => {
    const [rows, setRows] = useState([])
-   const navigate = useNavigate()
    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }))
    const columns = [
       { field: '_id', headerName: 'ID', flex: 3 },
@@ -63,7 +61,7 @@ const ViewLot = () => {
    ]
 
    const fetchLot = () => {
-      axios.get('http://localhost:5000/Lot').then((response) => {
+      axios.get('http://localhost:5000/LotVerification').then((response) => {
          console.log(response.data.lot)
          setRows(response.data.lot)
       })
