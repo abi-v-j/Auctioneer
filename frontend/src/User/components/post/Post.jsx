@@ -1,6 +1,7 @@
+import { Link } from 'react-router-dom'
 import './post.scss'
 
-import { Button, CardMedia } from '@mui/material'
+import { CardMedia } from '@mui/material'
 
 const Post = ({ post }) => {
    
@@ -36,7 +37,12 @@ const Post = ({ post }) => {
             </div>
             <div className='info'>
                <div className='item'>
-                 <Button type='text' > View More</Button> 
+                 <Link
+                to={`/profile/${post.userId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+View More
+                     </Link>
                </div>
                
             </div>

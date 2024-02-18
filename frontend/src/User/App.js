@@ -7,7 +7,9 @@ import Profile from './pages/profile/Profile'
 import './style.scss'
 // import Auction from './components/Auction/Auction'
 import { Box } from '@mui/material'
-import { useState } from 'react'
+import {  useState } from 'react'
+
+
 
 const myStyle = {
    height: '100vh',
@@ -39,15 +41,21 @@ const myStyle = {
 
 const App = () => {
    const [color, setColor] = useState(true)
+
+  
+   
    return (
       // <Routes>
       //   <Route path="/Auction" element={<Auction/>} />
       // </Routes>
       <Box
-         className={`theme-${color ? "light" : "dark"}`}
+         className={`theme-${color ? 'light' : 'dark'}`}
          sx={myStyle}
       >
-         <Navbar  setColor={setColor} color={color}/>
+         <Navbar
+            setColor={setColor}
+            color={color}
+         />
          {/* <div style={{ display: "flex" }}>
           <LeftBar /> */}
          <div style={{ flex: 8 }}>
@@ -57,7 +65,7 @@ const App = () => {
                   element={<Home />}
                />
                <Route
-                  path='/Profile'
+                  path='/Profile/:Id'
                   element={<Profile />}
                />
             </Routes>

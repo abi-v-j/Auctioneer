@@ -1,39 +1,80 @@
-import Stories from "../../components/stories/Stories"
-import Posts from "../../components/posts/Posts"
+import Stories from '../../components/stories/Stories'
+import Posts from '../../components/posts/Posts'
 // import Share from "../../components/share/Share"
-import "./home.scss"
-import axios from "axios"
-import { useEffect, useState } from "react"
-import { Card, Typography } from "@mui/material"
+import './home.scss'
+import axios from 'axios'
+import { useContext, useEffect, useState } from 'react'
+import { Box, Button, Card, Typography } from '@mui/material'
+import { setSocket } from '../../../Context/Context'
+
 
 const Home = () => {
-  const [rows, setRows] = useState(null)
 
-  const fetchLot = () => {
-     axios
-        .get('http://localhost:5000/AuctionheadCurrentDate')
-        .then((response) => {
-           console.log(response.data.auctionhead)
-           setRows(response.data.auctionhead)
-        })
+   const [rows, setRows] = useState(null)
+
+   const { socket } = useContext(setSocket)
+   const [countDown, setCountDown] = useState(null)
+   const [check, setCheck] = useState(false)
+   const [rowLot, setRowLot] = useState([])
+
+
+   useEffect(() => {
+      socket.on('auctionTimerFormServer', (arg) => {
+         setCountDown(arg.countdown)
+      })
+      socket.on('auctionButton', () =>  setCheck(true))
+   }, [socket])
+
+   const fetchLot = () => {
+      axios
+         .get('http://localhost:5000/AuctionheadCurrentDate')
+         .then((response) => {
+            console.log(response.data.auctionhead)
+            setRows(response.data.auctionhead)
+         })
+   }
+
+
+
+   const fetchLotData = () => {
+     axios.get('http://localhost:5000/Auctionhead').then((response) => {
+        console.log(response.data.auctionhead)
+        setRowLot(response.data.auctionhead)
+     })
   }
 
-  useEffect(() => {
-     fetchLot()
-  }, [])
-  return (
-    <div className="home">
-      {
-        rows &&  <Stories rows={rows}/>
+   useEffect(() => {
+      fetchLot()
+      fetchLotData()
+   }, [])
+   return (
+      <div className='home'>
+         {rows && <Stories rows={rows} />}
+         <Box sx={{ display: 'flex', width: '100%' }}>
+            <Card
+               className='innerCard'
+               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' }}
+            >
+               {check ? (
+                  <Button>Hello</Button>
+               ) : (
+                  <Typography variant='h4'>
+                     Auction Start in {countDown}
+                  </Typography>
+               )}
+            </Card>
 
-      }
-            <Card className="innerCard" sx={{p:5,m:3,textAlign:'center'}}><Typography variant="h4">Auction Start in </Typography></Card>
-
-      {/* <Share/> */}
-      <Card className="innerCard" sx={{p:5,m:3,textAlign:'center'}}><Typography variant="h4">Upcoming Auction</Typography></Card>
-      <Posts/>
-    </div>
-  )
+            {/* <Share/> */}
+            <Card
+               className='innerCard'
+               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' }}
+            >
+               <Typography variant='h4'>Upcoming Auction</Typography>
+            </Card>
+         </Box>
+         <Posts rowLot={rowLot} />
+      </div>
+   )
 }
 
 export default Home

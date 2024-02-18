@@ -9,7 +9,7 @@ const Stories = ({rows}) => {
    return (
       <div className='stories'>
          {rows.map((story, key) => (
-            <Box sx={{width:250}}>
+            <Box sx={{width:250}} key={key}>
                <Card
                   className='story'
                   key={key}

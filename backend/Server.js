@@ -36,15 +36,6 @@ httpServer.listen(port, async () => {
    }
 })
 
-io.on('connection', (socket) => {
-   socket.on('sample', ({ msg }, callback) => {
-      console.log(msg)
-      callback({
-         status: 'ok',
-      })
-   })
-})
-
 const PATH = './public/images'
 const upload = multer({
    storage: multer.diskStorage({
@@ -494,6 +485,8 @@ app.get('/Lot', async (req, res) => {
    res.send({ lot })
 })
 
+
+
 //Lot update
 
 app.put('/updateLot/:id', async (req, res) => {
@@ -634,13 +627,13 @@ app.post('/Auctionhead', async (req, res) => {
 
 app.get('/Auctionhead', async (req, res) => {
    const auctionhead = await Auctionhead.find().populate({
-      path: "lotId",
+      path: 'lotId',
       populate: {
-          path: "dealerId",
-          model: "dealerSchema",
+         path: 'dealerId',
+         model: 'dealerSchema',
       },
-  });
-   
+   })
+
    res.send({ auctionhead })
 })
 
@@ -652,12 +645,10 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
       const auctionhead = await Auctionhead.find({
          date: currentDate.format('YYYY-MM-DD'),
       }).populate('lotId')
-      if(auctionhead.length !== 0){
+      if (auctionhead.length !== 0) {
          res.send({ auctionhead })
-      }
-      else{
-         res.send({ auctionhead:null })
-
+      } else {
+         res.send({ auctionhead: null })
       }
    } catch (error) {
       console.error(error)
@@ -1062,8 +1053,9 @@ app.post(
 
 // select Gallery
 
-app.get('/Gallery', async (req, res) => {
-   const gallery = await Gallery.find()
+app.get('/Gallery/:Id', async (req, res) => {
+   const Id = req.params.Id
+   const gallery = await Gallery.find({lotId:Id}).populate("lotId")
    res.send({ gallery })
 })
 
@@ -1097,3 +1089,118 @@ app.post('/Login', async (req, res) => {
       }
    } catch (error) {}
 })
+
+// const calculateCountdown = () => {
+//    try {
+//       const currentDateIST = moment().utcOffset('+05:30')
+
+//       // Set the target time for starting the countdown (10:00 AM IST)
+//       const startTime = currentDateIST
+//          .clone()
+//          .set({ hour: 10, minute: 0, second: 0, millisecond: 0 })
+
+//       // Set the target time for ending the countdown (8:00 PM IST)
+//       const endTime = currentDateIST
+//          .clone()
+//          .set({ hour: 20, minute: 0, second: 0, millisecond: 0 })
+
+//       // If the current time is before 10:00 AM or after 8:00 PM, return '00:00:00'
+//       if (
+//          currentDateIST.isAfter(startTime) &&
+//          currentDateIST.isBefore(endTime)
+//       ) {
+//          io.sockets.emit('auctionButton')
+
+//          return '00:00:00' // Return 00:00:00 as the countdown until the appropriate time
+
+//       }
+
+//       if (currentDateIST.day() === 0 && currentDateIST.isBefore(endTime)) {
+//          return '00:00:00' // Return 00:00:00 as the countdown until the appropriate time
+//       }
+//       const auctionStartTime = currentDateIST
+//          .clone()
+//          .set({ hour: 10, minute: 0, second: 0, millisecond: 0 })
+//       if (currentDateIST.isAfter(auctionStartTime)) {
+//          auctionStartTime.add(1, 'days') // Move to the next day
+//          // If the next day is Sunday, move the auction start time to the following day
+//          if (auctionStartTime.day() === 0) {
+//             auctionStartTime.add(1, 'day')
+//          }
+//       }
+
+//       const countdown = moment.duration(auctionStartTime.diff(currentDateIST))
+
+//       const formattedCountdown = `${countdown
+//          .hours()
+//          .toString()
+//          .padStart(2, '0')}:${countdown
+//          .minutes()
+//          .toString()
+//          .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
+
+//       return formattedCountdown
+//    } catch (error) {
+//       console.error(error)
+//    }
+// }
+
+// const emitCountdown = () => {
+//    const countdown = calculateCountdown() // Replace this with your countdown calculation logic
+//    io.sockets.emit('auctionTimerFormServer', { countdown })
+// }
+// emitCountdown() // Replace this with your countdown calculation logic
+
+// //  socket
+// io.on('connection', (socket) => {})
+
+// setInterval(emitCountdown, 1000) // Update the countdown every second
+
+const calculateCountdown = () => {
+   try {
+      const currentDateUTC = moment().utcOffset('+05:30')
+
+      const startTime = currentDateUTC.clone().startOf('day').add({ hours: 10 })
+      const endTime = currentDateUTC.clone().startOf('day').add({ hours: 20 })
+
+      if (currentDateUTC.isBetween(startTime, endTime)) {
+         io.sockets.emit('auctionButton')
+         return '00:00:00'
+      }
+
+      if (currentDateUTC.day() === 0 && currentDateUTC.isBefore(endTime)) {
+         return '00:00:00'
+      }
+
+      const auctionStartTime = startTime.clone()
+      if (currentDateUTC.isAfter(auctionStartTime)) {
+         auctionStartTime.add({ days: 1 })
+         if (auctionStartTime.day() === 0) {
+            auctionStartTime.add({ days: 1 })
+         }
+      }
+
+      const countdown = moment.duration(auctionStartTime.diff(currentDateUTC))
+      const formattedCountdown = `${countdown
+         .hours()
+         .toString()
+         .padStart(2, '0')}:${countdown
+         .minutes()
+         .toString()
+         .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
+
+      return formattedCountdown
+   } catch (error) {
+      console.error(error)
+      return '00:00:00' // Return default value in case of error
+   }
+}
+
+const emitCountdown = () => {
+   const countdown = calculateCountdown()
+   io.sockets.emit('auctionTimerFormServer', { countdown })
+}
+
+io.on('connection', (socket) => {})
+
+setInterval(emitCountdown, 1000)
