@@ -5,9 +5,11 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({setColor,color}) => {
 
   return (
     <div className="navbar">
@@ -16,11 +18,11 @@ const Navbar = () => {
           <span>lamasocial</span>
         </Link>
         <HomeOutlinedIcon />
-        {/* {darkMode ? (
-          <WbSunnyOutlinedIcon onClick={toggle} />
+        {color ? (
+          <DarkModeIcon onClick={()=>setColor(!color)} />
         ) : (
-          <DarkModeOutlinedIcon onClick={toggle} />
-        )} */}
+          <LightModeIcon onClick={()=>setColor(!color)} />
+        )}
         <GridViewOutlinedIcon />
         <div className="search">
           <SearchOutlinedIcon />

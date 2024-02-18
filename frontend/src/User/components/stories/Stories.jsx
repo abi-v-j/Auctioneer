@@ -1,44 +1,31 @@
-import "./stories.scss"
-import { Card } from '@mui/material'
+import './stories.scss'
+import { Box, Card } from '@mui/material'
 
-const Stories = () => {
+const Stories = ({rows}) => {
+  
 
+  
 
-  //TEMPORARY
-  const stories = [
-    {
-      id: 1,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 3,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-    {
-      id: 4,
-      name: "John Doe",
-      img: "https://images.pexels.com/photos/13916254/pexels-photo-13916254.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
-    },
-  ];
+   return (
+      <div className='stories'>
+         {rows.map((story, key) => (
+            <Box sx={{width:250}}>
+               <Card
+                  className='story'
+                  key={key}
+               >
+                  <img
+                     src={story.lotId.antiqueimgsrc}
+                     alt=''
+                  />
+                  <span>{story.token}</span>
+                  <a href="car" className='link'  rel='noopener noreferrer'>View Details</a>
 
-  return (
-    <div className="stories">
-     
-      {stories.map(story=>(
-        <Card className="story" key={story.id}>
-          <img src={story.img} alt="" />
-          <span>{story.name}</span>
-        </Card >
-      ))}
-    </div>
-  )
+               </Card>
+            </Box>
+         ))}
+      </div>
+   )
 }
 
 export default Stories

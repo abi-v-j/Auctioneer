@@ -585,10 +585,19 @@ app.post('/Auctionhead', async (req, res) => {
       const latestAssignedDay = await Auctionhead.findOne({})
          .sort({ date: -1 }) // Sort by date in descending order to get the latest date
          .select('date')
+
       // If no records found, set the latest assigned day to tomorrow
       let dateToAssign = latestAssignedDay
          ? moment(latestAssignedDay.date)
          : moment().add(1, 'day')
+
+      // Check if latestAssignedDay is today
+      if (
+         latestAssignedDay &&
+         latestAssignedDay.date === moment().startOf('day').format('YYYY-MM-DD')
+      ) {
+         dateToAssign.add(1, 'day')
+      }
 
       const lotCount = await Auctionhead.countDocuments({
          date: dateToAssign.format('YYYY-MM-DD'),
@@ -624,10 +633,37 @@ app.post('/Auctionhead', async (req, res) => {
 // select Auction Head
 
 app.get('/Auctionhead', async (req, res) => {
-   const auctionhead = await Auctionhead.find().populate('lotId')
+   const auctionhead = await Auctionhead.find().populate({
+      path: "lotId",
+      populate: {
+          path: "dealerId",
+          model: "dealerSchema",
+      },
+  });
+   
    res.send({ auctionhead })
 })
 
+// select Auction Head
+
+app.get('/AuctionheadCurrentDate', async (req, res) => {
+   const currentDate = moment().startOf('day') // Get the current date at the start of the day
+   try {
+      const auctionhead = await Auctionhead.find({
+         date: currentDate.format('YYYY-MM-DD'),
+      }).populate('lotId')
+      if(auctionhead.length !== 0){
+         res.send({ auctionhead })
+      }
+      else{
+         res.send({ auctionhead:null })
+
+      }
+   } catch (error) {
+      console.error(error)
+      res.status(500).send('Internal Server Error')
+   }
+})
 //Auction head update
 
 app.put('/updateAuctionhead/:id', async (req, res) => {
