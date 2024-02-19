@@ -30,7 +30,7 @@ const Post = ({ post }) => {
             <div className='content'>
                <p>{post.lotId.quantity}</p>
                <CardMedia
-                  image={post.lotId.antiqueimgsrc}
+                  image={post.lotId.productimgsrc}
                   alt=''
                   sx={{ height: 400 }}
                />

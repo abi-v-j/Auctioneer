@@ -15,7 +15,7 @@ const Stories = ({rows}) => {
                   key={key}
                >
                   <img
-                     src={story.lotId.antiqueimgsrc}
+                     src={story.lotId.productimgsrc}
                      alt=''
                   />
                   <span>{story.token}</span>

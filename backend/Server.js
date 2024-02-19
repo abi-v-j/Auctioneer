@@ -424,7 +424,7 @@ const lotSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
-   antiqueimgsrc: {
+   productimgsrc: {
       type: String,
       require: true,
    },
@@ -451,14 +451,14 @@ app.post(
    upload.fields([{ name: 'antique', maxCount: 1 }]),
    async (req, res) => {
       var fileValue = JSON.parse(JSON.stringify(req.files))
-      var antiqueimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
+      var productimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
 
-      const { name, minprice, quantity, datetime, dealerId } = req.body
+      const { name, price, quantity, datetime, dealerId } = req.body
       try {
          let lot = new Lot({
             name,
-            minprice,
-            antiqueimgsrc,
+            price,
+            productimgsrc,
             quantity,
             datetime,
             dealerId,
@@ -484,8 +484,6 @@ app.get('/Lot', async (req, res) => {
    const lot = await Lot.find()
    res.send({ lot })
 })
-
-
 
 //Lot update
 
@@ -644,6 +642,7 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
    try {
       const auctionhead = await Auctionhead.find({
          date: currentDate.format('YYYY-MM-DD'),
+         __v: 0,
       }).populate('lotId')
       if (auctionhead.length !== 0) {
          res.send({ auctionhead })
@@ -1055,7 +1054,7 @@ app.post(
 
 app.get('/Gallery/:Id', async (req, res) => {
    const Id = req.params.Id
-   const gallery = await Gallery.find({lotId:Id}).populate("lotId")
+   const gallery = await Gallery.find({ lotId: Id }).populate('lotId')
    res.send({ gallery })
 })
 
@@ -1200,7 +1199,28 @@ const emitCountdown = () => {
    const countdown = calculateCountdown()
    io.sockets.emit('auctionTimerFormServer', { countdown })
 }
+let countdownTimer // Variable to store the countdown timer
 
-io.on('connection', (socket) => {})
+io.on('connection', (socket) => {
+   socket.on('smallCountDownFromClient', async() => {
+      let count = 10 // Initial countdown value
+
+      // Function to emit countdown updates to the client
+      const emitCountdownSmall = () => {
+         io.sockets.emit('smallCountDownFromServer', count) // Emit countdown value to the client
+         count-- // Decrement countdown value
+         if (count >= 0) {
+            countdownTimer = setTimeout(emitCountdownSmall, 1000) // Schedule next update after 1 second (1000 milliseconds)
+         }
+      }
+      if (countdownTimer) {
+         clearTimeout(countdownTimer)
+      }
+
+      emitCountdownSmall() // Start the countdown
+   })
+
+
+})
 
 setInterval(emitCountdown, 1000)

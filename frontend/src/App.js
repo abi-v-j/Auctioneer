@@ -5,6 +5,7 @@ import Admin from './Admin/App'
 import Guest from './Guest/App'
 import User from './User/App'
 import Dealer from './Dealer/App'
+import Auction from './User/components/Auction/Auction'
 
 
 const App = () => {
@@ -27,6 +28,10 @@ const App = () => {
          <Route
             path='/Dealer/*'
             element={<Dealer />}
+            />
+            <Route
+            path='/Auction/'
+            element={<Auction />}
             />
       </Routes>
    )

@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
 import { Box, Button, Card, Typography } from '@mui/material'
 import { setSocket } from '../../../Context/Context'
+import { Link } from 'react-router-dom'
 
 
 const Home = () => {
@@ -15,7 +16,7 @@ const Home = () => {
    const { socket } = useContext(setSocket)
    const [countDown, setCountDown] = useState(null)
    const [check, setCheck] = useState(false)
-   const [rowLot, setRowLot] = useState([])
+   const [rowLot, setRowLot] = useState(null)
 
 
    useEffect(() => {
@@ -56,7 +57,7 @@ const Home = () => {
                sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' }}
             >
                {check ? (
-                  <Button>Hello</Button>
+                  <Link  to={`../../Auction`}>Hello</Link>
                ) : (
                   <Typography variant='h4'>
                      Auction Start in {countDown}
@@ -72,7 +73,9 @@ const Home = () => {
                <Typography variant='h4'>Upcoming Auction</Typography>
             </Card>
          </Box>
-         <Posts rowLot={rowLot} />
+         {
+            rowLot && <Posts rowLot={rowLot} />
+         }
       </div>
    )
 }
