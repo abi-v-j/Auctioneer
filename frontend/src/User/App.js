@@ -65,7 +65,7 @@ const App = () => {
                   element={<Home />}
                />
                <Route
-                  path='/Profile/:Id'
+                  path='/Profile'
                   element={<Profile />}
                />
             </Routes>

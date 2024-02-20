@@ -735,8 +735,18 @@ app.delete('/Category/:id', async (req, res) => {
 
 const auctionbodySchemastructure = new mongoose.Schema({
    lotauctionbodyprice: {
-      type: String,
+      type: Number,
       require: true,
+   },
+   auctionheadId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'auctionheadSchema',
+      required: true,
+   },
+   userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'userSchema',
+      required: true,
    },
 })
 
@@ -1086,7 +1096,7 @@ app.post('/Login', async (req, res) => {
       } else {
          console.log('hey ')
       }
-   } catch (error) {}
+   } catch (error) { }
 })
 
 // const calculateCountdown = () => {
@@ -1184,9 +1194,9 @@ const calculateCountdown = () => {
          .hours()
          .toString()
          .padStart(2, '0')}:${countdown
-         .minutes()
-         .toString()
-         .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
+            .minutes()
+            .toString()
+            .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
 
       return formattedCountdown
    } catch (error) {
@@ -1202,12 +1212,40 @@ const emitCountdown = () => {
 let countdownTimer // Variable to store the countdown timer
 
 io.on('connection', (socket) => {
-   socket.on('smallCountDownFromClient', async() => {
+   socket.on('smallCountDownFromClient', async ({ price, Id, uid }) => {
+      let pricedata = 0
+      const largestPrice = await Auctionbody
+         .find({ auctionheadId: Id })
+         .sort({ lotauctionbodyprice: -1 }) // Sort in descending order to get the highest price first
+         .limit(1); // Limit the result to 1 document
+      if (largestPrice.length === 0) {
+         const lotData = await Auctionhead.findById({ _id: Id }).populate("lotId")
+         const priceFromLot = parseInt(lotData.lotId.price)
+         pricedata = priceFromLot + price
+         let insertData = new Auctionbody({
+            lotauctionbodyprice: pricedata,
+            userId: uid,
+            auctionheadId: Id
+         })
+
+         await insertData.save()
+      }
+      else {
+         const priceFromAutionBody = largestPrice[0].lotauctionbodyprice
+         pricedata = priceFromAutionBody + price
+         let insertData = new Auctionbody({
+            lotauctionbodyprice:pricedata ,
+            userId: uid,
+            auctionheadId: Id
+         })
+
+         await insertData.save()
+      }
       let count = 10 // Initial countdown value
 
       // Function to emit countdown updates to the client
       const emitCountdownSmall = () => {
-         io.sockets.emit('smallCountDownFromServer', count) // Emit countdown value to the client
+         io.sockets.emit('smallCountDownFromServer', {count,pricedata}) // Emit countdown value to the client
          count-- // Decrement countdown value
          if (count >= 0) {
             countdownTimer = setTimeout(emitCountdownSmall, 1000) // Schedule next update after 1 second (1000 milliseconds)
