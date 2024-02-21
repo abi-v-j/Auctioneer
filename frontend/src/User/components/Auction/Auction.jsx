@@ -15,7 +15,7 @@ const Auction = () => {
       axios
          .get('http://localhost:5000/AuctionheadCurrentDate')
          .then((response) => {
-           const data = response.data.auctionhead[0]
+            const data = response.data.auctionhead[0]
             setRowLot(response.data.auctionhead)
             setRows(response.data.auctionhead[0])
             setPricedata(data.lotId.price)
@@ -23,8 +23,8 @@ const Auction = () => {
          })
    }
 
-   const countDown = (price,Id) => {
-      socket.emit("smallCountDownFromClient",{price,Id,uid})
+   const countDown = (price, Id) => {
+      socket.emit("smallCountDownFromClient", { price, Id, uid })
    }
 
    useEffect(() => {
@@ -33,17 +33,17 @@ const Auction = () => {
 
 
    useEffect(() => {
-      socket.on("smallCountDownFromServer", ({count,pricedata}) => {
+      socket.on("smallCountDownFromServer", ({ count, pricedata }) => {
          setCount(count)
          setPricedata(pricedata)
       })
    }, [socket])
    return (
 
-      <Box sx={{ width: '100vw', height: '100vh', display: 'flex' }}>
-         <Box sx={{ width: '60%', m: 2 }}>
+      <Box sx={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto', }}>
+         <Box sx={{ width: '60%', m: 2, }}>
             {
-               rows && <Card sx={{ height: '40vh' }}>
+               rows && <Card sx={{ height: '40vh', backgroundColor: 'red' }}>
                   <CardMedia
                      image={rows && rows.lotId.productimgsrc}
                      sx={{ width: 200, height: 200 }}
@@ -82,19 +82,19 @@ const Auction = () => {
                   <Box>
                      <Button
                         variant='contained'
-                        onClick={() => countDown(50,rows._id)}
+                        onClick={() => countDown(50, rows._id)}
                      >
                         +50
                      </Button>
                      <Button
                         variant='contained'
-                        onClick={() => countDown(100,rows._id)}
+                        onClick={() => countDown(100, rows._id)}
                      >
                         +100
                      </Button>
                      <Button
                         variant='contained'
-                        onClick={() => countDown(200,rows._id)}
+                        onClick={() => countDown(200, rows._id)}
                      >
                         +200
                      </Button>

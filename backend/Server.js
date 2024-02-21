@@ -559,6 +559,11 @@ const auctionheadSchemastructure = new mongoose.Schema({
       ref: 'lotSchema',
       required: true,
    },
+   userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'userSchema',
+      required: true,
+   },
 })
 
 //Insert AuctionHead
@@ -653,6 +658,19 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
       console.error(error)
       res.status(500).send('Internal Server Error')
    }
+})
+
+app.get('AuctionPrice',async(req, res) => {
+   try {
+      const largestPrice = await Auctionbody
+      .find({ auctionheadId: Id })
+      .sort({ lotauctionbodyprice: -1 }) // Sort in descending order to get the highest price first
+      .limit(1); // Limit the result to 1 document
+      
+   } catch (error) {
+      
+   }
+  
 })
 //Auction head update
 
@@ -1234,7 +1252,7 @@ io.on('connection', (socket) => {
          const priceFromAutionBody = largestPrice[0].lotauctionbodyprice
          pricedata = priceFromAutionBody + price
          let insertData = new Auctionbody({
-            lotauctionbodyprice:pricedata ,
+            lotauctionbodyprice: pricedata,
             userId: uid,
             auctionheadId: Id
          })
@@ -1244,11 +1262,23 @@ io.on('connection', (socket) => {
       let count = 10 // Initial countdown value
 
       // Function to emit countdown updates to the client
-      const emitCountdownSmall = () => {
-         io.sockets.emit('smallCountDownFromServer', {count,pricedata}) // Emit countdown value to the client
+      const emitCountdownSmall = async () => {
+         io.sockets.emit('smallCountDownFromServer', { count, pricedata }) // Emit countdown value to the client
          count-- // Decrement countdown value
          if (count >= 0) {
             countdownTimer = setTimeout(emitCountdownSmall, 1000) // Schedule next update after 1 second (1000 milliseconds)
+         }
+         if (count === 0) {
+            const updatedAuctionhead = await Auctionhead.findByIdAndUpdate(
+               Id,
+               {
+                  price: pricedata,
+                  userId: uid,
+                  __v:1
+               },
+               { new: true }
+            )
+
          }
       }
       if (countdownTimer) {
