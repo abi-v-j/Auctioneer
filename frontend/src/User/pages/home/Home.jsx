@@ -4,7 +4,7 @@ import Posts from '../../components/posts/Posts'
 import './home.scss'
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
-import { Box, Button, Card, Typography } from '@mui/material'
+import { Box, Card, Typography } from '@mui/material'
 import { setSocket } from '../../../Context/Context'
 import { Link } from 'react-router-dom'
 
@@ -23,7 +23,9 @@ const Home = () => {
       socket.on('auctionTimerFormServer', (arg) => {
          setCountDown(arg.countdown)
       })
-      socket.on('auctionButton', () =>  setCheck(true))
+      socket.on('auctionButton', () =>  {
+         setCheck(true)
+      })
    }, [socket])
 
    const fetchLot = () => {

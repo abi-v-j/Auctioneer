@@ -7,9 +7,9 @@ import Login from './Pages/Login';
 const App = () => {
     return (
         <Routes>
-            <Route path='/User' element={<User />} />
-            <Route path='/Dealer' element={<Dealer />} />
-            <Route path='/Login' element={<Login/>} />
+            <Route path='/UserRegistration' element={<User />} />
+            <Route path='/DealerRegistration' element={<Dealer />} />
+            <Route path='/' element={<Login/>} />
         </Routes>
     )
 }

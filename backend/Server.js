@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://auctioneer123:auctioneer%40123@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://auctioneer:auctioneer_123@cluster0.ffl1t2y.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -476,6 +476,7 @@ app.post(
 // select Lot
 
 app.get('/LotVerification', async (req, res) => {
+   console.log('hi');
    const lot = await Lot.find({ __v: 0 })
    res.send({ lot })
 })
@@ -562,7 +563,6 @@ const auctionheadSchemastructure = new mongoose.Schema({
    userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'userSchema',
-      required: true,
    },
 })
 
@@ -595,13 +595,16 @@ app.post('/Auctionhead', async (req, res) => {
          dateToAssign.add(1, 'day')
       }
 
-      const lotCount = await Auctionhead.countDocuments({
+      let lotCount = await Auctionhead.countDocuments({
          date: dateToAssign.format('YYYY-MM-DD'),
       })
 
       // Add a day to the latest assigned day
-      if (lotCount === 9) {
+      if (lotCount === 10) {
          dateToAssign.add(1, 'day')
+         lotCount = await Auctionhead.countDocuments({
+            date: dateToAssign.format('YYYY-MM-DD'),
+         })
       }
 
       // If the day to assign is Sunday, move to the next day
@@ -660,17 +663,36 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
    }
 })
 
-app.get('AuctionPrice',async(req, res) => {
+app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
+   const currentDate = moment().startOf('day') // Get the current date at the start of the day
+   try {
+      const auctionhead = await Auctionhead.findOne({
+         date: currentDate.format('YYYY-MM-DD'),
+         __v: 0,
+      }).populate('lotId')
+      console.log(auctionhead);
+      if (auctionhead) {
+         res.send({ auctionhead })
+      } else {
+         res.send({ auctionhead:null})
+      }
+   } catch (error) {
+      console.error(error)
+      res.status(500).send('Internal Server Error')
+   }
+})
+
+app.get('AuctionPrice', async (req, res) => {
    try {
       const largestPrice = await Auctionbody
-      .find({ auctionheadId: Id })
-      .sort({ lotauctionbodyprice: -1 }) // Sort in descending order to get the highest price first
-      .limit(1); // Limit the result to 1 document
-      
+         .find({ auctionheadId: Id })
+         .sort({ lotauctionbodyprice: -1 }) // Sort in descending order to get the highest price first
+         .limit(1); // Limit the result to 1 document
+
    } catch (error) {
-      
+
    }
-  
+
 })
 //Auction head update
 
@@ -1182,22 +1204,22 @@ app.post('/Login', async (req, res) => {
 // io.on('connection', (socket) => {})
 
 // setInterval(emitCountdown, 1000) // Update the countdown every second
+const dateCurrent = moment().format('YYYY-MM-DD')
 
-const calculateCountdown = () => {
+const calculateCountdown = async() => {
    try {
       const currentDateUTC = moment().utcOffset('+05:30')
-
       const startTime = currentDateUTC.clone().startOf('day').add({ hours: 10 })
-      const endTime = currentDateUTC.clone().startOf('day').add({ hours: 20 })
 
-      if (currentDateUTC.isBetween(startTime, endTime)) {
-         io.sockets.emit('auctionButton')
+      const AuctionAvailable = await Auctionhead.countDocuments({__v:0,date:dateCurrent})
+
+      if (currentDateUTC.isAfter(startTime) && AuctionAvailable !== 0) {
+        io.sockets.emit('auctionButton')
          return '00:00:00'
       }
 
-      if (currentDateUTC.day() === 0 && currentDateUTC.isBefore(endTime)) {
-         return '00:00:00'
-      }
+
+     
 
       const auctionStartTime = startTime.clone()
       if (currentDateUTC.isAfter(auctionStartTime)) {
@@ -1223,8 +1245,8 @@ const calculateCountdown = () => {
    }
 }
 
-const emitCountdown = () => {
-   const countdown = calculateCountdown()
+const emitCountdown = async () => {
+   const countdown =  await calculateCountdown()
    io.sockets.emit('auctionTimerFormServer', { countdown })
 }
 let countdownTimer // Variable to store the countdown timer
@@ -1263,7 +1285,9 @@ io.on('connection', (socket) => {
 
       // Function to emit countdown updates to the client
       const emitCountdownSmall = async () => {
-         io.sockets.emit('smallCountDownFromServer', { count, pricedata }) // Emit countdown value to the client
+         // const AuctionAvailable = await Auctionhead.countDocuments({__v:0,date:dateCurrent})
+
+         io.sockets.emit('smallCountDownFromServer', { count, pricedata, uid }) // Emit countdown value to the client
          count-- // Decrement countdown value
          if (count >= 0) {
             countdownTimer = setTimeout(emitCountdownSmall, 1000) // Schedule next update after 1 second (1000 milliseconds)
@@ -1274,7 +1298,7 @@ io.on('connection', (socket) => {
                {
                   price: pricedata,
                   userId: uid,
-                  __v:1
+                  __v: 1
                },
                { new: true }
             )

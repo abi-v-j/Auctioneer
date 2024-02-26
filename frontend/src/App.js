@@ -18,7 +18,7 @@ const App = () => {
             element={<Admin />}
          />
          <Route
-            path='/Guest/*'
+            path='/*'
             element={<Guest />}
          />
          <Route

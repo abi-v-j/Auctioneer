@@ -2,10 +2,12 @@ import { Box, Button, Card, CardMedia, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { setSocket } from '../../../Context/Context'
+import { useNavigate } from 'react-router-dom'
 
 const Auction = () => {
    const { socket } = useContext(setSocket)
    const uid = sessionStorage.getItem('uId')
+   const navigate = useNavigate()
 
    const [rows, setRows] = useState(null)
    const [rowLot, setRowLot] = useState(null)
@@ -15,10 +17,27 @@ const Auction = () => {
       axios
          .get('http://localhost:5000/AuctionheadCurrentDate')
          .then((response) => {
-            const data = response.data.auctionhead[0]
             setRowLot(response.data.auctionhead)
-            setRows(response.data.auctionhead[0])
-            setPricedata(data.lotId.price)
+
+         })
+   }
+
+   const fetchSingleLot = () => {
+      axios
+         .get('http://localhost:5000/SingleAuctionheadCurrentDate')
+         .then((response) => {
+            const data = response.data.auctionhead
+            console.log(data);
+            if(data === null)
+            {
+               alert("Auction Ended Next Auction comming soon......")
+               navigate("/User")
+            }
+            else{
+
+               setRows(response.data.auctionhead)
+               setPricedata(data.lotId.price)
+            }
 
          })
    }
@@ -28,6 +47,7 @@ const Auction = () => {
    }
 
    useEffect(() => {
+      fetchSingleLot()
       fetchLot()
    }, [])
 
@@ -35,6 +55,12 @@ const Auction = () => {
    useEffect(() => {
       socket.on("smallCountDownFromServer", ({ count, pricedata }) => {
          setCount(count)
+        
+         if (count === 0) {
+            fetchSingleLot()
+            fetchLot()
+
+         }
          setPricedata(pricedata)
       })
    }, [socket])
@@ -43,13 +69,13 @@ const Auction = () => {
       <Box sx={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto', }}>
          <Box sx={{ width: '60%', m: 2, }}>
             {
-               rows && <Card sx={{ height: '40vh', backgroundColor: 'red' }}>
+               rows && (<Card sx={{ height: '40vh', backgroundColor: 'red' }}>
                   <CardMedia
                      image={rows && rows.lotId.productimgsrc}
                      sx={{ width: 200, height: 200 }}
                   />
                   <Typography>{rows && rows.lotId.name}</Typography>
-               </Card>
+               </Card>)
             }
 
             <Card
@@ -102,7 +128,15 @@ const Auction = () => {
                </Stack>
             </Card>
          </Box>
-         <Box sx={{ width: '40%' }}>hai</Box>
+         <Box sx={{ width: '40%' }}>
+            <Card>
+               {
+                  rowLot && rowLot.map((lotdata, key) => (
+                     <Typography key={key}>{lotdata.lotId.name}</Typography>
+                  ))
+               }
+            </Card>
+         </Box>
       </Box>
    )
 }

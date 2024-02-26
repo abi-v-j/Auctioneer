@@ -114,6 +114,7 @@ const Registration = () => {
                      label='Name'
                      variant='standard'
                      onChange={(event) => setName(event.target.value)}
+                     value={Name}
                   />
                </Stack>
                <Stack sx={{ mt: 1 }}>
@@ -122,6 +123,7 @@ const Registration = () => {
                      label='Email'
                      variant='standard'
                      onChange={(event) => setEmail(event.target.value)}
+                     value={Email}
                   />
                </Stack>
                <Stack>
@@ -144,6 +146,7 @@ const Registration = () => {
                      label='Contact'
                      variant='standard'
                      onChange={(event) => setContact(event.target.value)}
+                     value={Contact}
                   />
                </Stack>
 
@@ -153,6 +156,7 @@ const Registration = () => {
                      label='Password'
                      variant='standard'
                      onChange={(event) => setPassword(event.target.value)}
+                     value={Password}
                   />
                </Stack>
                <Stack sx={{ mt: 3 }}>
@@ -250,6 +254,7 @@ const Registration = () => {
                         id='demo-simple-select-standard'
                         label='Place'
                         onChange={(event) => setPlace(event.target.value)}
+                        value={Place}
                      >
                         {placeData.map((place, key) => (
                            <MenuItem
