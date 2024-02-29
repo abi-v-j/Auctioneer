@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardMedia, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardMedia, Grid, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { setSocket } from '../../../Context/Context'
@@ -18,7 +18,6 @@ const Auction = () => {
          .get('http://localhost:5000/AuctionheadCurrentDate')
          .then((response) => {
             setRowLot(response.data.auctionhead)
-
          })
    }
 
@@ -27,23 +26,19 @@ const Auction = () => {
          .get('http://localhost:5000/SingleAuctionheadCurrentDate')
          .then((response) => {
             const data = response.data.auctionhead
-            console.log(data);
-            if(data === null)
-            {
-               alert("Auction Ended Next Auction comming soon......")
-               navigate("/User")
-            }
-            else{
-
+            console.log(data)
+            if (data === null) {
+               alert('Auction Ended Next Auction comming soon......')
+               navigate('/User')
+            } else {
                setRows(response.data.auctionhead)
                setPricedata(data.lotId.price)
             }
-
          })
    }
 
    const countDown = (price, Id) => {
-      socket.emit("smallCountDownFromClient", { price, Id, uid })
+      socket.emit('smallCountDownFromClient', { price, Id, uid })
    }
 
    useEffect(() => {
@@ -51,32 +46,37 @@ const Auction = () => {
       fetchLot()
    }, [])
 
-
    useEffect(() => {
-      socket.on("smallCountDownFromServer", ({ count, pricedata }) => {
+      socket.on('smallCountDownFromServer', ({ count, pricedata, Userid }) => {
          setCount(count)
-        
-         if (count === 0) {
-            fetchSingleLot()
-            fetchLot()
 
+         if (count === 0) {
+            if (Userid === uid) {
+               alert('You Won This Lot')
+               fetchSingleLot()
+               fetchLot()
+            } else {
+               alert('Better Luck Next Time')
+               fetchSingleLot()
+               fetchLot()
+            }
          }
          setPricedata(pricedata)
       })
    }, [socket])
-   return (
 
-      <Box sx={{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto', }}>
-         <Box sx={{ width: '60%', m: 2, }}>
-            {
-               rows && (<Card sx={{ height: '40vh', backgroundColor: 'red' }}>
+   return (
+      <Grid container spacing={2}>
+         <Grid item xs={12} sm={6}>
+            {rows && (
+               <Card sx={{ height: '40vh', backgroundColor: 'red' }}>
                   <CardMedia
                      image={rows && rows.lotId.productimgsrc}
                      sx={{ width: 200, height: 200 }}
                   />
                   <Typography>{rows && rows.lotId.name}</Typography>
-               </Card>)
-            }
+               </Card>
+            )}
 
             <Card
                sx={{
@@ -93,6 +93,8 @@ const Auction = () => {
             >
                <Typography variant='h5'>{count}</Typography>
             </Card>
+         </Grid>
+         <Grid item xs={12} sm={6}>
             <Card
                sx={{
                   height: '50vh',
@@ -106,38 +108,28 @@ const Auction = () => {
                      <Typography>Current Price : {pricedata}</Typography>
                   </Box>
                   <Box>
-                     <Button
-                        variant='contained'
-                        onClick={() => countDown(50, rows._id)}
-                     >
+                     <Button variant='contained' onClick={() => countDown(50, rows._id)}>
                         +50
                      </Button>
-                     <Button
-                        variant='contained'
-                        onClick={() => countDown(100, rows._id)}
-                     >
+                     <Button variant='contained' onClick={() => countDown(100, rows._id)}>
                         +100
                      </Button>
-                     <Button
-                        variant='contained'
-                        onClick={() => countDown(200, rows._id)}
-                     >
+                     <Button variant='contained' onClick={() => countDown(200, rows._id)}>
                         +200
                      </Button>
                   </Box>
                </Stack>
             </Card>
-         </Box>
-         <Box sx={{ width: '40%' }}>
+         </Grid>
+         <Grid item xs={12}>
             <Card>
-               {
-                  rowLot && rowLot.map((lotdata, key) => (
+               {rowLot &&
+                  rowLot.map((lotdata, key) => (
                      <Typography key={key}>{lotdata.lotId.name}</Typography>
-                  ))
-               }
+                  ))}
             </Card>
-         </Box>
-      </Box>
+         </Grid>
+      </Grid>
    )
 }
 
