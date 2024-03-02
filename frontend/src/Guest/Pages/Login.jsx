@@ -1,7 +1,8 @@
-import { Box, Button, Card, Stack, TextField } from '@mui/material'
+import { Box, Button, Card, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import './GuestStyle.css'
 const Login = () => {
    const navigate = useNavigate()
    const [email, setEmail] = useState('')
@@ -40,9 +41,10 @@ const Login = () => {
             onSubmit={handleSubmit}
          >
             <Card sx={{ p: 10, backgroundColor: 'lightblue' }}>
+               <Typography variant='h4' textAlign={'center'} sx={{p:2}} className='dancing-script'>Auctioneer</Typography>
                <TextField
                   id='standard-basic'
-                  label='User name'
+                  label='Email'
                   variant='standard'
                   onChange={(event) => setEmail(event.target.value)}
                />
@@ -68,7 +70,7 @@ const Login = () => {
                      variant='outlined'
                      type='submit'
                   >
-                     Submit
+                     Login
                   </Button>
                </Stack>
             </Card>

@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardMedia, Grid, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardMedia, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { setSocket } from '../../../Context/Context'
@@ -13,6 +13,7 @@ const Auction = () => {
    const [rowLot, setRowLot] = useState(null)
    const [count, setCount] = useState(10)
    const [pricedata, setPricedata] = useState(0)
+   const [notification, setNotification] = useState([])
    const fetchLot = () => {
       axios
          .get('http://localhost:5000/AuctionheadCurrentDate')
@@ -49,6 +50,17 @@ const Auction = () => {
    useEffect(() => {
       socket.on('smallCountDownFromServer', ({ count, pricedata, Userid }) => {
          setCount(count)
+         if (count === 10) {
+            setNotification((prevState) => {
+               // Check if prevState has 10 values
+               if (prevState.length === 10) {
+                  // If prevState has 10 values, remove the first one
+                  prevState = prevState.slice(1)
+               }
+               // Add pricedata to the end of prevState
+               return [...prevState, pricedata]
+            })
+         }
 
          if (count === 0) {
             if (Userid === uid) {
@@ -64,72 +76,148 @@ const Auction = () => {
          setPricedata(pricedata)
       })
    }, [socket])
-
    return (
-      <Grid container spacing={2}>
-         <Grid item xs={12} sm={6}>
+      <Box
+         sx={{
+            width: '100vw',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: 'auto',
+         }}
+      >
+         <Box sx={{ width: '30%' }}>
+            <Card sx={{ m: 2, height: '93vh' }}>
+               <Typography
+                  variant='h5'
+                  textAlign={'center'}
+                  sx={{ m: 3 }}
+               >
+                  Live Price
+               </Typography>
+               <Box sx={{display:'flex',flexDirection:'column-reverse'}}>
+                  {notification &&
+                     notification.map((notify, key) => (
+                        <Card
+                           sx={{
+                              p: 2,
+                              m: 1,
+                              transition: 'opacity 0.5s ease-out',
+                           }}
+                        >
+                           <Typography key={key}> {notify} </Typography>
+                        </Card>
+                     ))}
+               </Box>
+            </Card>
+         </Box>
+         <Box sx={{ width: '40%' }}>
             {rows && (
-               <Card sx={{ height: '40vh', backgroundColor: 'red' }}>
-                  <CardMedia
-                     image={rows && rows.lotId.productimgsrc}
-                     sx={{ width: 200, height: 200 }}
-                  />
-                  <Typography>{rows && rows.lotId.name}</Typography>
+               <Card
+                  sx={{
+                     height: '40vh',
+                     minHeight: '250px',
+                     m: 2,
+                  }}
+               >
+                  <Box sx={{ width: '100%', m: 5, display: 'flex' }}>
+                     <CardMedia
+                        image={rows && rows.lotId.productimgsrc}
+                        sx={{
+                           width: 200,
+                           height: 200,
+                           borderRadius: '50%',
+                           objectFit: 'cover',
+                           border: 1,
+                        }}
+                     />
+                     <Box sx={{ m: 4 }}>
+                        <Typography>{rows && rows.lotId.name}</Typography>
+                        <Typography>{rows && rows.lotId.price}</Typography>
+                     </Box>
+                  </Box>
                </Card>
             )}
 
-            <Card
-               sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  position: 'absolute',
-                  left: '55vw',
-                  width: 100,
-                  height: 100,
-                  borderRadius: '50%',
-                  backgroundColor: 'lightblue',
-                  alignItems: 'center',
-               }}
-            >
-               <Typography variant='h5'>{count}</Typography>
-            </Card>
-         </Grid>
-         <Grid item xs={12} sm={6}>
             <Card
                sx={{
                   height: '50vh',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  m: 2,
                }}
             >
-               <Stack direction={'column'} gap={3}>
+               <Stack
+                  direction={'column'}
+                  gap={3}
+                  sx={{ m: 3 }}
+               >
                   <Box>
                      <Typography>Current Price : {pricedata}</Typography>
                   </Box>
-                  <Box>
-                     <Button variant='contained' onClick={() => countDown(50, rows._id)}>
+                  <Stack
+                     direction={'row'}
+                     gap={2}
+                  >
+                     <Button
+                        variant='contained'
+                        onClick={() => countDown(50, rows._id)}
+                        sx={{ p: 4, fontSize: 20 }}
+                     >
                         +50
                      </Button>
-                     <Button variant='contained' onClick={() => countDown(100, rows._id)}>
+                     <Button
+                        variant='contained'
+                        onClick={() => countDown(100, rows._id)}
+                        sx={{ p: 4, fontSize: 20 }}
+                     >
                         +100
                      </Button>
-                     <Button variant='contained' onClick={() => countDown(200, rows._id)}>
+                     <Button
+                        variant='contained'
+                        onClick={() => countDown(200, rows._id)}
+                        sx={{ p: 4, fontSize: 20 }}
+                     >
                         +200
                      </Button>
-                  </Box>
+                  </Stack>
                </Stack>
+               <Box
+                  sx={{
+                     height: '100%',
+                     width: '100%',
+                     display: 'flex',
+                     justifyContent: 'flex-end',
+                  }}
+               >
+                  <Card
+                     sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        width: 100,
+                        height: 100,
+                        borderRadius: '50%',
+                        backgroundColor: 'lightblue',
+                        alignItems: 'center',
+                        m: 3,
+                     }}
+                  >
+                     <Typography variant='h5'>{count}</Typography>
+                  </Card>
+               </Box>
             </Card>
-         </Grid>
-         <Grid item xs={12}>
-            <Card>
+         </Box>
+         <Box sx={{ width: '30%' }}>
+            <Card sx={{ m: 2 }}>
                {rowLot &&
                   rowLot.map((lotdata, key) => (
                      <Typography key={key}>{lotdata.lotId.name}</Typography>
                   ))}
             </Card>
-         </Grid>
-      </Grid>
+         </Box>
+      </Box>
    )
 }
 

@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
+import './GuestStyle.css'
 
 const VisuallyHiddenInput = styled('input')({
    clip: 'rect(0 0 0 0)',
@@ -52,17 +53,16 @@ const Registration = () => {
       frm.append('Photo', Photo)
       frm.append('Place', Place)
 
-    
       axios.post('http://localhost:5000/User', frm).then((response) => {
          console.log(response.data)
-        //  setName('')
-        //  setEmail('')
-        //  setPassword('')
-        //  setContact('')
-        //  setProof('')
-        //  setPhoto('')
-        //  setDistrict('')
-        //  setPlace('')
+         setName('')
+         setEmail('')
+         setPassword('')
+         setContact('')
+         setProof('')
+         setPhoto('')
+         setDistrict('')
+         setPlace('')
       })
    }
 
@@ -106,24 +106,29 @@ const Registration = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: '20vw' }}>
-               <Typography>User Registration</Typography>
-               <Stack sx={{ mt: 1 }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: '30vw' }}>
+            <Typography variant='h4' textAlign={'center'} sx={{p:2}} className='dancing-script'>Auctioneer</Typography>
+               <Stack
+                  direction={'row'}
+                  sx={{ mt: 1 }}
+                  gap={4}
+               >
                   <TextField
                      id='standard-basic'
                      label='Name'
                      variant='standard'
                      onChange={(event) => setName(event.target.value)}
                      value={Name}
+                     fullWidth
                   />
-               </Stack>
-               <Stack sx={{ mt: 1 }}>
+
                   <TextField
                      id='standard-basic'
                      label='Email'
                      variant='standard'
                      onChange={(event) => setEmail(event.target.value)}
                      value={Email}
+                     fullWidth
                   />
                </Stack>
                <Stack>
@@ -140,23 +145,27 @@ const Registration = () => {
                      />
                   </Button>
                </Stack>
-               <Stack sx={{ mt: 1 }}>
+               <Stack
+                  sx={{ mt: 1 }}
+                  direction={'row'}
+                  gap={4}
+               >
                   <TextField
                      id='standard-basic'
                      label='Contact'
                      variant='standard'
                      onChange={(event) => setContact(event.target.value)}
                      value={Contact}
+                     fullWidth
                   />
-               </Stack>
 
-               <Stack sx={{ mt: 1 }}>
                   <TextField
                      id='standard-basic'
                      label='Password'
                      variant='standard'
                      onChange={(event) => setPassword(event.target.value)}
                      value={Password}
+                     fullWidth
                   />
                </Stack>
                <Stack sx={{ mt: 3 }}>
@@ -174,13 +183,13 @@ const Registration = () => {
                </Stack>
 
                <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
+                  sx={{ mt: 2 }}
                   direction='row'
+                  gap={4}
                >
                   <FormControl
                      variant='standard'
-                     sx={{ m: 1, minWidth: 120 }}
+                     sx={{ m: 1, minWidth: 140 }}
                      fullWidth
                   >
                      <InputLabel id='demo-simple-select-standard-label'>
@@ -203,13 +212,7 @@ const Registration = () => {
                         ))}
                      </Select>
                   </FormControl>
-               </Stack>
 
-               <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
-                  direction='row'
-               >
                   <FormControl
                      variant='standard'
                      sx={{ m: 1, minWidth: 120 }}
