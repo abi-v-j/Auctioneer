@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardMedia, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, Card, CardMedia, Stack, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import { setSocket } from '../../../Context/Context'
@@ -63,6 +63,7 @@ const Auction = () => {
          }
 
          if (count === 0) {
+            setNotification([])
             if (Userid === uid) {
                alert('You Won This Lot')
                fetchSingleLot()
@@ -82,7 +83,6 @@ const Auction = () => {
             width: '100vw',
             height: '100vh',
             display: 'flex',
-            alignItems: 'center',
             justifyContent: 'center',
             margin: 'auto',
          }}
@@ -210,10 +210,14 @@ const Auction = () => {
             </Card>
          </Box>
          <Box sx={{ width: '30%' }}>
-            <Card sx={{ m: 2 }}>
+            <Card sx={{ m: 2, backgroundColor:'#008080' }}>
+               <Typography variant={'h5'} textAlign={'center'} color={'white'} sx={{m:2}}>UpComing</Typography>
                {rowLot &&
                   rowLot.map((lotdata, key) => (
+                     <Card sx={{display:'flex',backgroundColor:'#ABAB5',gap:2,p:3,m:1}}>
+                        <Avatar src={lotdata.lotId.productimgsrc}/>
                      <Typography key={key}>{lotdata.lotId.name}</Typography>
+                     </Card>
                   ))}
             </Card>
          </Box>

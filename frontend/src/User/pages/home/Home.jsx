@@ -4,7 +4,7 @@ import Posts from '../../components/posts/Posts'
 import './home.scss'
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
-import { Box, Card, Typography } from '@mui/material'
+import { Box, Button, Card, Typography } from '@mui/material'
 import { setSocket } from '../../../Context/Context'
 import { Link } from 'react-router-dom'
 
@@ -55,11 +55,18 @@ const Home = () => {
          {rows && <Stories rows={rows} />}
          <Box sx={{ display: 'flex', width: '100%' }}>
             <Card
+               
                className='innerCard'
-               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' }}
+               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' ,backgroundColor:'lavender'}}
             >
                {check ? (
-                  <Link  to={`../../Auction`}>Hello</Link>
+                  <Link  to={`../../Auction`}>
+                     <Button component='label'
+                     variant='contained'
+                    >
+                        Start Auction
+                     </Button>
+                  </Link>
                ) : (
                   <Typography variant='h4'>
                      Auction Start in {countDown}

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import './post.scss'
 
-import { CardMedia } from '@mui/material'
+import { Button, CardMedia } from '@mui/material'
 
 const Post = ({ post }) => {
-   
+
 
    return (
       <div className='post'>
@@ -26,6 +26,8 @@ const Post = ({ post }) => {
                   </div>
                </div>
                {/* <MoreHorizIcon /> */}
+               <Button
+                  variant='contained'>View</Button>
             </div>
             <div className='content'>
                <p>{post.lotId.quantity}</p>
@@ -36,15 +38,17 @@ const Post = ({ post }) => {
                />
             </div>
             <div className='info'>
+
                <div className='item'>
-                 <Link
-                to={`/profile/${post.userId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-View More
-                     </Link>
+                  <Link
+                     to={`/profile/${post.userId}`}
+                     style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                     View More
+                  </Link>
+
                </div>
-               
+
             </div>
          </div>
       </div>

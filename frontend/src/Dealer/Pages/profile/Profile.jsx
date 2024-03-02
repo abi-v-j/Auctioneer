@@ -8,24 +8,9 @@ import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Posts from "../../components/posts/Posts"
-import { useEffect, useState } from "react";
-import axios from "axios";
+import Posts from "../../Component/posts/Posts"
 
 const Profile = () => {
-  const [myProfile, setMyProfile] = useState([])
-
-  const fetchMyProfile = () => {
-    const Uid = sessionStorage.getItem('uId')
-    axios.get(`http://localhost:5000/User/${Uid}`).then((response) => {
-      console.log(response.data.user)
-      setMyProfile(response.data.user)
-   })
-  }
-  useEffect(() => {
-    fetchMyProfile()
-  },[])
-
   return (
     <div className="profile">
       <div className="images">
@@ -35,7 +20,7 @@ const Profile = () => {
           className="cover"
         />
         <img
-          src={myProfile.photo}
+          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
           alt=""
           className="profilePic"
         />
@@ -60,7 +45,7 @@ const Profile = () => {
             </a>
           </div>
           <div className="center">
-            <span>{myProfile.name}</span>
+            <span>Jane Doe</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon />

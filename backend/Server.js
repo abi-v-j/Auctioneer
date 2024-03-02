@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://auctioneer:auctioneer%40123@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://auctioneer123:auction@cluster0.4teukan.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -233,6 +233,15 @@ app.post(
 
 app.get('/User', async (req, res) => {
    const user = await User.find()
+   res.send({ user })
+})
+
+
+// select User
+
+app.get('/User/:Id', async (req, res) => {
+   const Id = req.params.Id
+   const user = await User.findOne({_id:Id})
    res.send({ user })
 })
 
