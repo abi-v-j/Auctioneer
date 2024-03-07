@@ -69,10 +69,7 @@ const App = () => {
                         path='/'
                         element={<Profile />}
                     />
-                    <Route
-                        path='/Profile'
-                        element={<Profile />}
-                    />
+                   
                     <Route path='/MyProfile' element={<MyProfile />} />
                     <Route path='/AddLot' element={<AddLot />} />
                     <Route path='/AddImage/:Id' element={<AddLotImages />} />

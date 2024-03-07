@@ -27,7 +27,6 @@ const AddLot = () => {
    const [Name, setName] = useState('')
    const [Price, setPrice] = useState('')
    const [Antique, setAntique] = useState('')
-   const [Quantity, setQuantity] = useState('')
    const [rows, setRows] = useState([])
 
    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }))
@@ -54,11 +53,7 @@ const AddLot = () => {
          headerName: 'Name',
          flex: 3,
       },
-      {
-         field: 'quantity',
-         headerName: 'Quality',
-         flex: 3,
-      },
+      
       {
          field: 'Action',
          headerName: 'Action',
@@ -87,15 +82,12 @@ const AddLot = () => {
       const frm = new FormData()
       frm.append('name', Name)
       frm.append('price', Price)
-      frm.append('antique', Antique)
-      frm.append('quantity', Quantity)
       frm.append('dealerId', sessionStorage.getItem('dId'))
 
       axios.post('http://localhost:5000/Lot', frm).then((response) => {
          console.log(response.data)
          setName('')
          setPrice('')
-         setQuantity('')
       })
    }
    useEffect(() => {
@@ -114,7 +106,8 @@ const AddLot = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue' }}>
+            <Card sx={{ p: 5, backgroundColor: 'lightblue',width:400 }}>
+               
                <Stack
                   spacing={3}
                   sx={{ backgroundColor: 'lightblue' }}
@@ -134,6 +127,7 @@ const AddLot = () => {
                      id='standard-basic'
                      label='Price'
                      variant='standard'
+                     type='number'
                      onChange={(event) => setPrice(event.target.value)}
                   />
                </Stack>
@@ -155,17 +149,7 @@ const AddLot = () => {
                   </Button>
                </Stack>
 
-               <Stack
-                  spacing={3}
-                  sx={{ backgroundColor: 'lightblue' }}
-               >
-                  <TextField
-                     id='standard-basic'
-                     label='Quantity'
-                     variant='standard'
-                     onChange={(event) => setQuantity(event.target.value)}
-                  />
-               </Stack>
+             
 
                <Stack
                   spacing={3}

@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://auctioneer123:auction@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://auctioneer123:auctioneer123@cluster0.4teukan.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -462,14 +462,12 @@ app.post(
       var fileValue = JSON.parse(JSON.stringify(req.files))
       var productimgsrc = `http://127.0.0.1:${port}/images/${fileValue.antique[0].filename}`
 
-      const { name, price, quantity, datetime, dealerId } = req.body
+      const { name, price,  dealerId } = req.body
       try {
          let lot = new Lot({
             name,
             price,
             productimgsrc,
-            quantity,
-            datetime,
             dealerId,
          })
 
