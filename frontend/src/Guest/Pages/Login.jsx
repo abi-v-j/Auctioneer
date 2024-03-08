@@ -51,7 +51,7 @@ const Login = () => {
 
                <Stack
                   spacing={3}
-                  sx={{ backgroundColor: 'lightblue' }}
+                  sx={{ backgroundColor: 'aliceblue' }}
                >
                   <TextField
                      id='standard-basic'
