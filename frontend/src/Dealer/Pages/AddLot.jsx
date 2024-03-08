@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Card, Stack, TextField, Typography } from '@mui/ma
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 
 
@@ -64,8 +64,8 @@ const AddLot = () => {
          renderCell: (params) => {
             return (
                <Box sx={{ display: 'flex', gap: 3 }}>
-                  <Link variant='outlined' to={`/Dealer/AddImage/${params.row._id}`}>Add Image</Link>
-                  <Button variant='outlined'>Reject</Button>
+                  <Button variant='outlined' to={`/Dealer/AddImage/${params.row._id}`}>Add Image</Button>
+                  <Button variant='outlined' sx={{color: 'red', borderColor: 'red'}}>Reject</Button>
                </Box>
             )
          },
