@@ -38,7 +38,7 @@ const Registration = () => {
    const [Photo, setPhoto] = useState(null)
    const [District, setDistrict] = useState('')
    const [Place, setPlace] = useState('')
-   const [PhotoURL, setPhotoURL] = useState('') // State to store URL of the selected photo
+   const [PhotoURL, setPhotoURL] = useState('') 
 
    const [State, setState] = useState('')
    const [stateData, setStateData] = useState([])
