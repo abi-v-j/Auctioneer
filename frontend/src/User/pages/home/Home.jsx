@@ -64,7 +64,7 @@ const Home = () => {
                      <Button component='label'
                      variant='contained'
                     >
-                        Start Auction
+                        Live Auction
                      </Button>
                   </Link>
                ) : (

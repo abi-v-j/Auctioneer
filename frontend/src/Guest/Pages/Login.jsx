@@ -40,7 +40,7 @@ const Login = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 10, backgroundColor: 'lightblue' }}>
+            <Card sx={{ p: 10, backgroundColor: 'aliceblue' }}>
                <Typography variant='h4' textAlign={'center'} sx={{p:2}} className='dancing-script'>Auctioneer</Typography>
                <TextField
                   id='standard-basic'

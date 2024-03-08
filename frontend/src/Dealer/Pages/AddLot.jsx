@@ -65,7 +65,7 @@ const AddLot = () => {
             return (
                <Box sx={{ display: 'flex', gap: 3 }}>
                   <Button variant='outlined' to={`/Dealer/AddImage/${params.row._id}`}>Add Image</Button>
-                  <Button variant='outlined' sx={{color: 'red', borderColor: 'red'}}>Reject</Button>
+                  <Button variant='outlined' sx={{color: 'red', borderColor: 'red'}}>Delete</Button>
                </Box>
             )
          },
