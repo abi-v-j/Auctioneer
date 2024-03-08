@@ -15,8 +15,6 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
-import './GuestStyle.css'
-
 
 const VisuallyHiddenInput = styled('input')({
    clip: 'rect(0 0 0 0)',
