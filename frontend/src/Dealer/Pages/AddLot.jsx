@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, Stack, TextField } from '@mui/material'
+import { Avatar, Box, Button, Card, Stack, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
@@ -28,6 +28,8 @@ const AddLot = () => {
    const [Price, setPrice] = useState('')
    const [Antique, setAntique] = useState('')
    const [rows, setRows] = useState([])
+   const [PhotoURL, setPhotoURL] = useState('')
+ 
 
    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }))
    const columns = [
@@ -91,6 +93,13 @@ const AddLot = () => {
          setPrice('')
       })
    }
+
+   const handlePhotoChange = (event) => {
+      const file = event.target.files[0]
+      setAntique(file)
+      setPhotoURL(URL.createObjectURL(file))
+   }
+
    useEffect(() => {
       fetchLot()
    }, [])
@@ -107,11 +116,20 @@ const AddLot = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue',width:400 }}>
-               
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue',width: 600}}>
+            <Typography variant='h4' textAlign={'center'} sx={{ p: 2, marginBottom: 5 }} className='dancing-script'>Auctioneer</Typography>
+               <Box sx={{display:'flex',gap:10}}>
+
+                  <Box sx={{width:300,display:'flex',flexDirection:'column',alignItems:'center'}}>
+                     <Avatar src={PhotoURL} sx={{width:300, height:300}} variant="square"/>
+                     <Typography textAlign={'center'} sx={{mt:5}} variant='h5'>{Name}</Typography>
+
+                     
+                  </Box>
+                  <Box>
                <Stack
                   spacing={3}
-                  sx={{ backgroundColor: 'lightblue' }}
+                  sx={{ backgroundColor: 'aliceblue', }}
                >
                   <TextField
                      id='standard-basic'
@@ -122,7 +140,7 @@ const AddLot = () => {
                </Stack>
                <Stack
                   spacing={3}
-                  sx={{ backgroundColor: 'lightblue' }}
+                  sx={{ backgroundColor: 'aliceblue', mt: 4 }}
                >
                   <TextField
                      id='standard-basic'
@@ -134,7 +152,7 @@ const AddLot = () => {
                </Stack>
                <Stack
                   spacing={3}
-                  sx={{ backgroundColor: 'lightblue', mt:3 }}
+                  sx={{ backgroundColor: 'lightblue', mt:4 }}
                >
                  
                   <Button
@@ -145,7 +163,7 @@ const AddLot = () => {
                      Upload file
                      <VisuallyHiddenInput
                         type='file'
-                        onChange={(event) => setAntique(event.target.files[0])}
+                        onChange={handlePhotoChange}
                      />
                   </Button>
                </Stack>
@@ -154,16 +172,19 @@ const AddLot = () => {
 
                <Stack
                   spacing={3}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 4 }}
                >
                   <Button
-                     sx={{ px: 4, mt: 10, ml: 5 }}
+                     sx={{ px: 4, mt: 10, ml: 5, }}
                      type='submit'
                      variant='outlined'
+                     
                   >
                      Submit
                   </Button>
                </Stack>
+               </Box>
+               </Box>
             </Card>
          </Box>
          <Box sx={{ height: 400, width: '80%' }}>

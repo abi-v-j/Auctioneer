@@ -115,7 +115,7 @@ const DealerRegistration = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', width: 800 }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 800 }}>
             <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Auctioneer</Typography>
                <Box sx={{ display: 'flex', gap: 5 }}>
 
