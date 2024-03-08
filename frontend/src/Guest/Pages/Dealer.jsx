@@ -15,6 +15,8 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
+import './GuestStyle.css'
+
 
 const VisuallyHiddenInput = styled('input')({
    clip: 'rect(0 0 0 0)',
@@ -116,7 +118,7 @@ const DealerRegistration = () => {
             onSubmit={handleSubmit}
          >
             <Card sx={{ p: 5, backgroundColor: 'lightblue', width: 800 }}>
-               <Typography>Dealer Registration</Typography>
+            <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Auctioneer</Typography>
                <Box sx={{ display: 'flex', gap: 5 }}>
 
                   <Box sx={{ width: 400, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -127,7 +129,7 @@ const DealerRegistration = () => {
                   </Box>
                   <Box>
 
-                     <Stack>
+                     <Stack direction={'row'}  gap={4}> 
                         <TextField
                            id='standard-basic'
                            label='Name'
@@ -135,8 +137,7 @@ const DealerRegistration = () => {
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
                         />
-                     </Stack>
-                     <Stack>
+                     
                         <TextField
                            id='standard-basic'
                            label='Email'
@@ -145,7 +146,7 @@ const DealerRegistration = () => {
                            value={Email}
                         />
                      </Stack>
-                     <Stack>
+                     <Stack >
                         <Button
                            sx={{ mt: 3 }}
                            component='label'
@@ -159,7 +160,7 @@ const DealerRegistration = () => {
                            />
                         </Button>
                      </Stack>
-                     <Stack>
+                     <Stack direction={'row'}  gap={4}>
                         <TextField
                            id='standard-basic'
                            label='Contact'
@@ -167,8 +168,7 @@ const DealerRegistration = () => {
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
                         />
-                     </Stack>
-                     <Stack>
+                     
                         <TextField
                            id='standard-basic'
                            label='Password'
@@ -195,6 +195,7 @@ const DealerRegistration = () => {
                         spacing={5}
                         sx={{ mt: 3 }}
                         direction='row'
+                        gap={4}
                      >
                         <FormControl
                            variant='standard'
@@ -220,12 +221,7 @@ const DealerRegistration = () => {
                               ))}
                            </Select>
                         </FormControl>
-                     </Stack>
-                     <Stack
-                        spacing={5}
-                        sx={{ mt: 3 }}
-                        direction='row'
-                     >
+                     
                         <FormControl
                            variant='standard'
                            fullWidth
@@ -255,6 +251,7 @@ const DealerRegistration = () => {
                         spacing={5}
                         sx={{ mt: 3 }}
                         direction='row'
+                        gap={4}
                      >
                         <FormControl
                            variant='standard'
