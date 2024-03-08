@@ -9,6 +9,7 @@ import {
    FormControl,
    TextField,
    Typography,
+   Avatar,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -40,6 +41,8 @@ const DealerRegistration = () => {
    const [stateData, setStateData] = useState([])
    const [districtData, setDistrictData] = useState([])
    const [placeData, setPlaceData] = useState([])
+   const [PhotoURL, setPhotoURL] = useState('') // State to store URL of the selected photo
+
 
    const handleSubmit = (event) => {
       event.preventDefault()
@@ -89,6 +92,12 @@ const DealerRegistration = () => {
       })
    }
 
+   const handlePhotoChange = (event) => {
+      const file = event.target.files[0]
+      setPhoto(file)
+      setPhotoURL(URL.createObjectURL(file)) // Generate URL for the selected image file
+   }
+
    useEffect(() => {
       fetchState()
    }, [])
@@ -106,177 +115,189 @@ const DealerRegistration = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', width: 400 }}>
+            <Card sx={{ p: 5, backgroundColor: 'lightblue', width: 800 }}>
                <Typography>Dealer Registration</Typography>
-               <Stack>
-                  <TextField
-                     id='standard-basic'
-                     label='Name'
-                     variant='standard'
-                     onChange={(event) => setName(event.target.value)}
-                     value={Name}
-                  />
-               </Stack>
-               <Stack>
-                  <TextField
-                     id='standard-basic'
-                     label='Email'
-                     variant='standard'
-                     onChange={(event) => setEmail(event.target.value)}
-                     value={Email}
-                  />
-               </Stack>
-               <Stack>
-                  <Button
-                     sx={{ mt: 3 }}
-                     component='label'
-                     variant='contained'
-                     startIcon={<CloudUploadIcon />}
-                  >
-                     Upload Photo
-                     <VisuallyHiddenInput
-                        type='file'
-                        onChange={(event) => setPhoto(event.target.files[0])}
-                     />
-                  </Button>
-               </Stack>
-               <Stack>
-                  <TextField
-                     id='standard-basic'
-                     label='Contact'
-                     variant='standard'
-                     onChange={(event) => setContact(event.target.value)}
-                     value={Contact}
-                  />
-               </Stack>
-               <Stack>
-                  <TextField
-                     id='standard-basic'
-                     label='Password'
-                     variant='standard'
-                     onChange={(event) => setPassword(event.target.value)}
-                     value={Password}
-                  />
-               </Stack>
-               <Stack sx={{ mt: 5 }}>
-                  <Button
-                     component='label'
-                     variant='contained'
-                     startIcon={<CloudUploadIcon />}
-                  >
-                     Upload Proof
-                     <VisuallyHiddenInput
-                        type='file'
-                        onChange={(event) => setProof(event.target.files[0])}
-                     />
-                  </Button>
-               </Stack>
+               <Box sx={{ display: 'flex', gap: 5 }}>
 
-               <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
-                  direction='row'
-               >
-                  <FormControl
-                     variant='standard'
-                     fullWidth
-                  >
-                     <InputLabel id='demo-simple-select-standard-label'>
-                        State
-                     </InputLabel>
-                     <Select
-                        labelId='demo-simple-select-standard-label'
-                        id='demo-simple-select-standard'
-                        label='State'
-                        onChange={(event) => fetchDistrict(event.target.value)}
-                        value={State}
+                  <Box sx={{ width: 400, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                     <Avatar src={PhotoURL} sx={{ width: 300, height: 300 }} />
+                     <Typography textAlign={'center'} sx={{ mt: 5 }} variant='h5'>{Name}</Typography>
+
+
+                  </Box>
+                  <Box>
+
+                     <Stack>
+                        <TextField
+                           id='standard-basic'
+                           label='Name'
+                           variant='standard'
+                           onChange={(event) => setName(event.target.value)}
+                           value={Name}
+                        />
+                     </Stack>
+                     <Stack>
+                        <TextField
+                           id='standard-basic'
+                           label='Email'
+                           variant='standard'
+                           onChange={(event) => setEmail(event.target.value)}
+                           value={Email}
+                        />
+                     </Stack>
+                     <Stack>
+                        <Button
+                           sx={{ mt: 3 }}
+                           component='label'
+                           variant='contained'
+                           startIcon={<CloudUploadIcon />}
+                        >
+                           Upload Photo
+                           <VisuallyHiddenInput
+                              type='file'
+                              onChange={handlePhotoChange}
+                           />
+                        </Button>
+                     </Stack>
+                     <Stack>
+                        <TextField
+                           id='standard-basic'
+                           label='Contact'
+                           variant='standard'
+                           onChange={(event) => setContact(event.target.value)}
+                           value={Contact}
+                        />
+                     </Stack>
+                     <Stack>
+                        <TextField
+                           id='standard-basic'
+                           label='Password'
+                           variant='standard'
+                           onChange={(event) => setPassword(event.target.value)}
+                           value={Password}
+                        />
+                     </Stack>
+                     <Stack sx={{ mt: 5 }}>
+                        <Button
+                           component='label'
+                           variant='contained'
+                           startIcon={<CloudUploadIcon />}
+                        >
+                           Upload Proof
+                           <VisuallyHiddenInput
+                              type='file'
+                              onChange={(event) => setProof(event.target.files[0])}
+                           />
+                        </Button>
+                     </Stack>
+
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3 }}
+                        direction='row'
                      >
-                        {stateData.map((state, key) => (
-                           <MenuItem
-                              key={key}
-                              value={state._id}
+                        <FormControl
+                           variant='standard'
+                           fullWidth
+                        >
+                           <InputLabel id='demo-simple-select-standard-label'>
+                              State
+                           </InputLabel>
+                           <Select
+                              labelId='demo-simple-select-standard-label'
+                              id='demo-simple-select-standard'
+                              label='State'
+                              onChange={(event) => fetchDistrict(event.target.value)}
+                              value={State}
                            >
-                              {state.stateName}
-                           </MenuItem>
-                        ))}
-                     </Select>
-                  </FormControl>
-               </Stack>
-               <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
-                  direction='row'
-               >
-                  <FormControl
-                     variant='standard'
-                     fullWidth
-                  >
-                     <InputLabel id='demo-simple-select-standard-label'>
-                        District
-                     </InputLabel>
-                     <Select
-                        labelId='demo-simple-select-standard-label'
-                        id='demo-simple-select-standard'
-                        label='District'
-                        onChange={(event) => fetchPlace(event.target.value)}
-                        value={District}
+                              {stateData.map((state, key) => (
+                                 <MenuItem
+                                    key={key}
+                                    value={state._id}
+                                 >
+                                    {state.stateName}
+                                 </MenuItem>
+                              ))}
+                           </Select>
+                        </FormControl>
+                     </Stack>
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3 }}
+                        direction='row'
                      >
-                        {districtData.map((district, key) => (
-                           <MenuItem
-                              key={key}
-                              value={district._id}
+                        <FormControl
+                           variant='standard'
+                           fullWidth
+                        >
+                           <InputLabel id='demo-simple-select-standard-label'>
+                              District
+                           </InputLabel>
+                           <Select
+                              labelId='demo-simple-select-standard-label'
+                              id='demo-simple-select-standard'
+                              label='District'
+                              onChange={(event) => fetchPlace(event.target.value)}
+                              value={District}
                            >
-                              {district.districtName}
-                           </MenuItem>
-                        ))}
-                     </Select>
-                  </FormControl>
-               </Stack>
-               <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
-                  direction='row'
-               >
-                  <FormControl
-                     variant='standard'
-                     fullWidth
-                  >
-                     <InputLabel id='demo-simple-select-standard-label'>
-                        Place
-                     </InputLabel>
-                     <Select
-                        labelId='demo-simple-select-standard-label'
-                        id='demo-simple-select-standard'
-                        label='Place'
-                        onChange={(event) => setPlace(event.target.value)}
-                        value={Place}
+                              {districtData.map((district, key) => (
+                                 <MenuItem
+                                    key={key}
+                                    value={district._id}
+                                 >
+                                    {district.districtName}
+                                 </MenuItem>
+                              ))}
+                           </Select>
+                        </FormControl>
+                     </Stack>
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3 }}
+                        direction='row'
                      >
-                        {placeData.map((place, key) => (
-                           <MenuItem
-                              key={key}
-                              value={place._id}
+                        <FormControl
+                           variant='standard'
+                           fullWidth
+                        >
+                           <InputLabel id='demo-simple-select-standard-label'>
+                              Place
+                           </InputLabel>
+                           <Select
+                              labelId='demo-simple-select-standard-label'
+                              id='demo-simple-select-standard'
+                              label='Place'
+                              onChange={(event) => setPlace(event.target.value)}
+                              value={Place}
                            >
-                              {place.placeName}
-                           </MenuItem>
-                        ))}
-                     </Select>
-                  </FormControl>
-               </Stack>
-               <Stack
-                  spacing={5}
-                  sx={{ mt: 3 }}
-                  direction='row'
-               >
-                  <Button
-                     sx={{ px: 5 }}
-                     type='submit'
-                     variant='contained'
-                     fullWidth
-                     
-                  >
-                     Submit
-                  </Button>
-               </Stack>
+                              {placeData.map((place, key) => (
+                                 <MenuItem
+                                    key={key}
+                                    value={place._id}
+                                 >
+                                    {place.placeName}
+                                 </MenuItem>
+                              ))}
+                           </Select>
+                        </FormControl>
+                     </Stack>
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3 }}
+                        direction='row'
+                     >
+                        <Button
+                           sx={{ px: 5 }}
+                           type='submit'
+                           variant='contained'
+                           fullWidth
+
+                        >
+                           Submit
+                        </Button>
+                     </Stack>
+                  </Box>
+               </Box>
             </Card>
          </Box>
       </div>
