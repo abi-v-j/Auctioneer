@@ -82,6 +82,7 @@ const AddLot = () => {
       const frm = new FormData()
       frm.append('name', Name)
       frm.append('price', Price)
+      frm.append('antique', Antique)
       frm.append('dealerId', sessionStorage.getItem('dId'))
 
       axios.post('http://localhost:5000/Lot', frm).then((response) => {

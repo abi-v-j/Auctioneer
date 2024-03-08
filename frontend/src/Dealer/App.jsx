@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import Navbar from './Component/navbar/Navbar'
 // import LeftBar from './components/leftBar/LeftBar'
 // import RightBar from './components/rightBar/RightBar'
-import Home from './Pages/home/Home'
 import Profile from './Pages/profile/Profile'
 import MyProfile from './Pages/MyProfile';
 import AddLot from './Pages/AddLot';
