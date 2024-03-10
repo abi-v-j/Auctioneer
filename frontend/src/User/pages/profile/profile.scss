@@ -1,4 +1,5 @@
 @import "../../style.scss";
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 
 .profile {
   @include themify($themes) {
@@ -29,6 +30,16 @@
     }
     .profileContainer {
       padding: 20px 70px;
+
+      .dancing-script {
+        font-family: "Dancing Script", cursive !important;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+        background: linear-gradient(to right, #8c8ff0, #39d8f4); 
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: themed("textColor");
+      }
 
       @include mobile{
         padding: 10px;

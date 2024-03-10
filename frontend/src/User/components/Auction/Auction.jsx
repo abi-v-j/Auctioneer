@@ -33,7 +33,7 @@ const Auction = () => {
                navigate('/User')
             } else {
                setRows(response.data.auctionhead)
-               setPricedata(data.lotId.price)
+               setPricedata(data.price)
             }
          })
    }
@@ -123,7 +123,7 @@ const Auction = () => {
                >
                   <Box sx={{ width: '100%', m: 5, display: 'flex' }}>
                      <CardMedia
-                        image={rows && rows.lotId.productimgsrc}
+                        image={rows && rows.galleries[0].lotImgsrc}
                         sx={{
                            width: 200,
                            height: 200,
@@ -133,8 +133,8 @@ const Auction = () => {
                         }}
                      />
                      <Box sx={{ m: 4 }}>
-                        <Typography>{rows && rows.lotId.name}</Typography>
-                        <Typography>{rows && rows.lotId.price}</Typography>
+                        <Typography>{rows && rows.name}</Typography>
+                        <Typography>{rows && rows.price}</Typography>
                      </Box>
                   </Box>
                </Card>
@@ -215,8 +215,8 @@ const Auction = () => {
                {rowLot &&
                   rowLot.map((lotdata, key) => (
                      <Card sx={{display:'flex',backgroundColor:'#ABAB5',gap:2,p:3,m:1}}>
-                        <Avatar src={lotdata.lotId.productimgsrc}/>
-                     <Typography key={key}>{lotdata.lotId.name}</Typography>
+                        <Avatar src={lotdata.galleries[0].lotImgsrc}/>
+                     <Typography key={key}>{lotdata.name}</Typography>
                      </Card>
                   ))}
             </Card>

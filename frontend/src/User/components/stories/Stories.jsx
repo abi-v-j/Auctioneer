@@ -3,7 +3,6 @@ import { Box, Card } from '@mui/material'
 
 const Stories = ({rows}) => {
   
-
   
 
    return (
@@ -15,10 +14,10 @@ const Stories = ({rows}) => {
                   key={key}
                >
                   <img
-                     src={story.lotId.productimgsrc}
+                     src={story.galleries[0].lotImgsrc}
                      alt=''
                   />
-                  <span>{story.token}</span>
+                  <span>{story.auctionheadToken}</span>
                   <a href="car" className='link'  rel='noopener noreferrer'>View Details</a>
 
                </Card>
