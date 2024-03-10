@@ -8,16 +8,17 @@ import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutline
 import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
+import { Card } from "@mui/material";
 
 const Navbar = () => {
   const { dispatch } = useContext(DarkModeContext);
 
   return (
-    <div className="navbar">
+    <Card className="navbar" sx={{m:2,borderRadius:5}}>
       <div className="wrapper">
         <div className="search">
-          <input type="text" placeholder="Search..." />
-          <SearchOutlinedIcon />
+          {/* <input type="text" placeholder="Search..." />
+          <SearchOutlinedIcon /> */}
         </div>
         <div className="items">
           <div className="item">
@@ -53,7 +54,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

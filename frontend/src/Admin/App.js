@@ -10,8 +10,24 @@ import State from "./Pages/State";
 import Sidebar from "./components/sidebar/Sidebar";
 import Navbar from "./components/navbar/Navbar";
 import ViewLot from "./Pages/ViewLot";
-import { Box } from "@mui/material";
+import { Box, Card } from "@mui/material";
 import AssignAuction from "./Pages/AssignAuction";
+
+
+const styles = {
+  margin: 2,
+  height: '75vh',
+  overflowY: 'scroll', // Allow scrolling
+  padding: 3,
+  borderRadius: 5,
+  // Hide the default scrollbar
+  scrollbarWidth: 'none',
+  '-ms-overflow-style': 'none',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
+};
+
 function App() {
   const { darkMode } = useContext(DarkModeContext);
 
@@ -21,7 +37,7 @@ function App() {
         <Sidebar />
         <div className="homeContainer">
           <Navbar />
-          <Box sx={{m:5}}>
+          <Card sx={styles}>
 
           <Routes>
             <Route path="/" element={<Home />} />
@@ -33,7 +49,7 @@ function App() {
             <Route path='/ViewLot' element={<ViewLot />} />
             <Route path='/AssignAuction/:id' element={<AssignAuction />} />
           </Routes>
-          </Box>
+          </Card>
         </div>
       </div>
     </div>

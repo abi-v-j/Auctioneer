@@ -28,7 +28,7 @@ const Profile = () => {
       <div className="profileContainer">
         <div className="uInfo">
           <div className="left">
-            <a href="http://facebook.com">
+            {/* <a href="http://facebook.com">
               <FacebookTwoToneIcon fontSize="large" />
             </a>
             <a href="http://facebook.com">
@@ -42,24 +42,24 @@ const Profile = () => {
             </a>
             <a href="http://facebook.com">
               <PinterestIcon fontSize="large" />
-            </a>
+            </a> */}
           </div>
           <div className="center">
             <span>Jane Doe</span>
             <div className="info">
               <div className="item">
-                <PlaceIcon />
-                <span>USA</span>
+                {/* <PlaceIcon />
+                <span>USA</span> */}
               </div>
               <div className="item">
-                <LanguageIcon />
-                <span>lama.dev</span>
+                {/* <LanguageIcon />
+                <span>lama.dev</span> */}
               </div>
             </div>
             <button>follow</button>
           </div>
           <div className="right">
-            <EmailOutlinedIcon />
+            {/* <EmailOutlinedIcon /> */}
             <MoreVertIcon />
           </div>
         </div>

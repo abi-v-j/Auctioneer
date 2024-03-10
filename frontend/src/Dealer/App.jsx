@@ -7,7 +7,6 @@ import Navbar from './Component/navbar/Navbar'
 import Profile from './Pages/profile/Profile'
 import MyProfile from './Pages/MyProfile';
 import AddLot from './Pages/AddLot';
-import AddLotImages from './Pages/AddLotImages';
 import './style.scss'
 // import Auction from './components/Auction/Auction'
 import { Box } from '@mui/material'
@@ -71,7 +70,6 @@ const App = () => {
                    
                     <Route path='/MyProfile' element={<MyProfile />} />
                     <Route path='/AddLot' element={<AddLot />} />
-                    <Route path='/AddImage/:Id' element={<AddLotImages />} />
                 </Routes>
                 {/* </div> */}
                 {/* <RightBar /> */}
