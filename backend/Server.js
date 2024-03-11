@@ -1035,6 +1035,75 @@ app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
    }
 })
 
+
+
+
+app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
+   const currentDate = moment().startOf('day') // Get the current date at the start of the day
+   try {
+      const auctionhead = await Auctionhead.aggregate([
+         // Stage 1: Match lots with the current date
+         {
+            $match: {
+               date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         // Stage 2: Lookup auctionheads for each lot
+         {
+            $lookup: {
+               from: 'lotschemas',
+               localField: 'lotId',
+               foreignField: '_id',
+               as: 'lot',
+            },
+         },
+         // // Stage 3: Filter lots with associated auctionheads
+
+         // // Stage 4: Lookup galleries for each lot
+         {
+            $lookup: {
+               from: 'galleryschemas',
+               localField: 'lot._id',
+               foreignField: 'lotId',
+               as: 'galleries',
+            },
+         },
+         // // Stage 5: Unwind the galleries array
+         {
+            $unwind: '$galleries',
+         },
+         // // Stage 6: Group by lotId to reconstruct the galleries array
+         {
+            $group: {
+               _id: '$_id',
+               name: { $first: '$lot.name' },
+               price: { $first: '$lot.price' },
+               datetime: { $first: '$lot.datetime' },
+               auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
+               auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+               auctionheadToken: { $first: '$token' }, // Include the auctionhead date
+               galleries: { $push: '$galleries' },
+            },
+         },
+         {
+            $sort: { datetime: 1 },
+         },
+         // Stage 8: Limit to only one result
+         {
+            $limit: 1,
+         },
+      ])
+      if (auctionhead.length !== 0) {
+         res.send({ auctionhead: auctionhead[0] })
+      } else {
+         res.send({ auctionhead: null })
+      }
+   } catch (error) {
+      console.error(error)
+      res.status(500).send('Internal Server Error')
+   }
+})
+
 app.get('AuctionPrice', async (req, res) => {
    try {
       const largestPrice = await Auctionbody.find({ auctionheadId: Id })

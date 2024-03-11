@@ -30,7 +30,7 @@ const Home = () => {
 
    const fetchLot = () => {
       axios
-         .get('http://localhost:5000/AuctionheadCurrentDate')
+         .get('http://localhost:5000/AuctionheadCurrentDateForHome')
          .then((response) => {
             console.log(response.data.auctionhead)
             setRows(response.data.auctionhead)
@@ -40,7 +40,7 @@ const Home = () => {
 
 
    const fetchLotData = () => {
-     axios.get('http://localhost:5000/Auctionhead').then((response) => {
+     axios.get('http://localhost:5000/AuctionheadForHome').then((response) => {
         console.log(response.data.auctionhead)
         setRowLot(response.data.auctionhead)
      })
