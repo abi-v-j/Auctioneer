@@ -4,6 +4,7 @@ import Navbar from './components/navbar/Navbar'
 // import RightBar from './components/rightBar/RightBar'
 import Home from './pages/home/Home'
 import Profile from './pages/profile/Profile'
+import Viewdealer from './pages/viewdealer/Viewdealer'
 import './style.scss'
 // import Auction from './components/Auction/Auction'
 import { Box } from '@mui/material'
@@ -67,6 +68,10 @@ const App = () => {
                <Route
                   path='/Profile'
                   element={<Profile />}
+               />
+               <Route
+                  path='/Viewdealer'
+                  element={<Viewdealer />}
                />
             </Routes>
             {/* </div> */}
