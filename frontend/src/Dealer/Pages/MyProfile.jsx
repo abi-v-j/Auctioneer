@@ -1,29 +1,26 @@
-import { Box, Button, Card, Stack, TextField, Typography } from '@mui/material'
+import { Avatar, Box, Card, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
+import './GuestStyle.css'
+
+
 
 const MyProfile = () => {
+
     return (
         <div>
-            <Box sx={{ width: '100%', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                <Card sx={{ p: 5, backgroundColor: 'lightblue' }}>
-                    <Typography>My Profile</Typography>
-                    <Card spacing={5} sx={{ borderRadius: '100%', height: '17vh', width: '170' }}>
-                        <Stack alignItems={'center'}>
-                            <h1 >PHOTO</h1>
-                        </Stack>
-                    </Card>
+                <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 300, height: 400, mt: 5,gap:3, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>My Profile</Typography>
+                    <Avatar sx={{ width: 150, height: 150, }}></Avatar>
                     <Stack>
-                        <TextField id="standard-basic" label="Name" variant="standard" />
+                        <Typography >Anas</Typography>
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Email" variant="standard" />
+                    <Typography >Anas</Typography>
                     </Stack>
                     <Stack>
-                        <TextField id="standard-basic" label="Contact" variant="standard" />
-                    </Stack>
-                    <Stack spacing={5} sx={{ mt: 3 }} direction='row'>
-                        <Button sx={{ px: 5 }} variant="contained" fullWidth>Save</Button>
+                    <Typography >Anas</Typography>
                     </Stack>
 
                 </Card>

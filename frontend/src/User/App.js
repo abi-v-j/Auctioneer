@@ -9,6 +9,8 @@ import './style.scss'
 // import Auction from './components/Auction/Auction'
 import { Box } from '@mui/material'
 import {  useState } from 'react'
+import Favourite from './pages/favourite/Favourite'
+import Notification from './pages/notification/Notification'
 
 
 
@@ -72,6 +74,14 @@ const App = () => {
                <Route
                   path='/Viewdealer'
                   element={<Viewdealer />}
+               />
+                <Route
+                  path='/Favourite'
+                  element={<Favourite />}
+               />
+               <Route
+                  path='/Notification'
+                  element={<Notification />}
                />
             </Routes>
             {/* </div> */}

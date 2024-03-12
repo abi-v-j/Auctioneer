@@ -11,6 +11,8 @@ import './style.scss'
 // import Auction from './components/Auction/Auction'
 import { Box } from '@mui/material'
 import { useState } from 'react'
+import ChangePassword from './Pages/ChangePassword';
+import EditProfile from './Pages/EditProfile';
 
 
 
@@ -69,6 +71,9 @@ const App = () => {
                     />
                    
                     <Route path='/MyProfile' element={<MyProfile />} />
+                    <Route path='/EditProfile' element={<EditProfile />} />
+                    <Route path='/Changepassword' element={<ChangePassword />} />
+
                     <Route path='/AddLot' element={<AddLot />} />
                 </Routes>
                 {/* </div> */}

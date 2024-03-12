@@ -28,7 +28,7 @@ const Post = ({ post }) => {
                      to={`/profile/${post.userId}`}
                      style={{ textDecoration: 'none', color: 'inherit' }}
                   >
-               <Button variant='contained'>View</Button>
+               <Button variant='contained'>Add to Favourite</Button>
                </Link>
             </div>
             <div className='content'>
