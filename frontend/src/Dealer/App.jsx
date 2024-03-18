@@ -13,6 +13,7 @@ import { Box } from '@mui/material'
 import { useState } from 'react'
 import ChangePassword from './Pages/ChangePassword';
 import EditProfile from './Pages/EditProfile';
+import ViewLot from './Pages/ViewLot';
 
 
 
@@ -75,6 +76,7 @@ const App = () => {
                     <Route path='/Changepassword' element={<ChangePassword />} />
 
                     <Route path='/AddLot' element={<AddLot />} />
+                    <Route path='/ViewLot' element={<ViewLot />} />
                 </Routes>
                 {/* </div> */}
                 {/* <RightBar /> */}

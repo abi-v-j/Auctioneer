@@ -11,6 +11,7 @@ import { Box } from '@mui/material'
 import {  useState } from 'react'
 import Favourite from './pages/favourite/Favourite'
 import Notification from './pages/notification/Notification'
+import ViewMyLot from './pages/ViewMyLot/ViewMyLot'
 
 
 
@@ -82,6 +83,10 @@ const App = () => {
                <Route
                   path='/Notification'
                   element={<Notification />}
+               />
+               <Route
+                  path='/ViewMyLot'
+                  element={<ViewMyLot />}
                />
             </Routes>
             {/* </div> */}

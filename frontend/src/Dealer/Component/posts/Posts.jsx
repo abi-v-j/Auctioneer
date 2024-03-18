@@ -1,10 +1,14 @@
 import Post from "../post/Post";
 import "./posts.scss";
 
-const Posts = () => {
+const Posts = ({rows}) => {
   
   return <div className="posts">
-      <Post />
+    {
+      rows.map((post,key) => (
+        <Post post={post} key={key} />
+      ))
+    }
   </div>;
 };
 

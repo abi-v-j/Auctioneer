@@ -703,7 +703,9 @@ app.post('/Auctionhead', async (req, res) => {
       const { Id } = req.body
 
       // Find the latest assigned day
-      const latestAssignedDay = await Auctionhead.findOne({})
+      const latestAssignedDay = await Auctionhead.findOne({
+         date: { $gte: moment().startOf('day').toDate() }
+      })
          .sort({ date: -1 }) // Sort by date in descending order to get the latest date
          .select('date')
 
@@ -1578,6 +1580,84 @@ app.post('/Login', async (req, res) => {
    } catch (error) {}
 })
 
+
+
+
+app.get('/AuctionDealerData/:DId', async (req, res) => {
+   const dealerId = new mongoose.Types.ObjectId(req.params.DId); // Convert dealer ID to ObjectId
+
+   const auctionhead = await Auctionhead.aggregate([
+      // Stage 1: Match lots with the current date
+     
+      // Stage 2: Lookup auctionheads for each lot
+      {
+         $lookup: {
+            from: 'lotschemas',
+            localField: 'lotId',
+            foreignField: '_id',
+            as: 'lot',
+         },
+      },
+      {
+         $match: {
+            'lot.dealerId': dealerId
+         }
+      },
+      // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$lot',
+      },
+
+      {
+         $lookup: {
+            from: 'dealerschemas',
+            localField: 'lot.dealerId',
+            foreignField: '_id',
+            as: 'dealer',
+         },
+      },
+     
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$dealer',
+      },
+
+      // // // Stage 4: Lookup galleries for each lot
+      {
+         $lookup: {
+            from: 'galleryschemas',
+            localField: 'lot._id',
+            foreignField: 'lotId',
+            as: 'galleries',
+         },
+      },
+      // // Stage 5: Unwind the galleries array
+      {
+         $unwind: '$galleries',
+      },
+      // // Stage 6: Group by lotId to reconstruct the galleries array
+      {
+         $group: {
+            _id: '$_id',
+            name: { $first: '$lot.name' },
+            price: { $first: '$lot.price' },
+            minprice: { $first: '$lot.minprice' },
+            details: { $first: '$lot.details' },
+            dealerId: { $first: '$dealer._id' },
+            dealerName: { $first: '$dealer.Name' },
+            dealerProfile: { $first: '$dealer.profileimgsrc' },
+            auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
+            auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+            auctionheadToken: { $first: '$token' }, // Include the auctionhead date
+            galleries: { $push: '$galleries' },
+         },
+      },
+   ])
+   console.log(auctionhead)
+   res.send({ auctionhead })
+})
+
+
 // const calculateCountdown = () => {
 //    try {
 //       const currentDateIST = moment().utcOffset('+05:30')
@@ -1667,8 +1747,16 @@ const calculateCountdown = async () => {
             auctionStartTime.add({ days: 1 })
          }
       }
+      // console.log(auctionStartTime.day());
+      // console.log(currentDateUTC);
+
+      if (auctionStartTime.day() === 0) {
+         // If it's still Sunday, adjust to Monday
+         auctionStartTime.add({ days: 1 })
+      }
 
       const countdown = moment.duration(auctionStartTime.diff(currentDateUTC))
+      // console.log(countdown);
       const formattedCountdown = `${countdown
          .hours()
          .toString()

@@ -9,8 +9,26 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../Component/posts/Posts"
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Profile = () => {
+  const [rows, setRows] = useState([])
+  const Did = sessionStorage.getItem('dId')
+
+
+
+  const fetchLot = () => {
+    axios.get(`http://localhost:5000/AuctionDealerData/${Did}`).then((response) => {
+       console.log(response.data.auctionhead)
+       setRows(response.data.auctionhead)
+    })
+ }
+
+  useEffect(() => {
+    fetchLot()
+ }, [])
+
   return (
     <div className="profile">
       <div className="images">
@@ -63,7 +81,7 @@ const Profile = () => {
             <MoreVertIcon />
           </div>
         </div>
-      <Posts/>
+        <Posts rows={rows} />
       </div>
     </div>
   );

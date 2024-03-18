@@ -74,6 +74,7 @@ const ViewLot = () => {
             .post('http://localhost:5000/Auctionhead', { Id })
             .then((response) => {
                console.log(response.data)
+               fetchLot()
             })
       })
    }
