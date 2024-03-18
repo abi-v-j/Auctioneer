@@ -12,6 +12,7 @@ import {  useState } from 'react'
 import Favourite from './pages/favourite/Favourite'
 import Notification from './pages/notification/Notification'
 import ViewMyLot from './pages/ViewMyLot/ViewMyLot'
+import Checkout from './pages/CheckOut'
 
 
 
@@ -83,6 +84,10 @@ const App = () => {
                <Route
                   path='/Notification'
                   element={<Notification />}
+               />
+               <Route
+                  path='/checkout'
+                  element={<Checkout />}
                />
                <Route
                   path='/ViewMyLot'
