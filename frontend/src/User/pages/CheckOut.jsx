@@ -112,6 +112,13 @@ const Checkout = () => {
     setValue(newValue);
   };
 
+  const ChangeLot = () => {
+    axios.put(`http://localhost:5000/ChangeLot/${Id}`).then((response) => {
+       console.log(response.data)
+      
+    })
+ }
+
 
 
   useState(() => {
@@ -138,14 +145,11 @@ const Checkout = () => {
               <Typography sx={{ color: "#003f88", fontWeight: "bold", fontSize: "30px", textAlign: "center", mt: 3 }} variant='h4'>CHECKOUT</Typography>
               <Typography sx={{ color: "gray", fontSize: "12px", textAlign: "center" }}>Secure Card Payments</Typography>
               <Stack sx={{ mx: 2, mt: 3, justifyContent: "center", border: "2px solid #d4d0cf", borderRadius: "20px", py: 1 }} direction={"row"} spacing={3}>
-                <Typography sx={{ color: "#003f88" }}>ORDER ID: <span style={{ fontWeight: "bold" }}>{
-                  "helo"
-                }</span></Typography>
+               
                 <Typography sx={{ color: "#003f88" }}>AMOUNT: <span style={{ fontWeight: "bold" }}>
-                  ₹4200
+                ₹{totalPrice.totalPrice/2}
 
                 </span></Typography>
-                <Typography sx={{ color: "#003f88" }}>USERNAME: <span style={{ fontWeight: "bold", textTransform: "uppercase" }}>{user && user.userName}</span></Typography>
               </Stack>
               <Box>
 
@@ -224,7 +228,7 @@ const Checkout = () => {
 
                       <Button
                         type='submit'
-                        variant='outlined' sx={{ margin: "0 auto", display: "block", mt: 3, px: 5, fontSize: "18px" }}>Pay Now</Button>
+                        variant='outlined' sx={{ margin: "0 auto", display: "block", mt: 3, px: 5, fontSize: "18px" }} onClick={ChangeLot}>Pay Now</Button>
                     </form>
                   </div>
                 </Box>
