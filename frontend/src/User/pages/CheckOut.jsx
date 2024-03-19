@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import { Button, Card, CardContent, Stack, TextField } from '@mui/material';
 
 // import './checkout.scss'
-import { useParams } from 'react-router-dom'
 import axios from 'axios';
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
@@ -88,9 +87,8 @@ const Checkout = () => {
     setOrderId(`CUR-${year}${month}${day}-${randmomNo}`)
   }
 
-  const uid = sessionStorage.getItem("Uid")
-  let { courseId, type } = useParams()
-  let bookingId = ""
+  const uid = sessionStorage.getItem("uId")
+
 
   
 
@@ -99,8 +97,9 @@ const Checkout = () => {
  
 
   const getUser = () => {
-    axios.get("http://localhost:5000/User/" + uid).then((res) => {
-      setUser(res.data)
+    axios.get("http://localhost:5000/AuctionheadWonTotal/" + uid).then((res) => {
+      console.log(res);
+      // setUser(res.data)
     })
   }
 
@@ -135,10 +134,10 @@ const Checkout = () => {
               <Typography sx={{ color: "gray", fontSize: "12px", textAlign: "center" }}>Secure Card Payments</Typography>
               <Stack sx={{ mx: 2, mt: 3, justifyContent: "center", border: "2px solid #d4d0cf", borderRadius: "20px", py: 1 }} direction={"row"} spacing={3}>
                 <Typography sx={{ color: "#003f88" }}>ORDER ID: <span style={{ fontWeight: "bold" }}>{
-                  type === "multiple" ? booking.orderId : orderId
+                 "helo"
                 }</span></Typography>
                 <Typography sx={{ color: "#003f88" }}>AMOUNT: <span style={{ fontWeight: "bold" }}>
-                  {type === "multiple" ? booking && `₹${booking.price}` : course.price === 0 ? "Free" : (course.price ? `₹${course.price}` : "₹4200")}
+                 ₹4200
 
                 </span></Typography>
                 <Typography sx={{ color: "#003f88" }}>USERNAME: <span style={{ fontWeight: "bold", textTransform: "uppercase" }}>{user && user.userName}</span></Typography>

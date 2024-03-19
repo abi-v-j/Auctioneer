@@ -24,17 +24,23 @@ const Auction = () => {
 
    const fetchSingleLot = () => {
       axios
-         .get('http://localhost:5000/SingleAuctionheadCurrentDate')
+         .get(`http://localhost:5000/SingleAuctionheadCurrentDate/${uid}`)
          .then((response) => {
+            const check = response.data.auctionheadWondata
             const data = response.data.auctionhead
             console.log(data)
             if (data === null) {
                alert('Auction Ended Next Auction comming soon......')
-               navigate('/User')
+               if (check)
+                  navigate('/User/CheckOut')
+               else {
+                  navigate('/User')
+               }
             } else {
                setRows(response.data.auctionhead)
                setPricedata(data.price)
             }
+
          })
    }
 
@@ -96,7 +102,7 @@ const Auction = () => {
                >
                   Live Price
                </Typography>
-               <Box sx={{display:'flex',flexDirection:'column-reverse'}}>
+               <Box sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
                   {notification &&
                      notification.map((notify, key) => (
                         <Card
@@ -210,13 +216,13 @@ const Auction = () => {
             </Card>
          </Box>
          <Box sx={{ width: '30%' }}>
-            <Card sx={{ m: 2, backgroundColor:'#008080' }}>
-               <Typography variant={'h5'} textAlign={'center'} color={'white'} sx={{m:2}}>UpComing</Typography>
+            <Card sx={{ m: 2, backgroundColor: '#008080' }}>
+               <Typography variant={'h5'} textAlign={'center'} color={'white'} sx={{ m: 2 }}>UpComing</Typography>
                {rowLot &&
                   rowLot.map((lotdata, key) => (
-                     <Card sx={{display:'flex',backgroundColor:'#ABAB5',gap:2,p:3,m:1}}>
-                        <Avatar src={lotdata.galleries[0].lotImgsrc}/>
-                     <Typography key={key}>{lotdata.name}</Typography>
+                     <Card sx={{ display: 'flex', backgroundColor: '#ABAB5', gap: 2, p: 3, m: 1 }}>
+                        <Avatar src={lotdata.galleries[0].lotImgsrc} />
+                        <Typography key={key}>{lotdata.name}</Typography>
                      </Card>
                   ))}
             </Card>

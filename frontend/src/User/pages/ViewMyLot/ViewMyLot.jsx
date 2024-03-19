@@ -1,33 +1,78 @@
 import { Box, Card, CardMedia, Typography } from '@mui/material'
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import Carousel from 'react-material-ui-carousel'
 
 const ViewMyLot = () => {
-  return (
-    <Box >
-        <Card sx={{height:150,backgroundColor:'lightBlue',display:'flex'}}>
-            <CardMedia sx={{height:150,width:150}}>
-                
-            </CardMedia>
-            <Box>
-            <Typography>
-                Name
-            </Typography>
-            <Typography>
-                Details
-            </Typography>
-           </Box>
-        </Card>
-        <Card sx={{height:150}}>
-            car
-        </Card>
-        <Card sx={{height:150}}>
-            car
-        </Card>
-        <Card sx={{height:150}}>
-            car
-        </Card>
-    </Box>
-  )
+    const [rowLot, setRowLot] = useState(null)
+    const Uid = sessionStorage.getItem('uId')
+
+
+    const fetchLot = () => {
+        axios
+            .get(`http://localhost:5000/AuctionheadWon/${Uid}`)
+            .then((response) => {
+                console.log(response.data.auctionhead);
+                setRowLot(response.data.auctionhead)
+            })
+    }
+
+    useEffect(() => {
+        fetchLot()
+    }, [])
+    return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            {
+                rowLot && rowLot.map((item, key) => (
+                    <Card sx={{ m: 3, p: 5, width: '40%' }} key={key}>
+                        <Carousel
+                            height={'400px'}
+                            stopAutoPlayOnHover={true}
+                            autoPlay={false}
+                        >
+                            {item.galleries.map((post, key) => (
+                                <Box key={key}>
+                                    {post.Type === 'image' ? (
+                                        <CardMedia
+                                            component='img'
+                                            height='100%'
+                                            width='20%'
+                                            image={post.lotImgsrc}
+                                            alt='Image'
+                                        />
+                                    ) : (
+                                        <video
+                                            controls // Adding controls attribute for playback control
+                                            autoplay // Adding autoplay attribute for automatic playback
+                                            muted // Adding muted attribute to mute the video by default
+                                            width='100%' // Setting width to 100% of the container
+                                            height='500px' // Setting height to auto to maintain aspect ratio
+                                        >
+                                            <source
+                                                src={post.lotImgsrc}
+                                                type='video/mp4'
+                                            />
+                                        </video>
+                                    )}
+                                </Box>
+                            ))}
+                        </Carousel>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Box>
+                                {item.name}
+                            </Box>
+                            <Box>
+                                {item.details}
+                            </Box>
+                        </Box>
+
+                    </Card>
+                ))
+            }
+
+
+        </Box>
+    )
 }
 
 export default ViewMyLot
