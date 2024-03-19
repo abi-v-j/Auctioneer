@@ -32,7 +32,7 @@ const Auction = () => {
             if (data === null) {
                alert('Auction Ended Next Auction comming soon......')
                if (check)
-                  navigate('/User/CheckOut')
+                  navigate('/User/ViewMyLot')
                else {
                   navigate('/User')
                }
