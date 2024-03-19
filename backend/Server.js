@@ -1779,10 +1779,10 @@ app.get('/AuctionDealerData/:DId', async (req, res) => {
    res.send({ auctionhead })
 })
 
+//Report of Auction by date
+app.get('/DailyReportData', async (req, res) => {
 
-app.get('/AuctionLotListData', async (req, res) => {
-
-   const auctionlist = await Auctionhead.aggregate([
+   const dailyreport = await Auctionhead.aggregate([
       // Stage 1: Match lots with the current date
 
       // Stage 2: Lookup auctionheads for each lot
@@ -1843,10 +1843,78 @@ app.get('/AuctionLotListData', async (req, res) => {
          },
       },
    ])
-   console.log(auctionlist)
-   res.send({ auctionlist })
+   console.log(dailyreport)
+   res.send({ dailyreport })
 })
 
+//Report of Auction by Lot
+
+app.get('/LotReportData', async (req, res) => {
+
+   const lotreport = await Auctionhead.aggregate([
+      // Stage 1: Match lots with the current date
+
+      // Stage 2: Lookup auctionheads for each lot
+      {
+         $lookup: {
+            from: 'lotschemas',
+            localField: 'lotId',
+            foreignField: '_id',
+            as: 'lot',
+         },
+      },
+      {
+         $unwind: '$lot',
+      },
+
+      {
+         $lookup: {
+            from: 'dealerschemas',
+            localField: 'lot.dealerId',
+            foreignField: '_id',
+            as: 'dealer',
+         },
+      },
+
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$dealer',
+      },
+
+      // // // Stage 4: Lookup galleries for each lot
+      {
+         $lookup: {
+            from: 'galleryschemas',
+            localField: 'lot._id',
+            foreignField: 'lotId',
+            as: 'galleries',
+         },
+      },
+      // // Stage 5: Unwind the galleries array
+      {
+         $unwind: '$galleries',
+      },
+      // // Stage 6: Group by lotId to reconstruct the galleries array
+      {
+         $group: {
+            _id: '$_id',
+            name: { $first: '$lot.name' },
+            price: { $first: '$lot.price' },
+            minprice: { $first: '$lot.minprice' },
+            details: { $first: '$lot.details' },
+            dealerId: { $first: '$dealer._id' },
+            dealerName: { $first: '$dealer.Name' },
+            dealerProfile: { $first: '$dealer.profileimgsrc' },
+            auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
+            auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+            auctionheadToken: { $first: '$token' }, // Include the auctionhead date
+            galleries: { $push: '$galleries' },
+         },
+      },
+   ])
+   console.log(lotreport)
+   res.send({ lotreport })
+})
 
 // const calculateCountdown = () => {
 //    try {

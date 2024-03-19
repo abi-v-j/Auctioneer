@@ -12,7 +12,8 @@ import Navbar from "./components/navbar/Navbar";
 import ViewLot from "./Pages/ViewLot";
 import { Box, Card } from "@mui/material";
 import AssignAuction from "./Pages/AssignAuction";
-import Auctionlist from "./Pages/Auctionlist";
+import DailyReport from "./Pages/DailyReport";
+import LotReport from "./Pages/LotReport";
 
 
 const styles = {
@@ -49,7 +50,8 @@ function App() {
             <Route path='/State' element={<State />} />
             <Route path='/ViewLot' element={<ViewLot />} />
             <Route path='/AssignAuction/:id' element={<AssignAuction />} />
-            <Route path="/Auctionlist"  element={<Auctionlist />} />
+            <Route path="/DailyReport"  element={<DailyReport />} />
+            <Route path="/LotReport"  element={<LotReport />} />
           </Routes>
           </Card>
         </div>
