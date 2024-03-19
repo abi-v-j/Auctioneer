@@ -668,6 +668,20 @@ app.put('/rejectLot/:id', async (req, res) => {
 
 //AuctionHead Schema
 
+
+app.put('/ChangeLot/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      let auctionhead = await Auctionhead.findOne({ _id: id })
+      auctionhead.__v = 2
+      const updatedAuctionhead = await auctionhead.findByIdAndUpdate(id, auctionhead, { new: true })
+      res.json(updatedAuctionhead)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
 const auctionheadSchemastructure = new mongoose.Schema({
    token: {
       type: String,
