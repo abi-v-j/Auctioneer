@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Avatar } from '@mui/material';
 
 const columns = [
-    { field: '$_id', headerName: 'ID', width: 70 },
-    { field: '$dealer.Name', headerName: 'Dealer name', width: 130 },
-    { field: '$lot.price', headerName: 'Art Price', width: 130 },
+
     {
-        field: '$galleriesge',
-        headerName: 'Image',
-        width: 90,
-    },
-    { field: '$date', headerName: 'Date', width: 130 },
+        field: "userProfile",
+        headerName: "",
+        width: 50,
+        renderCell: (params) => {
+          return (
+            <>
+              <Avatar
+                
+                className="divListDelete"
+                src={params.row.userProfile}
+              />
+            </>
+          );
+        },
+      },
+    { field: 'userName', headerName: 'PARTICIPANTS', width: 200 },
+    { field: 'price', headerName: 'INITIAL PRICE', width: 200 },
+    { field: 'realPrice', headerName: 'BID PRICE', width: 200 },
 
    
 ];
@@ -21,11 +34,15 @@ const columns = [
 const DailyReport = () => {
 
     const [rows, setRows] = useState([])
+    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }));
+
+    const{id} = useParams()
+    console.log(id);
 
     const fetchLot = () => {
-        axios.get(`http://localhost:5000/AuctionLotListData`).then((response) => {
-            console.log(response.data.auctionlist)
-            setRows(response.data.auctionlist)
+        axios.get(`http://localhost:5000/LotReportData/${id}`).then((response) => {
+            console.log(response.data.lotreport)
+            setRows(response.data.lotreport)
         })
     }
 
@@ -36,7 +53,7 @@ const DailyReport = () => {
     return (
         <div style={{ height: 400, width: '100%' }}>
             <DataGrid
-                rows={rows}
+                rows={rowsWithId}
                 columns={columns}
                 initialState={{
                     pagination: {

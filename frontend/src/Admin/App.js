@@ -51,7 +51,7 @@ function App() {
             <Route path='/ViewLot' element={<ViewLot />} />
             <Route path='/AssignAuction/:id' element={<AssignAuction />} />
             <Route path="/DailyReport"  element={<DailyReport />} />
-            <Route path="/LotReport"  element={<LotReport />} />
+            <Route path="/LotReport/:id"  element={<LotReport />} />
           </Routes>
           </Card>
         </div>

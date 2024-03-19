@@ -1,18 +1,61 @@
 import React, { useEffect, useState } from 'react'
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridDeleteIcon, GridMoreVertIcon, GridViewColumnIcon } from '@mui/x-data-grid';
 import axios from 'axios';
+import { Avatar } from '@mui/material';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import RemoveRedEyeOutlined from '@mui/icons-material/RemoveRedEyeOutlined';
+import { Link, useParams } from 'react-router-dom';
 
 const columns = [
-    { field: '$_id', headerName: 'ID', width: 70 },
-    { field: '$dealer.Name', headerName: 'Dealer name', width: 130 },
-    { field: '$lot.price', headerName: 'Art Price', width: 130 },
+    { field: 'auctionheadDate', headerName: 'Date', width: 100 },
     {
-        field: '$galleriesge',
-        headerName: 'Image',
-        width: 90,
-    },
-    { field: '$date', headerName: 'Date', width: 130 },
-
+        field: "dealerProfile",
+        headerName: "Dealer Profile",
+        width: 100,
+        renderCell: (params) => {
+          return (
+            <>
+              <Avatar
+                className="divListDelete"
+                src={params.row.dealerProfile}
+              />
+            </>
+          );
+        },
+      },
+    { field: 'dealerName', headerName: 'Dealer name', width: 130 },
+    { field: 'price', headerName: 'Price', width: 130 },
+    {
+        field: "galleries",
+        headerName: "Image",
+        width: 100,
+        renderCell: (params) => {
+          return (
+            <>
+              <Avatar
+                
+                className="divListDelete"
+                src={params.row.lotImgsrc
+                }
+              />
+            </>
+          );
+        },
+      },
+    { field: 'details', headerName: 'Details', width: 200 },
+    {
+        field: "action",
+        headerName: "Action",
+        width: 100,
+        renderCell: (params) => {
+          return (
+            <><Link to={`/Admin/Lotreport/${params.row.auctionheadId}`} >
+              <RemoveRedEyeOutlined/>
+              </Link>
+            </>
+          );
+        },
+      },
    
 ];
 
@@ -21,11 +64,13 @@ const columns = [
 const DailyReport = () => {
 
     const [rows, setRows] = useState([])
+    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }));
+
 
     const fetchLot = () => {
-        axios.get(`http://localhost:5000/AuctionLotListData`).then((response) => {
-            console.log(response.data.auctionlist)
-            setRows(response.data.auctionlist)
+        axios.get(`http://localhost:5000/DailyReportData/`).then((response) => {
+            console.log(response.data.dailyreport)
+            setRows(response.data.dailyreport)
         })
     }
 
@@ -36,7 +81,7 @@ const DailyReport = () => {
     return (
         <div style={{ height: 400, width: '100%' }}>
             <DataGrid
-                rows={rows}
+                rows={rowsWithId}
                 columns={columns}
                 initialState={{
                     pagination: {

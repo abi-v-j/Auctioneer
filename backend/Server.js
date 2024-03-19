@@ -940,7 +940,7 @@ app.get('/AuctionheadWonTotal/:uId/:Id', async (req, res) => {
          },
       },
       // Stage 2: Lookup auctionheads for each lot
-    
+
       // // Stage 6: Group by lotId to reconstruct the galleries array
       {
          $group: {
@@ -950,7 +950,7 @@ app.get('/AuctionheadWonTotal/:uId/:Id', async (req, res) => {
       },
    ])
    console.log(auctionhead)
-   res.send({ auctionhead:auctionhead[0] })
+   res.send({ auctionhead: auctionhead[0] })
 })
 // select Auction Head
 
@@ -1148,9 +1148,9 @@ app.get('/SingleAuctionheadCurrentDate/:Id', async (req, res) => {
       let check;
       check = auctionheadWondata.length ? true : false
       if (auctionhead.length !== 0) {
-         res.send({ auctionhead: auctionhead[0], auctionheadWondata:check })
+         res.send({ auctionhead: auctionhead[0], auctionheadWondata: check })
       } else {
-         res.send({ auctionhead: null, auctionheadWondata:check })
+         res.send({ auctionhead: null, auctionheadWondata: check })
       }
    } catch (error) {
       console.error(error)
@@ -1801,6 +1801,11 @@ app.get('/DailyReportData', async (req, res) => {
 
       // Stage 2: Lookup auctionheads for each lot
       {
+         $match: {
+            __v: 2
+         }
+      },
+      {
          $lookup: {
             from: 'lotschemas',
             localField: 'lotId',
@@ -1863,16 +1868,41 @@ app.get('/DailyReportData', async (req, res) => {
 
 //Report of Auction by Lot
 
-app.get('/LotReportData', async (req, res) => {
+app.get('/LotReportData/:Id', async (req, res) => {
 
-   const lotreport = await Auctionhead.aggregate([
+   const Id = new mongoose.Types.ObjectId(req.params.Id); // Convert dealer ID to ObjectId
+
+
+   const lotreport = await Auctionbody.aggregate([
       // Stage 1: Match lots with the current date
 
       // Stage 2: Lookup auctionheads for each lot
       {
+         $match: {
+            'auctionheadId': Id
+         }
+      },
+
+
+
+      {
+         $lookup: {
+            from: 'auctionheadschemas',
+            localField: 'auctionheadId',
+            foreignField: '_id',
+            as: 'auctionHead',
+         },
+      },
+
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$auctionHead',
+      },
+
+      {
          $lookup: {
             from: 'lotschemas',
-            localField: 'lotId',
+            localField: 'auctionHead.lotId',
             foreignField: '_id',
             as: 'lot',
          },
@@ -1883,46 +1913,32 @@ app.get('/LotReportData', async (req, res) => {
 
       {
          $lookup: {
-            from: 'dealerschemas',
-            localField: 'lot.dealerId',
+            from: 'userschemas',
+            localField: 'userId',
             foreignField: '_id',
-            as: 'dealer',
+            as: 'user',
          },
       },
 
       // // // Stage 3: Filter lots with associated auctionheads
       {
-         $unwind: '$dealer',
+         $unwind: '$user',
       },
 
-      // // // Stage 4: Lookup galleries for each lot
-      {
-         $lookup: {
-            from: 'galleryschemas',
-            localField: 'lot._id',
-            foreignField: 'lotId',
-            as: 'galleries',
-         },
-      },
-      // // Stage 5: Unwind the galleries array
-      {
-         $unwind: '$galleries',
-      },
+
       // // Stage 6: Group by lotId to reconstruct the galleries array
       {
          $group: {
             _id: '$_id',
             name: { $first: '$lot.name' },
             price: { $first: '$lot.price' },
-            minprice: { $first: '$lot.minprice' },
+            realPrice: { $first: '$lotauctionbodyprice' },
             details: { $first: '$lot.details' },
-            dealerId: { $first: '$dealer._id' },
-            dealerName: { $first: '$dealer.Name' },
-            dealerProfile: { $first: '$dealer.profileimgsrc' },
-            auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
-            auctionheadDate: { $first: '$date' }, // Include the auctionhead date
-            auctionheadToken: { $first: '$token' }, // Include the auctionhead date
-            galleries: { $push: '$galleries' },
+            auctionHeadId: { $first: '$auctionHead._id' },
+            userProfile: { $first: '$user.photo' },
+            userName: { $first: '$user.name' },
+            auctionheadDate: { $first: '$auctionHead.date' }, // Include the auctionhead date
+            auctionheadToken: { $first: '$auctionHead.token' }, // Include the auctionhead date
          },
       },
    ])
