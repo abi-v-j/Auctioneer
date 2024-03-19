@@ -1,7 +1,8 @@
-import { Box, Card, CardMedia, Typography } from '@mui/material'
+import { Box, Button, Card, CardMedia, Typography } from '@mui/material'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Carousel from 'react-material-ui-carousel'
+import { Link } from 'react-router-dom'
 
 const ViewMyLot = () => {
     const [rowLot, setRowLot] = useState(null)
@@ -64,6 +65,9 @@ const ViewMyLot = () => {
                             <Box>
                                 {item.details}
                             </Box>
+                            <Link to={`/User/CheckOut/${item._id}`}>
+                                <Button variant='contained'>Payment</Button>
+                            </Link>
                         </Box>
 
                     </Card>

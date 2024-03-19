@@ -10,13 +10,14 @@ import { Button, Card, CardContent, Stack, TextField } from '@mui/material';
 import axios from 'axios';
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
+
 
   return (
     <div
@@ -52,11 +53,13 @@ function a11yProps(index) {
 const Checkout = () => {
   const navigate = useNavigate()
   const [value, setValue] = React.useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   // const [card, setCard] = useState("")
   const [orderId, setOrderId] = useState("")
   const [course, setCourse] = useState([])
   const [user, setUser] = useState([])
   const [booking, setBooking] = useState([])
+  const { Id } = useParams()
 
   const [state, setState] = useState({
     number: "",
@@ -90,29 +93,31 @@ const Checkout = () => {
   const uid = sessionStorage.getItem("uId")
 
 
-  
 
-  
 
- 
+
+
+
 
   const getUser = () => {
-    axios.get("http://localhost:5000/AuctionheadWonTotal/" + uid).then((res) => {
-      console.log(res);
-      // setUser(res.data)
-    })
+    console.log(Id);
+    console.log(uid);
+    axios.get("http://localhost:5000/AuctionheadWonTotal/" + uid + "/" + Id).then((res) => {
+      console.log(res.data.auctionhead);
+      setTotalPrice(res.data.auctionhead)
+        })
   }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  
+
 
   useState(() => {
     generateOrderId()
     getUser()
-    
+
   }, [])
 
   return (
@@ -134,16 +139,16 @@ const Checkout = () => {
               <Typography sx={{ color: "gray", fontSize: "12px", textAlign: "center" }}>Secure Card Payments</Typography>
               <Stack sx={{ mx: 2, mt: 3, justifyContent: "center", border: "2px solid #d4d0cf", borderRadius: "20px", py: 1 }} direction={"row"} spacing={3}>
                 <Typography sx={{ color: "#003f88" }}>ORDER ID: <span style={{ fontWeight: "bold" }}>{
-                 "helo"
+                  "helo"
                 }</span></Typography>
                 <Typography sx={{ color: "#003f88" }}>AMOUNT: <span style={{ fontWeight: "bold" }}>
-                 ₹4200
+                  ₹4200
 
                 </span></Typography>
                 <Typography sx={{ color: "#003f88" }}>USERNAME: <span style={{ fontWeight: "bold", textTransform: "uppercase" }}>{user && user.userName}</span></Typography>
               </Stack>
               <Box>
-          
+
                 <Box sx={{ mt: 2, width: "100%" }}>
                   <Cards
                     number={state.number}
@@ -152,7 +157,7 @@ const Checkout = () => {
                     name={state.name}
                     focused={state.focus}
                   />
-                  <div className="mt-3">      
+                  <div className="mt-3">
                     <form  >
 
                       <TextField
@@ -169,7 +174,7 @@ const Checkout = () => {
                         fullWidth
                         inputProps={{ maxLength: 16 }} // Add maxLength attribute
                       />
-                      
+
 
 
                       <TextField

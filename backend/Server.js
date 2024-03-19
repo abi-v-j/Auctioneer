@@ -903,7 +903,8 @@ app.get('/Auctionhead', async (req, res) => {
 
 
 
-app.get('/AuctionheadWonTotal/:Id', async (req, res) => {
+app.get('/AuctionheadWonTotal/:uId/:Id', async (req, res) => {
+   const uId = new mongoose.Types.ObjectId(req.params.uId)
    const Id = new mongoose.Types.ObjectId(req.params.Id)
    const currentDate = moment().startOf('day') // Get the current date at the start of the day
 
@@ -911,7 +912,12 @@ app.get('/AuctionheadWonTotal/:Id', async (req, res) => {
       // Stage 1: Match lots with the current date
       {
          $match: {
-            userId: Id,
+            userId: uId,
+         },
+      },
+      {
+         $match: {
+            _id: Id,
          },
       },
       {
@@ -930,7 +936,7 @@ app.get('/AuctionheadWonTotal/:Id', async (req, res) => {
       },
    ])
    console.log(auctionhead)
-   res.send({ auctionhead })
+   res.send({ auctionhead:auctionhead[0] })
 })
 // select Auction Head
 
