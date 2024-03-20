@@ -914,6 +914,11 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
                date: currentDate.format('YYYY-MM-DD'),
             },
          },
+         {
+            $match: {
+               __v: 0,
+            },
+         },
          // Stage 2: Lookup auctionheads for each lot
          {
             $lookup: {
@@ -979,6 +984,11 @@ app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         {
+            $match: {
+               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
@@ -1120,6 +1130,11 @@ app.get('/AuctionheadCurrentDateForHome', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         {
+            $match: {
+               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
