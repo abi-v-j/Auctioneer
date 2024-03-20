@@ -668,6 +668,20 @@ app.put('/rejectLot/:id', async (req, res) => {
 
 //AuctionHead Schema
 
+
+app.put('/ChangeLot/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      let auctionhead = await Auctionhead.findOne({ _id: id })
+      auctionhead.__v = 2
+      const updatedAuctionhead = await auctionhead.findByIdAndUpdate(id, auctionhead, { new: true })
+      res.json(updatedAuctionhead)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
 const auctionheadSchemastructure = new mongoose.Schema({
    token: {
       type: String,
@@ -812,7 +826,6 @@ app.get('/AuctionheadWon/:Id', async (req, res) => {
             _id: '$_id',
             name: { $first: '$lot.name' },
             price: { $first: '$lot.price' },
-            minprice: { $first: '$lot.minprice' },
             details: { $first: '$lot.details' },
             dealerId: { $first: '$dealer._id' },
             dealerName: { $first: '$dealer.Name' },
@@ -902,6 +915,43 @@ app.get('/Auctionhead', async (req, res) => {
    res.send({ auctionhead })
 })
 
+
+
+app.get('/AuctionheadWonTotal/:uId/:Id', async (req, res) => {
+   const uId = new mongoose.Types.ObjectId(req.params.uId)
+   const Id = new mongoose.Types.ObjectId(req.params.Id)
+   const currentDate = moment().startOf('day') // Get the current date at the start of the day
+
+   const auctionhead = await Auctionhead.aggregate([
+      // Stage 1: Match lots with the current date
+      {
+         $match: {
+            userId: uId,
+         },
+      },
+      {
+         $match: {
+            _id: Id,
+         },
+      },
+      {
+         $match: {
+            date: currentDate.format('YYYY-MM-DD'),
+         },
+      },
+      // Stage 2: Lookup auctionheads for each lot
+
+      // // Stage 6: Group by lotId to reconstruct the galleries array
+      {
+         $group: {
+            _id: '$_id',
+            totalPrice: { $sum: { $toInt: "$price" } } // Assuming price is stored as string, converting to integer for summation
+         },
+      },
+   ])
+   console.log(auctionhead)
+   res.send({ auctionhead: auctionhead[0] })
+})
 // select Auction Head
 
 app.get('/AuctionheadCurrentDate', async (req, res) => {
@@ -960,6 +1010,11 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
          {
             $sort: { datetime: 1 }, // Assuming you want to sort by datetime field in ascending order
          },
+         {
+            $match: {
+               __v: 0
+            }
+         },
          // Stage 8: Skip the first document
          {
             $skip: 1,
@@ -976,7 +1031,8 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
    }
 })
 
-app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
+app.get('/SingleAuctionheadCurrentDate/:Id', async (req, res) => {
+   const Id = new mongoose.Types.ObjectId(req.params.Id)
    const currentDate = moment().startOf('day') // Get the current date at the start of the day
    try {
       const auctionhead = await Auctionhead.aggregate([
@@ -984,11 +1040,6 @@ app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
-            },
-         },
-         {
-            $match: {
-               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
@@ -1031,15 +1082,75 @@ app.get('/SingleAuctionheadCurrentDate', async (req, res) => {
          {
             $sort: { datetime: 1 },
          },
+
          // Stage 8: Limit to only one result
          {
             $limit: 1,
          },
       ])
+
+      const auctionheadWondata = await Auctionhead.aggregate([
+         // Stage 1: Match lots with the current date
+         {
+            $match: {
+               userId: Id,
+            },
+         },
+         {
+            $match: {
+               date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         // Stage 2: Lookup auctionheads for each lot
+         {
+            $lookup: {
+               from: 'lotschemas',
+               localField: 'lotId',
+               foreignField: '_id',
+               as: 'lot',
+            },
+         },
+         // // Stage 3: Filter lots with associated auctionheads
+         {
+            $unwind: '$lot',
+         },
+
+         {
+            $lookup: {
+               from: 'dealerschemas',
+               localField: 'lot.dealerId',
+               foreignField: '_id',
+               as: 'dealer',
+            },
+         },
+         // // // Stage 3: Filter lots with associated auctionheads
+         {
+            $unwind: '$dealer',
+         },
+
+
+         // // Stage 6: Group by lotId to reconstruct the galleries array
+         {
+            $group: {
+               _id: '$_id',
+               name: { $first: '$lot.name' },
+               price: { $first: '$lot.price' },
+               details: { $first: '$lot.details' },
+               dealerId: { $first: '$dealer._id' },
+               dealerName: { $first: '$dealer.Name' },
+               dealerProfile: { $first: '$dealer.profileimgsrc' },
+               auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
+               auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+               auctionheadToken: { $first: '$token' }, // Include the auctionhead date
+            },
+         },
+      ])
+      let check;
+      check = auctionheadWondata.length ? true : false
       if (auctionhead.length !== 0) {
-         res.send({ auctionhead: auctionhead[0] })
+         res.send({ auctionhead: auctionhead[0], auctionheadWondata: check })
       } else {
-         res.send({ auctionhead: null })
+         res.send({ auctionhead: null, auctionheadWondata: check })
       }
    } catch (error) {
       console.error(error)
@@ -1059,6 +1170,12 @@ app.get('/AuctionheadForHome', async (req, res) => {
             date: { $gt: currentDate.format('YYYY-MM-DD') },
          },
       },
+      {
+         $match: {
+            __v: 0
+         }
+      },
+
       // Stage 2: Lookup auctionheads for each lot
       {
          $lookup: {
@@ -1099,6 +1216,8 @@ app.get('/AuctionheadForHome', async (req, res) => {
       {
          $unwind: '$galleries',
       },
+
+
       // // Stage 6: Group by lotId to reconstruct the galleries array
       {
          $group: {
@@ -1130,11 +1249,6 @@ app.get('/AuctionheadCurrentDateForHome', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
-            },
-         },
-         {
-            $match: {
-               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
@@ -1174,11 +1288,13 @@ app.get('/AuctionheadCurrentDateForHome', async (req, res) => {
                galleries: { $push: '$galleries' },
             },
          },
+
          // Stage 7: Sort documents in ascending order based on a field
          {
             $sort: { datetime: 1 }, // Assuming you want to sort by datetime field in ascending order
          },
-        
+
+
       ])
       if (auctionhead.length !== 0) {
          res.send({ auctionhead })
@@ -1197,7 +1313,7 @@ app.get('AuctionPrice', async (req, res) => {
       const largestPrice = await Auctionbody.find({ auctionheadId: Id })
          .sort({ lotauctionbodyprice: -1 }) // Sort in descending order to get the highest price first
          .limit(1) // Limit the result to 1 document
-   } catch (error) {}
+   } catch (error) { }
 })
 //Auction head update
 
@@ -1592,7 +1708,7 @@ app.post('/Login', async (req, res) => {
       } else {
          console.log('hey ')
       }
-   } catch (error) {}
+   } catch (error) { }
 })
 
 
@@ -1603,7 +1719,7 @@ app.get('/AuctionDealerData/:DId', async (req, res) => {
 
    const auctionhead = await Auctionhead.aggregate([
       // Stage 1: Match lots with the current date
-     
+
       // Stage 2: Lookup auctionheads for each lot
       {
          $lookup: {
@@ -1631,7 +1747,7 @@ app.get('/AuctionDealerData/:DId', async (req, res) => {
             as: 'dealer',
          },
       },
-     
+
       // // // Stage 3: Filter lots with associated auctionheads
       {
          $unwind: '$dealer',
@@ -1672,6 +1788,158 @@ app.get('/AuctionDealerData/:DId', async (req, res) => {
    res.send({ auctionhead })
 })
 
+//Report of Auction by date
+app.get('/DailyReportData', async (req, res) => {
+
+   const dailyreport = await Auctionhead.aggregate([
+      // Stage 1: Match lots with the current date
+
+      // Stage 2: Lookup auctionheads for each lot
+      {
+         $match: {
+            __v: 2
+         }
+      },
+      {
+         $lookup: {
+            from: 'lotschemas',
+            localField: 'lotId',
+            foreignField: '_id',
+            as: 'lot',
+         },
+      },
+      {
+         $unwind: '$lot',
+      },
+
+      {
+         $lookup: {
+            from: 'dealerschemas',
+            localField: 'lot.dealerId',
+            foreignField: '_id',
+            as: 'dealer',
+         },
+      },
+
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$dealer',
+      },
+
+      // // // Stage 4: Lookup galleries for each lot
+      {
+         $lookup: {
+            from: 'galleryschemas',
+            localField: 'lot._id',
+            foreignField: 'lotId',
+            as: 'galleries',
+         },
+      },
+      // // Stage 5: Unwind the galleries array
+      {
+         $unwind: '$galleries',
+      },
+      // // Stage 6: Group by lotId to reconstruct the galleries array
+      {
+         $group: {
+            _id: '$_id',
+            name: { $first: '$lot.name' },
+            price: { $first: '$lot.price' },
+            minprice: { $first: '$lot.minprice' },
+            details: { $first: '$lot.details' },
+            dealerId: { $first: '$dealer._id' },
+            dealerName: { $first: '$dealer.Name' },
+            dealerProfile: { $first: '$dealer.profileimgsrc' },
+            auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
+            auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+            auctionheadToken: { $first: '$token' }, // Include the auctionhead date
+            galleries: { $push: '$galleries' },
+         },
+      },
+   ])
+   console.log(dailyreport)
+   res.send({ dailyreport })
+})
+
+//Report of Auction by Lot
+
+app.get('/LotReportData/:Id', async (req, res) => {
+
+   const Id = new mongoose.Types.ObjectId(req.params.Id); // Convert dealer ID to ObjectId
+
+
+   const lotreport = await Auctionbody.aggregate([
+      // Stage 1: Match lots with the current date
+
+      // Stage 2: Lookup auctionheads for each lot
+      {
+         $match: {
+            'auctionheadId': Id
+         }
+      },
+
+
+
+      {
+         $lookup: {
+            from: 'auctionheadschemas',
+            localField: 'auctionheadId',
+            foreignField: '_id',
+            as: 'auctionHead',
+         },
+      },
+
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$auctionHead',
+      },
+
+      {
+         $lookup: {
+            from: 'lotschemas',
+            localField: 'auctionHead.lotId',
+            foreignField: '_id',
+            as: 'lot',
+         },
+      },
+      {
+         $unwind: '$lot',
+      },
+
+      {
+         $lookup: {
+            from: 'userschemas',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+         },
+      },
+
+      // // // Stage 3: Filter lots with associated auctionheads
+      {
+         $unwind: '$user',
+      },
+
+
+      // // Stage 6: Group by lotId to reconstruct the galleries array
+      {
+         $group: {
+            _id: '$_id',
+            name: { $first: '$lot.name' },
+            price: { $first: '$lot.price' },
+            realPrice: { $first: '$lotauctionbodyprice' },
+            details: { $first: '$lot.details' },
+            auctionHeadId: { $first: '$auctionHead._id' },
+            userProfile: { $first: '$user.photo' },
+            userName: { $first: '$user.name' },
+            auctionheadDate: { $first: '$auctionHead.date' }, // Include the auctionhead date
+            auctionheadToken: { $first: '$auctionHead.token' }, // Include the auctionhead date
+         },
+      },
+   ])
+   console.log(lotreport)
+   res.send({ lotreport })
+})
 
 // const calculateCountdown = () => {
 //    try {
@@ -1742,7 +2010,7 @@ const dateCurrent = moment().format('YYYY-MM-DD')
 
 const calculateCountdown = async () => {
    try {
-      const currentDateUTC = moment().utcOffset('+05:30')
+      const currentDateUTC = moment().utcOffset('+15:30')
       const startTime = currentDateUTC.clone().startOf('day').add({ hours: 10 })
 
       const AuctionAvailable = await Auctionhead.countDocuments({
@@ -1776,9 +2044,9 @@ const calculateCountdown = async () => {
          .hours()
          .toString()
          .padStart(2, '0')}:${countdown
-         .minutes()
-         .toString()
-         .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
+            .minutes()
+            .toString()
+            .padStart(2, '0')}:${countdown.seconds().toString().padStart(2, '0')}`
 
       return formattedCountdown
    } catch (error) {

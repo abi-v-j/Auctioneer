@@ -7,7 +7,7 @@ import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { Link } from 'react-router-dom'
-import { Avatar, Box, Button, Card, IconButton, Popper, Typography } from '@mui/material'
+import { Avatar, Box, Button, Card, IconButton, Popover, Popper, Typography } from '@mui/material'
 import { useState } from 'react'
 
 const Navbar = ({ setColor, color }) => {
@@ -15,9 +15,9 @@ const Navbar = ({ setColor, color }) => {
    const [anchorEl, setAnchorEl] = useState(null);
 
    const handleClick = (event) => {
-     setAnchorEl(anchorEl ? null : event.currentTarget);
+      setAnchorEl(anchorEl ? null : event.currentTarget);
    };
- 
+
    const open = Boolean(anchorEl);
    const id = open ? 'simple-popper' : undefined;
 
@@ -52,17 +52,28 @@ const Navbar = ({ setColor, color }) => {
             <div className='user'>
                <IconButton aria-describedby={id} type="button" onClick={handleClick}>
 
-               <Avatar
-               />
+                  <Avatar
+                  />
                </IconButton>
-               <Popper id={id} sx={{zIndex: 1200}} open={open} anchorEl={anchorEl}>
-                  <Card sx={{ border: 1, p: 1, bgcolor: 'background.paper',m:2,width:150,height:200 }}>
-                    <Button>Profile</Button>
-                    <Button>Edit Profile</Button>
-                    <Button>Change Password</Button>
-                    <Button></Button>
-                  </Card>
-               </Popper>
+               <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClick}
+                  anchorOrigin={{
+                     vertical: 'bottom',
+                     horizontal: 'left',
+                  }}
+               >                  <Box sx={{ m: 2, width: 180, height: 215, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                     <Button sx={{ width: '100%' }}>Profile</Button>
+                     <Button sx={{ width: '100%' }}> Edit Profile</Button>
+                     <Button sx={{ width: '100%' }}>Change Password</Button>
+                     <Link to={'/User/ViewMyLot'}>
+                        <Button sx={{ width: '100%' }}>My Winnings</Button>
+                     </Link>
+                     <Button variant='outlined' sx={{ width: '100%' }}>LogOut</Button>
+                  </Box>
+               </Popover>
                {/* <span>{currentUser.name}</span> */}
             </div>
          </div>

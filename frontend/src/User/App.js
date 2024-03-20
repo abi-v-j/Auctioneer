@@ -86,7 +86,7 @@ const App = () => {
                   element={<Notification />}
                />
                <Route
-                  path='/checkout'
+                  path='/checkout/:Id'
                   element={<Checkout />}
                />
                <Route
