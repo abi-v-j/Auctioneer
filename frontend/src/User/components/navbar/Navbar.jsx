@@ -27,6 +27,7 @@ const Navbar = ({ setColor, color }) => {
       <div className='navbar'>
          <div className='left'>
             <Link
+               className='Link'
                to='/'
                style={{ textDecoration: 'none' }}
             >
@@ -39,7 +40,13 @@ const Navbar = ({ setColor, color }) => {
                   Auctioneer
                </Typography>
             </Link>
-            <HomeOutlinedIcon />
+            <Link to='/User/'
+               className='Link'
+
+               style={{ textDecoration: 'none' }}
+            >
+               <HomeOutlinedIcon />
+            </Link>
             {color ? (
                <DarkModeIcon onClick={() => setColor(!color)} />
             ) : (
@@ -64,10 +71,20 @@ const Navbar = ({ setColor, color }) => {
                      vertical: 'bottom',
                      horizontal: 'left',
                   }}
-               >                  <Box sx={{ m: 2, width: 180, height: 215, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+               >             
+                    <Box sx={{ m: 2, width: 180, height: 215, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                    <Link to={'/User/Profile'}>
+
                      <Button sx={{ width: '100%' }}>Profile</Button>
+                     </Link>
+                     <Link to={'/User/EditProfile'}>
+
                      <Button sx={{ width: '100%' }}> Edit Profile</Button>
+                     </Link>
+                     <Link to={'/User/ChangePassword'}>
+
                      <Button sx={{ width: '100%' }}>Change Password</Button>
+                     </Link>
                      <Link to={'/User/ViewMyLot'}>
                         <Button sx={{ width: '100%' }}>My Winnings</Button>
                      </Link>

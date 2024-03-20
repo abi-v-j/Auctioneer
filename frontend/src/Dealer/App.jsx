@@ -70,7 +70,7 @@ const App = () => {
                         path='/'
                         element={<Profile />}
                     />
-                   
+
                     <Route path='/MyProfile' element={<MyProfile />} />
                     <Route path='/EditProfile' element={<EditProfile />} />
                     <Route path='/Changepassword' element={<ChangePassword />} />

@@ -10,9 +10,11 @@ import './style.scss'
 import { Box } from '@mui/material'
 import {  useState } from 'react'
 import Favourite from './pages/favourite/Favourite'
+import EditProfile from './pages/EditProfile'
 import Notification from './pages/notification/Notification'
 import ViewMyLot from './pages/ViewMyLot/ViewMyLot'
 import Checkout from './pages/CheckOut'
+import ChangePassword from './pages/ChangePassword'
 
 
 
@@ -78,12 +80,12 @@ const App = () => {
                   element={<Viewdealer />}
                />
                 <Route
-                  path='/Favourite'
-                  element={<Favourite />}
+                  path='/EditProfile'
+                  element={<EditProfile />}
                />
                <Route
-                  path='/Notification'
-                  element={<Notification />}
+                  path='/ChangePassword'
+                  element={<ChangePassword />}
                />
                <Route
                   path='/checkout/:Id'

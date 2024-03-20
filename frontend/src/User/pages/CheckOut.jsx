@@ -115,6 +115,7 @@ const Checkout = () => {
   const ChangeLot = () => {
     axios.put(`http://localhost:5000/ChangeLot/${Id}`).then((response) => {
        console.log(response.data)
+       navigate('/User/ViewMyLot')
       
     })
  }

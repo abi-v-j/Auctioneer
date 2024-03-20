@@ -65,9 +65,18 @@ const ViewMyLot = () => {
                             <Box>
                                 {item.details}
                             </Box>
-                            <Link to={`/User/CheckOut/${item._id}`}>
-                                <Button variant='contained'>Payment</Button>
-                            </Link>
+                            {
+                                console.log(item)
+                            }
+                            {
+                                item.auctionheadStatus === 2 ?
+                                    ' Payment Completed'
+                                    :
+                                    <Link to={`/User/CheckOut/${item._id}`}>
+                                        <Button variant='contained'>Payment</Button>
+                                    </Link>
+                            }
+
                         </Box>
 
                     </Card>

@@ -1,5 +1,5 @@
 .app.dark {
-    background-color: #111;
+    background-color: #2e2c2c;
     color: rgb(156, 156, 156);
   
     .chartGrid {
@@ -14,9 +14,9 @@
       }
     }
   
-    .navbar {
+    .navbarAdmin  {
       color: #999;
-      border-color: #333;
+      border-color: #020202 !important;
   
       .search {
         border-color: gray;
@@ -24,12 +24,12 @@
     }
   
     .sidebar {
-      background-color: #111;
+      background-color: #201f1f;
       border-color: #333;
   
       .top {
         .logo {
-          color: #999;
+          color: white;
         }
       }
       hr {
@@ -38,12 +38,16 @@
   
       ul {
         li {
+          color: white;
           &:hover {
             background-color: #333;
           }
   
           .icon {
-            color: #999;
+            color: white;
+          }
+          span{
+            color: white;
           }
         }
       }

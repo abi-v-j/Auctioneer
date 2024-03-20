@@ -3,6 +3,7 @@
 .home{
   @include themify($themes) {
     padding: 20px 70px;
+    height: 100vh;
     background-color: themed("bgSoft");
     .innerCard{
       background-color: themed("bg");

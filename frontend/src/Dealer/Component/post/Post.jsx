@@ -6,7 +6,7 @@ import Carousel from "react-material-ui-carousel";
 
 const Post = ({ post }) => {
    return (
-      <div className='post'>
+      <div className='postDealer'>
          <div className='container'>
             <div className='user'>
                <div className='userInfo'>

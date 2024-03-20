@@ -1,6 +1,6 @@
 @import "../../style.scss";
 
-.post {
+.postDealer {
   @include themify($themes) {
     -webkit-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
     -moz-box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
@@ -8,7 +8,7 @@
     border-radius: 20px;
     background-color: themed("bg");
     color: themed("textColor");
-    width: 43vw;
+    width: 42.5vw;
 
     .container {
       padding: 20px;

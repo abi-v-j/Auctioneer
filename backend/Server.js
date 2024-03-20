@@ -269,16 +269,13 @@ app.delete('/User/:id', async (req, res) => {
 app.put('/updateUser/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, email, password } = req.body
+      const { name, email, contact } = req.body
       const updatedUser = await User.findByIdAndUpdate(
          id,
          {
             name,
             email,
-            password,
-            photo,
             contact,
-            proof,
          },
          { new: true }
       )
@@ -367,8 +364,9 @@ app.post(
 
 // select Dealer
 
-app.get('/Dealer', async (req, res) => {
-   const dealer = await Dealer.find()
+app.get('/Dealer/:Id', async (req, res) => {
+   const Id = req.params.Id
+   const dealer = await Dealer.findOne({ _id: Id })
    res.send({ dealer })
 })
 
@@ -397,16 +395,13 @@ app.delete('/Dealer/:id', async (req, res) => {
 app.put('/updateDealer/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { name, email, password } = req.body
+      const { Name, Email, Contact } = req.body
       const updatedDealer = await Dealer.findByIdAndUpdate(
          id,
          {
-            name,
-            email,
-            password,
-            photo,
-            contact,
-            proof,
+            Name,
+            Email,
+            Contact,
          },
          { new: true }
       )
@@ -668,19 +663,19 @@ app.put('/rejectLot/:id', async (req, res) => {
 
 //AuctionHead Schema
 
-
 app.put('/ChangeLot/:id', async (req, res) => {
-   const id = req.params.id
+   const id = req.params.id;
+   console.log(id);
    try {
-      let auctionhead = await Auctionhead.findOne({ _id: id })
-      auctionhead.__v = 2
-      const updatedAuctionhead = await auctionhead.findByIdAndUpdate(id, auctionhead, { new: true })
-      res.json(updatedAuctionhead)
+      const updatedAuctionhead = await Auctionhead.findByIdAndUpdate(id, { __v: 2 }, { new: true });
+      console.log(updatedAuctionhead);
+      res.json(updatedAuctionhead);
    } catch (err) {
-      console.error(err.message)
-      res.status(500).send('server error')
+      console.error(err.message);
+      res.status(500).send('server error');
    }
-})
+});
+
 
 const auctionheadSchemastructure = new mongoose.Schema({
    token: {
@@ -832,6 +827,7 @@ app.get('/AuctionheadWon/:Id', async (req, res) => {
             dealerProfile: { $first: '$dealer.profileimgsrc' },
             auctionheadId: { $first: '$_id' }, // Include the auctionhead ID
             auctionheadDate: { $first: '$date' }, // Include the auctionhead date
+            auctionheadStatus: { $first: '$__v' }, // Include the auctionhead date
             auctionheadToken: { $first: '$token' }, // Include the auctionhead date
             galleries: { $push: '$galleries' },
          },
@@ -1010,11 +1006,7 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
          {
             $sort: { datetime: 1 }, // Assuming you want to sort by datetime field in ascending order
          },
-         {
-            $match: {
-               __v: 0
-            }
-         },
+         
          // Stage 8: Skip the first document
          {
             $skip: 1,
@@ -1040,6 +1032,11 @@ app.get('/SingleAuctionheadCurrentDate/:Id', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         {
+            $match: {
+               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
@@ -1249,6 +1246,11 @@ app.get('/AuctionheadCurrentDateForHome', async (req, res) => {
          {
             $match: {
                date: currentDate.format('YYYY-MM-DD'),
+            },
+         },
+         {
+            $match: {
+               __v: 0,
             },
          },
          // Stage 2: Lookup auctionheads for each lot
@@ -2010,13 +2012,14 @@ const dateCurrent = moment().format('YYYY-MM-DD')
 
 const calculateCountdown = async () => {
    try {
-      const currentDateUTC = moment().utcOffset('+15:30')
+      const currentDateUTC = moment().utcOffset('+05:30')
       const startTime = currentDateUTC.clone().startOf('day').add({ hours: 10 })
 
       const AuctionAvailable = await Auctionhead.countDocuments({
          __v: 0,
          date: dateCurrent,
       })
+      // console.log(AuctionAvailable);
 
       if (currentDateUTC.isAfter(startTime) && AuctionAvailable !== 0) {
          io.sockets.emit('auctionButton')

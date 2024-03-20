@@ -42,7 +42,7 @@ function App() {
           <Card sx={styles}>
 
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* <Route path="/" element={<Home />} /> */}
             {/* <Route path=":userId" element={<Single />} /> */}
             <Route path='/Category' element={<Category />} />
             <Route path='/District' element={<District />} />
@@ -50,7 +50,7 @@ function App() {
             <Route path='/State' element={<State />} />
             <Route path='/ViewLot' element={<ViewLot />} />
             <Route path='/AssignAuction/:id' element={<AssignAuction />} />
-            <Route path="/DailyReport"  element={<DailyReport />} />
+            <Route path="/"  element={<DailyReport />} />
             <Route path="/LotReport/:id"  element={<LotReport />} />
           </Routes>
           </Card>

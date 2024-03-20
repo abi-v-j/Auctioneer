@@ -33,6 +33,10 @@
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: themed("textColor");
               }
+              .Link{
+                color: themed("textColor") !important;
+
+              }
             .search {
                 display: flex;
                 align-items: center;

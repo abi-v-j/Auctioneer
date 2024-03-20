@@ -11,11 +11,21 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../Component/posts/Posts"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Button, Card } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [rows, setRows] = useState([])
   const Did = sessionStorage.getItem('dId')
 
+  const [myProfile, setMyProfile] = useState([])
+
+  const fetchMyProfile = () => {
+     axios.get(`http://localhost:5000/Dealer/${Did}`).then((response) => {
+        console.log(response.data.dealer)
+        setMyProfile(response.data.dealer)
+     })
+  }
 
 
   const fetchLot = () => {
@@ -27,18 +37,20 @@ const Profile = () => {
 
   useEffect(() => {
     fetchLot()
+    fetchMyProfile()
  }, [])
 
   return (
     <div className="profile">
       <div className="images">
-        <img
-          src="https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          alt=""
+        <Card
+         
           className="cover"
-        />
+        >
+          Auctioneer
+        </Card>
         <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
+        src={myProfile.profileimgsrc}
           alt=""
           className="profilePic"
         />
@@ -63,7 +75,7 @@ const Profile = () => {
             </a> */}
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>{myProfile.Name}</span>
             <div className="info">
               <div className="item">
                 {/* <PlaceIcon />
@@ -74,13 +86,16 @@ const Profile = () => {
                 <span>lama.dev</span> */}
               </div>
             </div>
-            <button>follow</button>
+            <Link to={'/Dealer/AddLot/'}>
+            <Button size="small">Add Lot</Button>
+            </Link>
           </div>
           <div className="right">
             {/* <EmailOutlinedIcon /> */}
-            <MoreVertIcon />
+            {/* <MoreVertIcon /> */}
           </div>
         </div>
+        
         <Posts rows={rows} />
       </div>
     </div>

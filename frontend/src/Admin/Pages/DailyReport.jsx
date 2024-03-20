@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { DataGrid, GridDeleteIcon, GridMoreVertIcon, GridViewColumnIcon } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Avatar } from '@mui/material';
+import { Avatar, Box, Typography } from '@mui/material';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import RemoveRedEyeOutlined from '@mui/icons-material/RemoveRedEyeOutlined';
 import { Link, useParams } from 'react-router-dom';
@@ -79,7 +79,8 @@ const DailyReport = () => {
     }, [])
 
     return (
-        <div style={{ height: 400, width: '100%' }}>
+        <Box style={{ height: 400, width: '100%' }}>
+          <Typography variant='h5' sx={{m:3}}>Reports</Typography>
             <DataGrid
                 rows={rowsWithId}
                 columns={columns}
@@ -90,7 +91,7 @@ const DailyReport = () => {
                 }}
                 pageSizeOptions={[5, 10]}
                 checkboxSelection />
-        </div>
+        </Box>
     );
 }
 
