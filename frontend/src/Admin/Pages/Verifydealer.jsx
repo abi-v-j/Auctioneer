@@ -52,9 +52,9 @@ const Verifydealer = () => {
         })
     }
 
-    useEffect(() => {
-        fetchDealer()
-    }, [])
+    // useEffect(() => {
+    //     fetchDealer()
+    // }, [])
 
     return (
         <div style={{ height: 400, width: '100%' }}>
