@@ -1,8 +1,9 @@
 import { Box, Button, Card, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './GuestStyle.css'
+import RemoveRedEyeOutlined from '@mui/icons-material/RemoveRedEyeOutlined'
 const Login = () => {
    const navigate = useNavigate()
    const [email, setEmail] = useState('')
@@ -41,7 +42,7 @@ const Login = () => {
             onSubmit={handleSubmit}
          >
             <Card sx={{ p: 10, backgroundColor: 'aliceblue' }}>
-               <Typography variant='h4' textAlign={'center'} sx={{p:2}} className='dancing-script'>Auctioneer</Typography>
+               <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Auctioneer</Typography>
                <TextField
                   id='standard-basic'
                   label='Email'
@@ -72,6 +73,14 @@ const Login = () => {
                   >
                      Login
                   </Button>
+               </Stack>
+               <Stack
+                  spacing={3}
+                  sx={{ mt: 1,display:'flex', alignItems: 'center' }}
+               >
+                  <Link to={`/VerifyRegistration`} >
+                     New Account?
+                  </Link>
                </Stack>
             </Card>
          </Box>

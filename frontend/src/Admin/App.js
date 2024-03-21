@@ -14,6 +14,7 @@ import { Box, Card } from "@mui/material";
 import AssignAuction from "./Pages/AssignAuction";
 import DailyReport from "./Pages/DailyReport";
 import LotReport from "./Pages/LotReport";
+import Verifydealer from "./Pages/Verifydealer";
 
 
 const styles = {
@@ -52,6 +53,7 @@ function App() {
             <Route path='/AssignAuction/:id' element={<AssignAuction />} />
             <Route path="/"  element={<DailyReport />} />
             <Route path="/LotReport/:id"  element={<LotReport />} />
+            <Route path="/Verifydealer"  element={<Verifydealer />} />
           </Routes>
           </Card>
         </div>

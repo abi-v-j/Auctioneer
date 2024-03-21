@@ -388,6 +388,12 @@ app.get('/Dealer/:Id', async (req, res) => {
    res.send({ dealer })
 })
 
+
+app.get('/FetchDealerData', async (req, res) => {
+   const fetchdealer = await Dealer.find()
+   res.send(fetchdealer)
+})
+
 //Delete Dealer
 
 app.delete('/Dealer/:id', async (req, res) => {
