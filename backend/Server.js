@@ -286,6 +286,24 @@ app.put('/updateUser/:id', async (req, res) => {
    }
 })
 
+app.put('/updateChangePasswordUser/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      const { password } = req.body
+      const updatedUser = await User.findByIdAndUpdate(
+         id,
+         {
+            password
+         },
+         { new: true }
+      )
+      res.json(updatedUser)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
 //Dealer Schema
 
 const dealerSchemastructure = new mongoose.Schema({
@@ -402,6 +420,24 @@ app.put('/updateDealer/:id', async (req, res) => {
             Name,
             Email,
             Contact,
+         },
+         { new: true }
+      )
+      res.json(updatedDealer)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
+app.put('/updateChangePasswordDealer/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      const { Password } = req.body
+      const updatedDealer = await Dealer.findByIdAndUpdate(
+         id,
+         {
+            Password
          },
          { new: true }
       )
@@ -1006,7 +1042,7 @@ app.get('/AuctionheadCurrentDate', async (req, res) => {
          {
             $sort: { datetime: 1 }, // Assuming you want to sort by datetime field in ascending order
          },
-         
+
          // Stage 8: Skip the first document
          {
             $skip: 1,
