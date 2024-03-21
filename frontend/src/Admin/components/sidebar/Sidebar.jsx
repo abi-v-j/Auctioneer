@@ -58,7 +58,15 @@ const Sidebar = () => {
                   <p className='title'>MAIN</p>
                   <li>
                      <DashboardIcon className='icon' />
-                     <span>Dashboard</span>
+                     <span>State</span>
+                  </li>
+                  <li>
+                     <DashboardIcon className='icon' />
+                     <span>District</span>
+                  </li>
+                  <li>
+                     <DashboardIcon className='icon' />
+                     <span>Place</span>
                   </li>
                   <p className='title'>LISTS</p>
                   <Link
