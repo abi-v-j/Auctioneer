@@ -1589,17 +1589,22 @@ const complaintSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
+   userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'userSchema',
+      required: true,
+   },
 })
 
 //Insert Complaint
 
 const Complaint = mongoose.model('complaintSchema', complaintSchemastructure)
 app.post('/Complaint', async (req, res) => {
-   const { content, replay } = req.body
+   const { content, userId} = req.body
    try {
       let complaint = new Complaint({
          content,
-         replay,
+         userId
       })
 
       await complaint.save()
@@ -1615,6 +1620,11 @@ app.post('/Complaint', async (req, res) => {
 
 app.get('/Complaint', async (req, res) => {
    const complaint = await Complaint.find()
+   res.send({ complaint })
+})
+
+app.get('/Complaint/:Id', async (req, res) => {
+   const complaint = await Complaint.find({userId:req.params.Id})
    res.send({ complaint })
 })
 

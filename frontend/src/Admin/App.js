@@ -1,3 +1,4 @@
+import Home from "./Pages/home/Home";
 import {  Routes, Route } from "react-router-dom";
 import "./style/dark.scss";
 import { useContext } from "react";

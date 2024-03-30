@@ -55,7 +55,6 @@ const Navbar = ({ setColor, color }) => {
          </div>
          <div className='right'>
 
-            <NotificationsOutlinedIcon />
             <div className='user'>
                <IconButton aria-describedby={id} type="button" onClick={handleClick}>
 

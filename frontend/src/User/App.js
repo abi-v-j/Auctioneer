@@ -15,6 +15,7 @@ import Notification from './pages/notification/Notification'
 import ViewMyLot from './pages/ViewMyLot/ViewMyLot'
 import Checkout from './pages/CheckOut'
 import ChangePassword from './pages/ChangePassword'
+import Complaint from './pages/Complaint'
 
 
 
@@ -94,6 +95,10 @@ const App = () => {
                <Route
                   path='/ViewMyLot'
                   element={<ViewMyLot />}
+               />
+               <Route
+                  path='/Complaint'
+                  element={<Complaint />}
                />
             </Routes>
             {/* </div> */}
