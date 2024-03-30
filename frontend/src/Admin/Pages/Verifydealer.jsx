@@ -2,38 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Avatar, buttonBaseClasses } from '@mui/material';
+import { Avatar, Box, Button, buttonBaseClasses } from '@mui/material';
 
-const columns = [
-
-    {
-        field: "dealerProfile",
-        headerName: "",
-        width: 50,
-        renderCell: (params) => {
-            return (
-                <>
-                    <Avatar
-
-                        className="divListDelete"
-                        src={params.row.userProfile}
-                    />
-                </>
-            );
-        },
-    },
-    { field: 'dealerName', headerName: 'NAME', width: 200 },
-    { field: 'email', headerName: 'EMAIL', width: 200 },
-    { field: 'proof', headerName: 'PROOF', width: 200 },
-    { field: 'place', headerName: 'PLACE', width: 200 },
-    {
-        field: 'action',
-        headerName: 'ACTION',
-        width: 200
-
-    },
-
-];
 
 
 
@@ -46,15 +16,97 @@ const Verifydealer = () => {
     console.log(id);
 
     const fetchDealer = () => {
-        axios.get(`http://localhost:5000/FetchDealertData`).then((response) => {
+        axios.get(`http://localhost:5000/FetchDealerVerifyData`).then((response) => {
             console.log(response.data.fetchdealer)
             setRows(response.data.fetchdealer)
         })
     }
 
-    // useEffect(() => {
-    //     fetchDealer()
-    // }, [])
+
+    const acceptLot = (Id) => {
+        axios.put(`http://localhost:5000/acceptDealer/${Id}`).then((response) => {
+           console.log(response.data) 
+        })
+     }
+
+
+     const rejectLot = (Id) => {
+        axios.put(`http://localhost:5000/rejectDealer/${Id}`).then((response) => {
+           console.log(response.data)
+        })
+     }
+
+    useEffect(() => {
+        fetchDealer()
+    }, [])
+
+
+    const columns = [
+
+        {
+            field: "proofimgsrc",
+            headerName: "Proof",
+           flex:3,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Avatar
+    
+                            className="divListDelete"
+                            src={params.row.proofimgsrc}
+                        />
+                    </>
+                );
+            },
+        },
+        {
+            field: "profileimgsrc",
+            headerName: "Profile",
+            flex:3,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Avatar
+    
+                            className="divListDelete"
+                            src={params.row.profileimgsrc}
+                        />
+                    </>
+                );
+            },
+        },
+        { field: 'Name', headerName: 'NAME',  flex:3, },
+        { field: 'Email', headerName: 'EMAIL',  flex:3, },
+        { field: 'Contact', headerName: 'PLACE',  flex:3, },
+        {
+            field: 'Action',
+            headerName: 'Action',
+    
+            flex: 4,
+            renderCell: (params) => {
+               return (
+                  <Box sx={{ display: 'flex', gap: 3 }}>
+                    
+                     <Button
+                        variant='outlined'
+                        onClick={() => acceptLot(params.row._id)}
+                     >
+                        Accept
+                     </Button>
+
+                     <Button
+                        variant='outlined'
+                        onClick={() => rejectLot(params.row._id)}
+                     >
+                        Reject
+                     </Button>
+                  </Box>
+               )
+            },
+         },
+    
+    ];
+    
 
     return (
         <div style={{ height: 400, width: '100%' }}>

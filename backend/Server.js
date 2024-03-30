@@ -380,6 +380,39 @@ app.post(
    }
 )
 
+
+
+//Dealer update
+
+app.put('/acceptDealer/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      let dealer = await Dealer.findOne({ _id: id })
+      dealer.__v = 1
+      const updatedDealer = await Dealer.findByIdAndUpdate(id, dealer, { new: true })
+      res.json(updatedDealer)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
+//Dealer update
+
+app.put('/rejectDealer/:id', async (req, res) => {
+   const id = req.params.id
+   try {
+      let dealer = await Dealer.findOne({ _id: id })
+      dealer.__v = 2
+      const updatedDealer = await Dealer.findByIdAndUpdate(id, dealer, { new: true })
+      res.json(updatedDealer)
+   } catch (err) {
+      console.error(err.message)
+      res.status(500).send('server error')
+   }
+})
+
+
 // select Dealer
 
 app.get('/Dealer/:Id', async (req, res) => {
@@ -392,6 +425,13 @@ app.get('/Dealer/:Id', async (req, res) => {
 app.get('/FetchDealerData', async (req, res) => {
    const fetchdealer = await Dealer.find()
    res.send(fetchdealer)
+})
+
+
+
+app.get('/FetchDealerVerifyData', async (req, res) => {
+   const fetchdealer = await Dealer.find()
+   res.send({ fetchdealer })
 })
 
 //Delete Dealer
@@ -1633,6 +1673,14 @@ app.get('/State', async (req, res) => {
    res.send({ state })
 })
 
+
+// select State
+
+app.delete('/deleteState/:Id', async (req, res) => {
+   const state = await State.findByIdAndDelete(req.params.Id)
+   res.send({ state })
+})
+
 //District Schema
 
 const districtSchemastructure = new mongoose.Schema({
@@ -1675,6 +1723,18 @@ app.get('/District/:Id', async (req, res) => {
    res.send({ district })
 })
 
+
+app.get('/District', async (req, res) => {
+   const district = await District.find().populate('stateId')
+   res.send({ district })
+})
+
+
+app.delete('/deleteDistrict/:Id', async (req, res) => {
+   const district = await District.findByIdAndDelete(req.params.Id)
+   res.send({ district })
+})
+
 //Place Schema
 
 const placeSchemastructure = new mongoose.Schema({
@@ -1712,7 +1772,7 @@ app.post('/Place', async (req, res) => {
 // select Place
 
 app.get('/Place', async (req, res) => {
-   const place = await Place.find()
+   const place = await Place.find().populate("districtId")
    res.send({ place })
 })
 
@@ -1724,15 +1784,22 @@ app.get('/Place/:Id', async (req, res) => {
    res.send({ place })
 })
 
+
+app.delete('/deletePlace/:Id', async (req, res) => {
+   const place = await Place.findByIdAndDelete(req.params.Id)
+   res.send({ place })
+})
+
+
 app.post('/Login', async (req, res) => {
    try {
       const { email, password } = req.body
-      const user = await User.findOne({ email })
-      const dealer = await Dealer.findOne({ Email: email })
-      const admin = await Admin.findOne({ email })
+      const user = await User.findOne({ email, password})
+      const dealer = await Dealer.findOne({ Email: email, __v: 1 ,Password:password})
+      const admin = await Admin.findOne({ email,password })
 
       if (!user && !dealer && !admin) {
-         return res.status(400).json({ error: 'Invalid credential' })
+         return res.status(400).json({ error: 'Invalid Credential' })
       }
       if (user) {
          res.send({

@@ -26,6 +26,8 @@ const Login = () => {
             sessionStorage.setItem('dId', data.id)
             navigate('../../Dealer')
          }
+      }).catch((error)=> {
+         alert(error.response.data.error);
       })
    }
    return (
