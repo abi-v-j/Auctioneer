@@ -1,4 +1,3 @@
-import Home from "./Pages/home/Home";
 import {  Routes, Route } from "react-router-dom";
 import "./style/dark.scss";
 import { useContext } from "react";
@@ -10,7 +9,7 @@ import State from "./Pages/State";
 import Sidebar from "./components/sidebar/Sidebar";
 import Navbar from "./components/navbar/Navbar";
 import ViewLot from "./Pages/ViewLot";
-import { Box, Card } from "@mui/material";
+import {  Card } from "@mui/material";
 import AssignAuction from "./Pages/AssignAuction";
 import DailyReport from "./Pages/DailyReport";
 import LotReport from "./Pages/LotReport";

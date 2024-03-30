@@ -3,19 +3,14 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import HomeIcon from '@mui/icons-material/Home';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import SettingsSystemDaydreamOutlinedIcon from '@mui/icons-material/SettingsSystemDaydreamOutlined'
-import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined'
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import { Link } from 'react-router-dom'
-import { DarkModeContext } from '../../context/darkModeContext'
-import { useContext } from 'react'
+
 import { Box, Card, Typography } from '@mui/material'
 
 const styles = {
    height: '80vh',
    overflowY: 'scroll', // Allow scrolling
-
 
    // Hide the default scrollbar
    scrollbarWidth: 'none',
@@ -25,7 +20,6 @@ const styles = {
    },
 }
 const Sidebar = () => {
-   const { dispatch } = useContext(DarkModeContext)
    return (
       <Card
          className='sidebar'

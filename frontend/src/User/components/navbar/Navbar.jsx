@@ -1,13 +1,10 @@
 import './navbar.scss'
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined'
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined'
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
+
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import { Link } from 'react-router-dom'
-import { Avatar, Box, Button, Card, IconButton, Popover, Popper, Typography } from '@mui/material'
+import { Avatar, Box, Button,IconButton, Popover, Typography } from '@mui/material'
 import { useState } from 'react'
 
 const Navbar = ({ setColor, color }) => {
