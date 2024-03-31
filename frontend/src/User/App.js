@@ -16,6 +16,7 @@ import ViewMyLot from './pages/ViewMyLot/ViewMyLot'
 import Checkout from './pages/CheckOut'
 import ChangePassword from './pages/ChangePassword'
 import Complaint from './pages/Complaint'
+import Feedback from './pages/Feedback'
 
 
 
@@ -99,6 +100,10 @@ const App = () => {
                <Route
                   path='/Complaint'
                   element={<Complaint />}
+               />
+               <Route
+                  path='/Feedback'
+                  element={<Feedback />}
                />
             </Routes>
             {/* </div> */}
