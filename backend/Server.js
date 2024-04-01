@@ -1530,16 +1530,22 @@ const feedbackSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
+   userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'userSchema',
+      required: true,
+   },
 })
 
 //Insert Feedback
 
 const Feedback = mongoose.model('feedbackSchema', feedbackSchemastructure)
 app.post('/Feedback', async (req, res) => {
-   const { content } = req.body
+   const { content,userId } = req.body
    try {
       let feedback = new Feedback({
          content,
+         userId
       })
 
       await feedback.save()
@@ -1557,6 +1563,15 @@ app.get('/Feedback', async (req, res) => {
    const feedback = await Feedback.find()
    res.send({ feedback })
 })
+
+
+// select Feedback
+
+app.get('/Feedback/:Id', async (req, res) => {
+   const feedback = await Feedback.find({userId:req.params.Id})
+   res.send({ feedback })
+})
+
 
 //Feesback update
 
@@ -1578,6 +1593,11 @@ app.put('/updateFeedback/:id', async (req, res) => {
    }
 })
 
+app.delete('/Feedback/:Id', async (req, res) => {
+   const feedback = await Feedback.findByIdAndDelete(req.params.Id)
+   res.send({ feedback })
+})
+
 //Complaint Schema
 
 const complaintSchemastructure = new mongoose.Schema({
@@ -1585,7 +1605,7 @@ const complaintSchemastructure = new mongoose.Schema({
       type: String,
       require: true,
    },
-   replay: {
+   reply: {
       type: String,
       require: true,
    },
@@ -1628,17 +1648,22 @@ app.get('/Complaint/:Id', async (req, res) => {
    res.send({ complaint })
 })
 
+
+app.delete('/Complaint/:Id', async (req, res) => {
+   const complaint = await Complaint.findByIdAndDelete(req.params.Id)
+   res.send({ complaint })
+})
+
 //Complaint update
 
 app.put('/updateComplaint/:id', async (req, res) => {
    const id = req.params.id
    try {
-      const { content, replay } = req.body
+      const { reply } = req.body
       const updatedComplaint = await Complaint.findByIdAndUpdate(
          id,
          {
-            content,
-            replay,
+            reply,
          },
          { new: true }
       )

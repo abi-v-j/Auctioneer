@@ -15,6 +15,9 @@ import AssignAuction from "./Pages/AssignAuction";
 import DailyReport from "./Pages/DailyReport";
 import LotReport from "./Pages/LotReport";
 import Verifydealer from "./Pages/Verifydealer";
+import ViewComplaint from "./Pages/ViewComplaint";
+import Reply from "./Pages/Reply";
+import ViewFeedback from "./Pages/ViewFeedback";
 
 
 const styles = {
@@ -54,6 +57,9 @@ function App() {
             <Route path="/"  element={<DailyReport />} />
             <Route path="/LotReport/:id"  element={<LotReport />} />
             <Route path="/Verifydealer"  element={<Verifydealer />} />
+            <Route path="/ViewComplaint" element={<ViewComplaint />} />
+            <Route path="/Reply/:id" element={<Reply />} />
+            <Route path="/ViewFeedback" element={<ViewFeedback />} />
           </Routes>
           </Card>
         </div>

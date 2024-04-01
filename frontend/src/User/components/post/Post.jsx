@@ -24,12 +24,12 @@ const Post = ({ post }) => {
                   </div>
                </div>
                {/* <MoreHorizIcon /> */}
-               <Link
+               {/* <Link
                      to={`/profile/${post.userId}`}
                      style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                <Button variant='contained'>Add to Favourite</Button>
-               </Link>
+               </Link> */}
             </div>
             <div className='content'>
                <Carousel

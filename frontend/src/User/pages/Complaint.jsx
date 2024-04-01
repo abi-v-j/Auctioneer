@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Button, Card, Stack, TextField, Typography } from '@mui/material'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
@@ -13,8 +13,13 @@ const Complaint = () => {
       { field: 'id', headerName: 'ID', flex: 3 },
 
       {
-         field: 'stateName',
-         headerName: 'Name',
+         field: 'content',
+         headerName: 'Content',
+         flex: 3,
+      },
+      {
+         field: 'reply',
+         headerName: 'Reply',
          flex: 3,
       },
       {
@@ -59,36 +64,45 @@ const Complaint = () => {
      }
      
    const deleteComplaint = (Id) => {
-    axios.delete(`http://localhost:5000/deleteComplaint/${Id}`).then((response) => {
+    axios.delete(`http://localhost:5000/Complaint/${Id}`).then((response) => {
     fetchComplaint()
     })
  }
 
+
+ useEffect(() => {
+   fetchComplaint()
+ },[])
   
     return (
         <>
         <Box sx={{
             width: '100%',
+            height:'50vh',
             
             display: 'flex',
             justifyContent: 'center',
             
-            marginTop: '5'
+            marginTop: 5
         }}>
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', height: 100 }} component={'form'} onSubmit={handleSubmit}>
+            <Card sx={{ p: 5, backgroundColor: 'lightblue', height: 200 ,width:600 }} component={'form'} onSubmit={handleSubmit}>
                 <Typography variant='h5'>Complaint</Typography>
                 <Stack
                     spacing={5}
-                    sx={{ mt: 3 }}
+                    sx={{ mt: 3 , alignItems:'center'}}
                     direction='row'
+
                     >
                     <TextField
                         id="standard-multiline-static"
                         label="complaint"
                         rows={4}
-                        variant="standard"
+                        variant="outlined"
                         value={Complaint}
+                        multiline
+                        maxRows={3}
                         onChange={(event) => setComplaint(event.target.value)}
+                        fullWidth
                         />
                     <Button
                         sx={{ px: 5 }}

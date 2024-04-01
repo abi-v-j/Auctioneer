@@ -74,18 +74,24 @@ const Navbar = ({ setColor, color }) => {
 
                      <Button sx={{ width: '100%' }}>Profile</Button>
                      </Link>
-                     <Link to={'/User/EditProfile'}>
 
-                     <Button sx={{ width: '100%' }}> Edit Profile</Button>
-                     </Link>
-                     <Link to={'/User/ChangePassword'}>
-
-                     <Button sx={{ width: '100%' }}>Change Password</Button>
-                     </Link>
                      <Link to={'/User/ViewMyLot'}>
                         <Button sx={{ width: '100%' }}>My Winnings</Button>
                      </Link>
-                     <Button variant='outlined' sx={{ width: '100%' }}>LogOut</Button>
+
+                     
+                     <Link to={'/User/Complaint'}>
+                        <Button sx={{ width: '100%' }}>Complaint</Button>
+                     </Link>
+
+                     
+                     <Link to={'/User/Feedback'}>
+                        <Button sx={{ width: '100%' }}>Feedback</Button>
+                     </Link>
+                     <Link to={'/'} style={{width:'100%'}}>
+
+                     <Button variant='outlined' sx={{ width: '100%' }} fullWidth>LogOut</Button>
+                     </Link>
                   </Box>
                </Popover>
                {/* <span>{currentUser.name}</span> */}

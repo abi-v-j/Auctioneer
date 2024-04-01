@@ -4,7 +4,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Posts from '../../components/posts/Posts'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Typography } from '@mui/material'
+import { Box, Button, IconButton, Popover, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const Profile = () => {
    const [myProfile, setMyProfile] = useState([])
@@ -26,6 +27,15 @@ const Profile = () => {
             setRowLot(response.data.auctionhead)
          })
    }
+
+   const [anchorEl, setAnchorEl] = useState(null);
+
+   const handleClick = (event) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget);
+   };
+
+   const open = Boolean(anchorEl);
+   const id = open ? 'simple-popper' : undefined;
 
    useEffect(() => {
       fetchMyProfile()
@@ -77,11 +87,34 @@ const Profile = () => {
                 <span>lama.dev</span> */}
                      </div>
                   </div>
-                  <button>follow</button>
                </div>
                <div className='right'>
                   {/* <EmailOutlinedIcon /> */}
-                  <MoreVertIcon />
+                  <IconButton aria-describedby={id} type="button" onClick={handleClick}>
+                      <MoreVertIcon />
+                  </IconButton>
+                  <Popover
+                  id={id}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClick}
+                  anchorOrigin={{
+                     vertical: 'bottom',
+                     horizontal: 'left',
+                  }}
+               >             
+                    <Box sx={{ m: 2, width: 180, height: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+
+                     <Link to={'/User/EditProfile'}>
+
+                     <Button  sx={{ width: '100%' }}> Edit Profile</Button>
+                     </Link>
+                     <Link to={'/User/ChangePassword'}>
+
+                     <Button sx={{ width: '100%' }}>Change Password</Button>
+                     </Link>
+                  </Box>
+               </Popover>
                </div>
             </div>
             <Typography variant='h4' className='dancing-script' textAlign={'center'} sx={{m:5}}>Your Wons</Typography>

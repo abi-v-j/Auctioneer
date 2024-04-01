@@ -97,8 +97,25 @@ const Sidebar = () => {
                         <span>Dealer</span>
                      </li>
                   </Link>
-                 
                   <p className='title'>USER</p>
+                  <Link to={'/Admin/ViewComplaint'}
+                  style={{ textDecoration: 'none' }}
+                  >
+                 <li>
+                    <ExitToAppIcon className='icon' />
+                    <span>Complaints</span>
+                 </li>
+                 </Link>
+                 <Link to={'/Admin/ViewFeedback'}
+                  style={{ textDecoration: 'none' }}
+                  >
+                 <li>
+                    <ExitToAppIcon className='icon' />
+                    <span>Feedbacks</span>
+                 </li>
+                 </Link>
+                 
+                  <p className='title'>Settings</p>
                  
                   <li>
                      <ExitToAppIcon className='icon' />
