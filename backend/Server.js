@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://auctioneer123:auctioneer123@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://Auction1122:Auction1122@cluster0.4teukan.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
