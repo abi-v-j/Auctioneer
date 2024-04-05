@@ -37,7 +37,7 @@ const Place = () => {
          flex: 3,
          renderCell: (params) => {
             return (
-               <Typography>{params.row.districtId.districtName}</Typography>
+               <Typography>{params.row.districtId && params.row.districtId.districtName}</Typography>
             )
          },
       },
@@ -101,6 +101,8 @@ const Place = () => {
       axios.get('http://localhost:5000/Place').then((response) => {
          console.log(response.data.place)
          setRows(response.data.place)
+      }).catch(() => {
+         console.log('error');
       })
    }
 

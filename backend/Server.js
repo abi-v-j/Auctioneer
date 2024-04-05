@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('./public'))
 
 const db =
-   'mongodb+srv://Auction1122:Auction1122@cluster0.4teukan.mongodb.net/dbAuctioneer'
+   'mongodb+srv://anjanaks225:anjanaks225@cluster0.xveocpb.mongodb.net/dbAuctioneer'
 
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -1541,7 +1541,7 @@ const feedbackSchemastructure = new mongoose.Schema({
 
 const Feedback = mongoose.model('feedbackSchema', feedbackSchemastructure)
 app.post('/Feedback', async (req, res) => {
-   const { content,userId } = req.body
+   const { content, userId } = req.body
    try {
       let feedback = new Feedback({
          content,
@@ -1568,7 +1568,7 @@ app.get('/Feedback', async (req, res) => {
 // select Feedback
 
 app.get('/Feedback/:Id', async (req, res) => {
-   const feedback = await Feedback.find({userId:req.params.Id})
+   const feedback = await Feedback.find({ userId: req.params.Id })
    res.send({ feedback })
 })
 
@@ -1620,7 +1620,7 @@ const complaintSchemastructure = new mongoose.Schema({
 
 const Complaint = mongoose.model('complaintSchema', complaintSchemastructure)
 app.post('/Complaint', async (req, res) => {
-   const { content, userId} = req.body
+   const { content, userId } = req.body
    try {
       let complaint = new Complaint({
          content,
@@ -1644,7 +1644,7 @@ app.get('/Complaint', async (req, res) => {
 })
 
 app.get('/Complaint/:Id', async (req, res) => {
-   const complaint = await Complaint.find({userId:req.params.Id})
+   const complaint = await Complaint.find({ userId: req.params.Id })
    res.send({ complaint })
 })
 
@@ -1829,9 +1829,9 @@ app.delete('/deletePlace/:Id', async (req, res) => {
 app.post('/Login', async (req, res) => {
    try {
       const { email, password } = req.body
-      const user = await User.findOne({ email, password})
-      const dealer = await Dealer.findOne({ Email: email, __v: 1 ,Password:password})
-      const admin = await Admin.findOne({ email,password })
+      const user = await User.findOne({ email, password })
+      const dealer = await Dealer.findOne({ Email: email, __v: 1, Password: password })
+      const admin = await Admin.findOne({ email, password })
 
       if (!user && !dealer && !admin) {
          return res.status(400).json({ error: 'Invalid Credential' })
@@ -2274,3 +2274,66 @@ io.on('connection', (socket) => {
 })
 
 setInterval(emitCountdown, 1000)
+
+
+
+
+
+
+
+app.get('/Sample', async (req, res) => {
+
+   const assamDistricts = [
+      "Baksa",
+      "Barpeta",
+      "Biswanath",
+      "Bongaigaon",
+      "Cachar",
+      "Charaideo",
+      "Chirang",
+      "Darrang",
+      "Dhemaji",
+      "Dhubri",
+      "Dibrugarh",
+      "Dima Hasao",
+      "Goalpara",
+      "Golaghat",
+      "Hailakandi",
+      "Hojai",
+      "Jorhat",
+      "Kamrup",
+      "Kamrup Metropolitan",
+      "Karbi Anglong",
+      "Karimganj",
+      "Kokrajhar",
+      "Lakhimpur",
+      "Majuli",
+      "Morigaon",
+      "Nagaon",
+      "Nalbari",
+      "Sivasagar",
+      "Sonitpur",
+      "South Salmara-Mankachar",
+      "Tinsukia",
+      "Udalguri",
+      "West Karbi Anglong"
+    ];
+    
+    
+    
+       
+    
+    assamDistricts.map(async (item) => {
+      let mData = new District({
+         districtName: item,
+         stateId: '660f81f5734e7e2a7d437427',
+      })
+
+      await mData.save()
+
+
+   })
+
+
+
+})

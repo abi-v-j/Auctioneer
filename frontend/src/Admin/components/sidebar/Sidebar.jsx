@@ -5,7 +5,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp'
 import SettingsSystemDaydreamOutlinedIcon from '@mui/icons-material/SettingsSystemDaydreamOutlined'
 import { Link } from 'react-router-dom'
+import Diversity2Icon from '@mui/icons-material/Diversity2';
+import MarkUnreadChatAltIcon from '@mui/icons-material/MarkUnreadChatAlt';
 
+import FeedbackIcon from '@mui/icons-material/Feedback';
 import { Box, Card, Typography } from '@mui/material'
 
 const styles = {
@@ -93,7 +96,7 @@ const Sidebar = () => {
                   style={{ textDecoration: 'none' }}
                   >
                      <li>
-                        <SettingsSystemDaydreamOutlinedIcon className='icon' />
+                        <Diversity2Icon className='icon' />
                         <span>Dealer</span>
                      </li>
                   </Link>
@@ -102,7 +105,7 @@ const Sidebar = () => {
                   style={{ textDecoration: 'none' }}
                   >
                  <li>
-                    <ExitToAppIcon className='icon' />
+                    <MarkUnreadChatAltIcon className='icon' />
                     <span>Complaints</span>
                  </li>
                  </Link>
@@ -110,12 +113,12 @@ const Sidebar = () => {
                   style={{ textDecoration: 'none' }}
                   >
                  <li>
-                    <ExitToAppIcon className='icon' />
+                    <FeedbackIcon className='icon' />
                     <span>Feedbacks</span>
                  </li>
                  </Link>
                  
-                  <p className='title'>Settings</p>
+                  <p className='title'></p>
                  
                   <li>
                      <ExitToAppIcon className='icon' />
