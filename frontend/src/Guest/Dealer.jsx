@@ -1,21 +1,22 @@
 import {
-   Avatar,
    Box,
    Button,
    Card,
-   FormControl,
    InputLabel,
    MenuItem,
    Select,
    Stack,
+   FormControl,
    TextField,
    Typography,
+   Avatar,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
-import './GuestStyle.css'
+import Snackbar from '@mui/material/Snackbar';
+
 
 const VisuallyHiddenInput = styled('input')({
    clip: 'rect(0 0 0 0)',
@@ -29,21 +30,22 @@ const VisuallyHiddenInput = styled('input')({
    width: 1,
 })
 
-const Registration = () => {
+const DealerRegistration = () => {
    const [Name, setName] = useState('')
    const [Email, setEmail] = useState('')
    const [Password, setPassword] = useState('')
    const [Contact, setContact] = useState('')
-   const [Proof, setProof] = useState(null)
-   const [Photo, setPhoto] = useState(null)
+   const [Photo, setPhoto] = useState('')
+   const [Proof, setProof] = useState('')
    const [District, setDistrict] = useState('')
    const [Place, setPlace] = useState('')
-   const [PhotoURL, setPhotoURL] = useState('') 
-
    const [State, setState] = useState('')
    const [stateData, setStateData] = useState([])
    const [districtData, setDistrictData] = useState([])
    const [placeData, setPlaceData] = useState([])
+   const [PhotoURL, setPhotoURL] = useState('') // State to store URL of the selected photo
+   const [check, setCheck] = useState(false)
+
 
    const handleSubmit = (event) => {
       event.preventDefault()
@@ -56,7 +58,7 @@ const Registration = () => {
       frm.append('Photo', Photo)
       frm.append('Place', Place)
 
-      axios.post('http://localhost:5000/User', frm).then((response) => {
+      axios.post('http://localhost:5000/Dealer', frm).then((response) => {
          console.log(response.data)
          setName('')
          setEmail('')
@@ -64,6 +66,7 @@ const Registration = () => {
          setContact('')
          setProof('')
          setPhoto('')
+         setState('')
          setDistrict('')
          setPlace('')
       })
@@ -92,12 +95,23 @@ const Registration = () => {
       })
    }
 
-      // Function to handle file selection for photo
-      const handlePhotoChange = (event) => {
-         const file = event.target.files[0]
-         setPhoto(file)
-         setPhotoURL(URL.createObjectURL(file)) // Generate URL for the selected image file
-      }
+   const handlePhotoChange = (event) => {
+      const file = event.target.files[0]
+      setPhoto(file)
+      setPhotoURL(URL.createObjectURL(file)) // Generate URL for the selected image file
+   }
+
+   const handlePassword = (event) => {
+      const newPassword = event.target.value;
+      setPassword(newPassword); // Always update the password state
+
+      // Perform password pattern validation
+      const isValidPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(newPassword);
+
+      setCheck(!isValidPassword)
+
+   }
+
 
    useEffect(() => {
       fetchState()
@@ -116,30 +130,25 @@ const Registration = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'aliceblue', }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 800 }}>
                <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Auctioneer</Typography>
-               <Box sx={{display:'flex',gap:5}}>
+               <Box sx={{ display: 'flex', gap: 5 }}>
 
-                  <Box sx={{width:400,display:'flex',flexDirection:'column',alignItems:'center'}}>
-                     <Avatar src={PhotoURL} sx={{width:300, height:300}}/>
-                     <Typography textAlign={'center'} sx={{mt:5}} variant='h5'>{Name}</Typography>
+                  <Box sx={{ width: 400, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                     <Avatar src={PhotoURL} sx={{ width: 300, height: 300 }} />
+                     <Typography textAlign={'center'} sx={{ mt: 5 }} variant='h5'>{Name}</Typography>
 
-                     
+
                   </Box>
                   <Box>
 
-                     <Stack
-                        direction={'row'}
-                        sx={{ mt: 1 }}
-                        gap={4}
-                     >
+                     <Stack direction={'row'} gap={4}>
                         <TextField
                            id='standard-basic'
                            label='Name'
                            variant='standard'
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
-                           fullWidth
                         />
 
                         <TextField
@@ -148,10 +157,10 @@ const Registration = () => {
                            variant='standard'
                            onChange={(event) => setEmail(event.target.value)}
                            value={Email}
-                           fullWidth
+
                         />
                      </Stack>
-                     <Stack>
+                     <Stack >
                         <Button
                            sx={{ mt: 3 }}
                            component='label'
@@ -165,18 +174,13 @@ const Registration = () => {
                            />
                         </Button>
                      </Stack>
-                     <Stack
-                        sx={{ mt: 1 }}
-                        direction={'row'}
-                        gap={4}
-                     >
+                     <Stack direction={'row'} gap={4}>
                         <TextField
                            id='standard-basic'
                            label='Contact'
                            variant='standard'
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
-                           fullWidth
                         />
 
                         <TextField
@@ -185,10 +189,10 @@ const Registration = () => {
                            variant='standard'
                            onChange={(event) => setPassword(event.target.value)}
                            value={Password}
-                           fullWidth
+                           
                         />
                      </Stack>
-                     <Stack sx={{ mt: 3 }}>
+                     <Stack sx={{ mt: 5 }}>
                         <Button
                            component='label'
                            variant='contained'
@@ -203,13 +207,13 @@ const Registration = () => {
                      </Stack>
 
                      <Stack
-                        sx={{ mt: 2 }}
+                        spacing={5}
+                        sx={{ mt: 3 }}
                         direction='row'
                         gap={4}
                      >
                         <FormControl
                            variant='standard'
-                           sx={{ m: 1, minWidth: 140 }}
                            fullWidth
                         >
                            <InputLabel id='demo-simple-select-standard-label'>
@@ -235,7 +239,6 @@ const Registration = () => {
 
                         <FormControl
                            variant='standard'
-                           sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >
                            <InputLabel id='demo-simple-select-standard-label'>
@@ -263,10 +266,10 @@ const Registration = () => {
                         spacing={5}
                         sx={{ mt: 3 }}
                         direction='row'
+                        gap={4}
                      >
                         <FormControl
                            variant='standard'
-                           sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >
                            <InputLabel id='demo-simple-select-standard-label'>
@@ -290,7 +293,6 @@ const Registration = () => {
                            </Select>
                         </FormControl>
                      </Stack>
-
                      <Stack
                         spacing={5}
                         sx={{ mt: 3 }}
@@ -301,17 +303,24 @@ const Registration = () => {
                            type='submit'
                            variant='contained'
                            fullWidth
+
                         >
                            Submit
                         </Button>
                      </Stack>
                   </Box>
                </Box>
-
             </Card>
          </Box>
+         <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={check}
+            onClose={check}
+            message="Password must contain at least one number, one lowercase letter, one uppercase letter, and be at least 8 characters long"
+            // key={vertical + horizontal}
+         />
       </div>
    )
 }
 
-export default Registration
+export default DealerRegistration

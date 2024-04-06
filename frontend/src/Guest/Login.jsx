@@ -38,6 +38,9 @@ const Login = () => {
                display: 'flex',
                alignItems: 'center',
                justifyContent: 'center',
+            backgroundImage: 'url("download.jpeg ")', // Add your image path here
+               backgroundSize: 'cover',
+               backgroundPosition: 'center',
             }}
             component={'form'}
             onSubmit={handleSubmit}
@@ -60,6 +63,8 @@ const Login = () => {
                      label='password'
                      variant='standard'
                      onChange={(event) => setPassword(event.target.value)}
+
+                    
                   />
                </Stack>
 
