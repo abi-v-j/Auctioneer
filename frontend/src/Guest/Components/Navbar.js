@@ -47,7 +47,7 @@ const Navbar = () => {
       <div className="nav-logo-container">
         <Typography variant='h3' sx={{ p: 2 }} className='logo-script'>Auctioneer</Typography>
       </div>
-      <div className="navbar-links-container">
+      <div className="navbar-links-container" >
         <Link to="/">Home</Link>
         <Link to="/VerifyRegistration">Registration</Link>
         <Link to={'/Login'}>
