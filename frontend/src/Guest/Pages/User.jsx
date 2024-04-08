@@ -55,7 +55,7 @@ const Registration = () => {
 
    const handleSubmit = (event) => {
       event.preventDefault()
-      if(check){
+      
 
          const frm = new FormData()
          frm.append('Name', Name)
@@ -77,10 +77,7 @@ const Registration = () => {
          setDistrict('')
          setPlace('')
       })
-   }
-   else{
-      alert('not ')
-   }
+   
    }
 
    const fetchState = () => {
@@ -167,7 +164,7 @@ const Registration = () => {
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
                            fullWidth
-                           required
+                           
                         />
 
                         <TextField
