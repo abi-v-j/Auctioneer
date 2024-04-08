@@ -7,7 +7,7 @@ import { Avatar, Box, Button} from '@mui/material';
 
 
 
-const Verifydealer = () => {
+const Accepted = () => {
 
     const [rows, setRows] = useState([])
     const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }));
@@ -16,27 +16,21 @@ const Verifydealer = () => {
     console.log(id);
 
     const fetchDealer = () => {
-        axios.get(`http://localhost:5000/FetchDealerVerifyData`).then((response) => {
+        axios.get(`http://localhost:5000/FetchDealerVerifyAccepted`).then((response) => {
             console.log(response.data.fetchdealer)
             setRows(response.data.fetchdealer)
+            
         })
     }
 
 
-    const acceptLot = (Id) => {
-        axios.put(`http://localhost:5000/acceptDealer/${Id}`).then((response) => {
-           console.log(response.data) 
-           fetchDealer()
-
-        })
-     }
+   
 
 
      const rejectLot = (Id) => {
         axios.put(`http://localhost:5000/rejectDealer/${Id}`).then((response) => {
            console.log(response.data)
            fetchDealer()
-
         })
      }
 
@@ -91,12 +85,7 @@ const Verifydealer = () => {
                return (
                   <Box sx={{ display: 'flex', gap: 3 }}>
                     
-                     <Button
-                        variant='outlined'
-                        onClick={() => acceptLot(params.row._id)}
-                     >
-                        Accept
-                     </Button>
+                    
 
                      <Button
                         variant='outlined'
@@ -128,4 +117,4 @@ const Verifydealer = () => {
     );
 }
 
-export default Verifydealer;
+export default Accepted;

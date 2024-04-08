@@ -18,6 +18,8 @@ import Verifydealer from "./Pages/Verifydealer";
 import ViewComplaint from "./Pages/ViewComplaint";
 import Reply from "./Pages/Reply";
 import ViewFeedback from "./Pages/ViewFeedback";
+import Accepted from "./Pages/Accepted";
+import Rejected from "./Pages/Rejected";
 
 
 const styles = {
@@ -60,6 +62,8 @@ function App() {
             <Route path="/ViewComplaint" element={<ViewComplaint />} />
             <Route path="/Reply/:id" element={<Reply />} />
             <Route path="/ViewFeedback" element={<ViewFeedback />} />
+            <Route path="/Accepted" element={<Accepted />} />
+            <Route path="/Rejected" element={<Rejected />} />
           </Routes>
           </Card>
         </div>

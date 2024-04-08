@@ -100,6 +100,22 @@ const Sidebar = () => {
                         <span>Dealer</span>
                      </li>
                   </Link>
+                  <Link to={'/Admin/Accepted'}
+                  style={{ textDecoration: 'none' }}
+                  >
+                     <li>
+                        <Diversity2Icon className='icon' />
+                        <span>Accepted List</span>
+                     </li>
+                  </Link>
+                  <Link to={'/Admin/Rejected'}
+                  style={{ textDecoration: 'none' }}
+                  >
+                     <li>
+                        <Diversity2Icon className='icon' />
+                        <span>Rejected List</span>
+                     </li>
+                  </Link>
                   <p className='title'>USER</p>
                   <Link to={'/Admin/ViewComplaint'}
                   style={{ textDecoration: 'none' }}

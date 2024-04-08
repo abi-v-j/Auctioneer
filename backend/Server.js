@@ -430,9 +430,24 @@ app.get('/FetchDealerData', async (req, res) => {
 
 
 app.get('/FetchDealerVerifyData', async (req, res) => {
-   const fetchdealer = await Dealer.find()
+   const fetchdealer = await Dealer.find({__v:0})
    res.send({ fetchdealer })
 })
+
+
+app.get('/FetchDealerVerifyAccepted', async (req, res) => {
+   const fetchdealer = await Dealer.find({__v:1})
+   res.send({ fetchdealer })
+})
+
+
+app.get('/FetchDealerVerifyReject', async (req, res) => {
+   const fetchdealer = await Dealer.find({__v:2})
+   res.send({ fetchdealer })
+})
+
+
+
 
 //Delete Dealer
 
