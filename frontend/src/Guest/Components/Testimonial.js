@@ -9,15 +9,13 @@ const Testimonial = () => {
         <p className="primary-subheading">Testimonial</p>
         <h1 className="primary-heading">What They Are Saying</h1>
         <p className="primary-text">
-          Lorem ipsum dolor sit amet consectetur. Non tincidunt magna non et
-          elit. Dolor turpis molestie dui magnis facilisis at fringilla quam.
+          Discover the excitement of bidding on unique antique items at our online auction platform. Join now and explore a world of vintage treasures!
         </p>
       </div>
       <div className="testimonial-section-bottom">
-        <img src={ProfilePic} alt="" />
+        <img src={ProfilePic} alt="Auction" />
         <p>
-          Lorem ipsum dolor sit amet consectetur. Non tincidunt magna non et
-          elit. Dolor turpis molestie dui magnis facilisis at fringilla quam.
+          I've been using this online auction platform for months now, and I'm constantly amazed by the variety and quality of antique items available. It's a collector's dream come true!
         </p>
         <div className="testimonials-stars-container">
           <AiFillStar />
@@ -26,7 +24,7 @@ const Testimonial = () => {
           <AiFillStar />
           <AiFillStar />
         </div>
-        <h2>John Doe</h2>
+        <h2>Antique Enthusiast</h2>
       </div>
     </div>
   );
