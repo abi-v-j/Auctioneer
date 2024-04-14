@@ -18,7 +18,7 @@ const Stories = ({rows}) => {
                      alt=''
                   />
                   <span>{story.auctionheadToken}</span>
-                  <a href="car" className='link'  rel='noopener noreferrer'>View Details</a>
+                  <a className='link'  rel='noopener noreferrer'></a>
 
                </Card>
             </Box>
