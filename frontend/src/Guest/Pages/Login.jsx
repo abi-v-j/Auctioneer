@@ -63,6 +63,7 @@ const Login = () => {
                      id='standard-basic'
                      label='password'
                      variant='standard'
+                     type='password'
                      required = 'required'
                      onChange={(event) => setPassword(event.target.value)}
 
