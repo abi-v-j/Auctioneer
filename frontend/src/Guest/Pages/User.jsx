@@ -161,6 +161,7 @@ const Registration = () => {
                            id='standard-basic'
                            label='Name'
                            variant='standard'
+                           required = 'required'
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
                            fullWidth
@@ -171,6 +172,7 @@ const Registration = () => {
                            id='standard-basic'
                            label='Email'
                            variant='standard'
+                           required = 'required'
                            onChange={(event) => setEmail(event.target.value)}
                            value={Email}
                            fullWidth
@@ -181,6 +183,7 @@ const Registration = () => {
                            sx={{ mt: 3 }}
                            component='label'
                            variant='contained'
+                           required = 'required'
                            startIcon={<CloudUploadIcon />}
                         >
                            Upload Photo
@@ -199,6 +202,7 @@ const Registration = () => {
                            id='standard-basic'
                            label='Contact'
                            variant='standard'
+                           required = 'required'
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
                            fullWidth
@@ -208,6 +212,8 @@ const Registration = () => {
                            id='standard-basic'
                            label='Password'
                            variant='standard'
+                           required = 'required'
+                           type='password'
                            onChange={handlePassword}
                            value={Password}
                            fullWidth
@@ -222,6 +228,7 @@ const Registration = () => {
                         <Button
                            component='label'
                            variant='contained'
+                           required = 'required'
                            startIcon={<CloudUploadIcon />}
                         >
                            Upload Proof
@@ -239,6 +246,7 @@ const Registration = () => {
                      >
                         <FormControl
                            variant='standard'
+                           required = 'required'
                            sx={{ m: 1, minWidth: 140 }}
                            fullWidth
                         >
@@ -265,6 +273,7 @@ const Registration = () => {
 
                         <FormControl
                            variant='standard'
+                           required = 'required'
                            sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >
@@ -296,6 +305,7 @@ const Registration = () => {
                      >
                         <FormControl
                            variant='standard'
+                           required = 'required'
                            sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >

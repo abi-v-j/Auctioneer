@@ -51,6 +51,7 @@ const Login = () => {
                   id='standard-basic'
                   label='Email'
                   variant='standard'
+                  required = 'required'
                   onChange={(event) => setEmail(event.target.value)}
                />
 
@@ -62,6 +63,7 @@ const Login = () => {
                      id='standard-basic'
                      label='password'
                      variant='standard'
+                     required = 'required'
                      onChange={(event) => setPassword(event.target.value)}
 
                     
