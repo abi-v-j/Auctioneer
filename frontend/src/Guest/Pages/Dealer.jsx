@@ -308,6 +308,15 @@ const DealerRegistration = () => {
                            Submit
                         </Button>
                      </Stack>
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3,ml: 23 }}
+                        direction='row'
+                     >
+                        <Link to={`/Login`} >
+                           Login ?
+                        </Link>
+                     </Stack>
                   </Box>
                </Box>
             </Card>

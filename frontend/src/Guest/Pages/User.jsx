@@ -17,6 +17,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
 import './GuestStyle.css'
 import Snackbar from '@mui/material/Snackbar';
+import { Link } from 'react-router-dom'
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -50,23 +51,23 @@ const Registration = () => {
    const [districtData, setDistrictData] = useState([])
    const [placeData, setPlaceData] = useState([])
 
-  
-   
+
+
 
    const handleSubmit = (event) => {
       event.preventDefault()
-      
 
-         const frm = new FormData()
-         frm.append('Name', Name)
-         frm.append('Email', Email)
-         frm.append('Password', Password)
-         frm.append('Contact', Contact)
-         frm.append('Proof', Proof)
-         frm.append('Photo', Photo)
-         frm.append('Place', Place)
-         
-         axios.post('http://localhost:5000/User', frm).then((response) => {
+
+      const frm = new FormData()
+      frm.append('Name', Name)
+      frm.append('Email', Email)
+      frm.append('Password', Password)
+      frm.append('Contact', Contact)
+      frm.append('Proof', Proof)
+      frm.append('Photo', Photo)
+      frm.append('Place', Place)
+
+      axios.post('http://localhost:5000/User', frm).then((response) => {
          console.log(response.data)
          setName('')
          setEmail('')
@@ -77,7 +78,7 @@ const Registration = () => {
          setDistrict('')
          setPlace('')
       })
-   
+
    }
 
    const fetchState = () => {
@@ -119,8 +120,8 @@ const Registration = () => {
       const isValidPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(newPassword);
 
       setCheck(!isValidPassword)
-     
-      }
+
+   }
 
 
    useEffect(() => {
@@ -161,18 +162,18 @@ const Registration = () => {
                            id='standard-basic'
                            label='Name'
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
                            fullWidth
-                           
+
                         />
 
                         <TextField
                            id='standard-basic'
                            label='Email'
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            onChange={(event) => setEmail(event.target.value)}
                            value={Email}
                            fullWidth
@@ -183,7 +184,7 @@ const Registration = () => {
                            sx={{ mt: 3 }}
                            component='label'
                            variant='contained'
-                           required = 'required'
+                           required='required'
                            startIcon={<CloudUploadIcon />}
                         >
                            Upload Photo
@@ -202,7 +203,7 @@ const Registration = () => {
                            id='standard-basic'
                            label='Contact'
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
                            fullWidth
@@ -212,14 +213,13 @@ const Registration = () => {
                            id='standard-basic'
                            label='Password'
                            variant='standard'
-                           required = 'required'
                            type='password'
                            onChange={handlePassword}
                            value={Password}
                            fullWidth
                            required
 
-                          
+
 
 
                         />
@@ -228,7 +228,7 @@ const Registration = () => {
                         <Button
                            component='label'
                            variant='contained'
-                           required = 'required'
+                           required='required'
                            startIcon={<CloudUploadIcon />}
                         >
                            Upload Proof
@@ -246,7 +246,7 @@ const Registration = () => {
                      >
                         <FormControl
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            sx={{ m: 1, minWidth: 140 }}
                            fullWidth
                         >
@@ -273,7 +273,7 @@ const Registration = () => {
 
                         <FormControl
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >
@@ -305,7 +305,7 @@ const Registration = () => {
                      >
                         <FormControl
                            variant='standard'
-                           required = 'required'
+                           required='required'
                            sx={{ m: 1, minWidth: 120 }}
                            fullWidth
                         >
@@ -345,6 +345,15 @@ const Registration = () => {
                            Submit
                         </Button>
                      </Stack>
+                     <Stack
+                        spacing={5}
+                        sx={{ mt: 3,ml: 23 }}
+                        direction='row'
+                     >
+                        <Link to={`/Login`} >
+                           Login ?
+                        </Link>
+                     </Stack>
                   </Box>
                </Box>
 
@@ -355,7 +364,7 @@ const Registration = () => {
             open={check}
             onClose={check}
             message="Password must contain at least one number, one lowercase letter, one uppercase letter, and be at least 8 characters long"
-            // key={vertical + horizontal}
+         // key={vertical + horizontal}
          />
       </div>
    )

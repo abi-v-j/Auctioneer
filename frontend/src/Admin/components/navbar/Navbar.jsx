@@ -3,6 +3,7 @@ import "./navbar.scss";
 
 import { Avatar, Box, Button, Card, IconButton, Popover } from "@mui/material";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
 
@@ -55,7 +56,10 @@ const Navbar = () => {
             >
               <Box sx={{ m: 2, width: 180, height: 40, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
 
-                <Button variant='outlined' sx={{ width: '100%' }}>LogOut</Button>
+                <Link to={'/'} style={{ width: '100%' }}>
+
+                  <Button variant='outlined' sx={{ width: '100%' }} fullWidth>LogOut</Button>
+                </Link>
               </Box>
             </Popover>
           </div>
