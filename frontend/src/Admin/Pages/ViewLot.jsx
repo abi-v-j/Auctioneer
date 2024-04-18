@@ -7,7 +7,7 @@ const ViewLot = () => {
    const [rows, setRows] = useState([])
    const rowsWithId = rows.map((row, index) => ({ ...row, id: index + 1 }))
    const columns = [
-      { field: '_id', headerName: 'ID', flex: 3 },
+      // { field: '_id', headerName: 'ID', flex: 3 },
       {
          field: 'antiqueimgsrc',
          headerName: 'Photo',
@@ -29,11 +29,11 @@ const ViewLot = () => {
          headerName: 'Name',
          flex: 3,
       },
-      {
-         field: 'quantity',
-         headerName: 'Quality',
-         flex: 3,
-      },
+      // {
+      //    field: 'quantity',
+      //    headerName: 'Quality',
+      //    flex: 3,
+      // },
       {
          field: 'Action',
          headerName: 'Action',
