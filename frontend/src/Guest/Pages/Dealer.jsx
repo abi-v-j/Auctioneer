@@ -16,6 +16,7 @@ import axios from 'axios'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styled from '@emotion/styled'
 import Snackbar from '@mui/material/Snackbar';
+import { Link } from 'react-router-dom'
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -149,14 +150,17 @@ const DealerRegistration = () => {
                            variant='standard'
                            onChange={(event) => setName(event.target.value)}
                            value={Name}
+                           required
                         />
 
                         <TextField
                            id='standard-basic'
                            label='Email'
                            variant='standard'
+                           type='email'
                            onChange={(event) => setEmail(event.target.value)}
                            value={Email}
+                           required
 
                         />
                      </Stack>
@@ -171,6 +175,7 @@ const DealerRegistration = () => {
                            <VisuallyHiddenInput
                               type='file'
                               onChange={handlePhotoChange}
+                              required
                            />
                         </Button>
                      </Stack>
@@ -179,16 +184,20 @@ const DealerRegistration = () => {
                            id='standard-basic'
                            label='Contact'
                            variant='standard'
+                           pattern="[7-9]{1}[0-9]{9}"
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
+                           required
                         />
 
                         <TextField
                            id='standard-basic'
                            label='Password'
                            variant='standard'
+                           type='password'
                            onChange={(event) => setPassword(event.target.value)}
                            value={Password}
+                           required
                            
                         />
                      </Stack>
@@ -202,6 +211,7 @@ const DealerRegistration = () => {
                            <VisuallyHiddenInput
                               type='file'
                               onChange={(event) => setProof(event.target.files[0])}
+                              required
                            />
                         </Button>
                      </Stack>
@@ -225,6 +235,7 @@ const DealerRegistration = () => {
                               label='State'
                               onChange={(event) => fetchDistrict(event.target.value)}
                               value={State}
+                              required
                            >
                               {stateData.map((state, key) => (
                                  <MenuItem
@@ -250,6 +261,7 @@ const DealerRegistration = () => {
                               label='District'
                               onChange={(event) => fetchPlace(event.target.value)}
                               value={District}
+                              required
                            >
                               {districtData.map((district, key) => (
                                  <MenuItem
@@ -281,6 +293,7 @@ const DealerRegistration = () => {
                               label='Place'
                               onChange={(event) => setPlace(event.target.value)}
                               value={Place}
+                              required
                            >
                               {placeData.map((place, key) => (
                                  <MenuItem
@@ -310,7 +323,7 @@ const DealerRegistration = () => {
                      </Stack>
                      <Stack
                         spacing={5}
-                        sx={{ mt: 3,ml: 23 }}
+                        sx={{ mt: 3,ml: 19 }}
                         direction='row'
                      >
                         <Link to={`/Login`} >

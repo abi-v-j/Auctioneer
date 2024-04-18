@@ -123,7 +123,7 @@ const Place = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue' }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue' }}>
                <Typography variant='h5'>Place</Typography>
                <Stack
                   spacing={5}
@@ -143,6 +143,7 @@ const Place = () => {
                         label='State'
                         onChange={(event) => fetchDistrict(event.target.value)}
                         value={stateId}
+                        required
                      >
                         {stateData.map((state, key) => (
                            <MenuItem
@@ -174,6 +175,7 @@ const Place = () => {
                         label='District'
                         onChange={(event) => setDistrictId(event.target.value)}
                         value={districtId}
+                        required
                      >
                         {districtData.map((district, key) => (
                            <MenuItem
@@ -197,6 +199,7 @@ const Place = () => {
                      variant='standard'
                      onChange={(event) => setPlaceName(event.target.value)}
                      value={placeName}
+                     required
 
                   />
                   <Button

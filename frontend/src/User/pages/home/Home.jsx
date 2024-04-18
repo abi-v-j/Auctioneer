@@ -53,11 +53,12 @@ const Home = () => {
    return (
       <div className='home'>
          {rows && <Stories rows={rows} />}
-         <Box sx={{ display: 'flex', width: '100%' }}>
+         <Box sx={{ width: '100%' }}>
+            <Box>
             <Card
                
                className='innerCard'
-               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' ,backgroundColor:'lavender'}}
+               sx={{ p: 5, m: 3, textAlign: 'center', width: '100%' ,backgroundColor:'aliceblue'}}
             >
                {check ? (
                   <Link  to={`../../Auction`}>
@@ -73,14 +74,17 @@ const Home = () => {
                   </Typography>
                )}
             </Card>
-
+            </Box>
             {/* <Share/> */}
+            <Box>
+
             <Card
                className='innerCard'
-               sx={{ p: 5, m: 3, textAlign: 'center', width: '40%' }}
-            >
+               sx={{ p: 5, m: 3, textAlign: 'center', width: '100%', backgroundColor:'aliceblue' }}
+               >
                <Typography variant='h4'>Upcoming Auction</Typography>
             </Card>
+         </Box>
          </Box>
          {
             rowLot && <Posts rowLot={rowLot} />

@@ -204,6 +204,7 @@ const Registration = () => {
                            label='Contact'
                            variant='standard'
                            required='required'
+                           pattern="[7-9]{1}[0-9]{9}"
                            onChange={(event) => setContact(event.target.value)}
                            value={Contact}
                            fullWidth

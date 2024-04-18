@@ -80,7 +80,7 @@ const State = () => {
             component={'form'}
             onSubmit={handleSubmit}
          >
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', height: 150 }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', height: 200 }}>
                <Typography variant='h5'>State</Typography>
                <Stack
                   spacing={5}
@@ -93,6 +93,7 @@ const State = () => {
                      value={stateName}
                      variant='standard'
                      onChange={(event) => setStateName(event.target.value)}
+                     required
                   />
                   <Button
                      sx={{ px: 5 }}

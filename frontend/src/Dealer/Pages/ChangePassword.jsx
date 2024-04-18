@@ -56,7 +56,7 @@ const ChangePassword = () => {
 
     return (
         <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 300, height: 350, mt: 5, display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 400, height: 450, mt: 5, display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Change Password</Typography>
                 <Stack>
                     <TextField id="standard-basic" label="Old Password" variant="outlined" value={currentPassword} onChange={(event) => setcurrentPassword(event.target.value)} />

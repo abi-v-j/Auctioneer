@@ -38,6 +38,15 @@ const VerifyRegistration = () => {
                                 </Button>
                             </Link>
                         </Stack>
+                        <Stack
+                        spacing={5}
+                        sx={{ mt: 3 }}
+                        direction='row'
+                     >
+                        <Link to={`/Login`} >
+                           Login ?
+                        </Link>
+                     </Stack>
                     </Card>
             </Box>
         </div>

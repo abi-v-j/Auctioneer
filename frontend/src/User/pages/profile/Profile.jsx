@@ -77,6 +77,8 @@ const Profile = () => {
                </div>
                <div className='center'>
                   <span>{myProfile.name}</span>
+                  <span>{myProfile.email}</span>
+                  <span>{myProfile.contact}</span>
                   <div className='info'>
                      <div className='item'>
                         {/* <PlaceIcon />
@@ -117,7 +119,7 @@ const Profile = () => {
                </Popover>
                </div>
             </div>
-            <Typography variant='h4' className='dancing-script' textAlign={'center'} sx={{m:5}}>Your Wons</Typography>
+            <Typography variant='h4' className='dancing-script' textAlign={'center'} sx={{m:5}}>Your Winnings</Typography>
             {rowLot && <Posts rowLot={rowLot} />}
          </div>
       </div>

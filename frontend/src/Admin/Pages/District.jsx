@@ -126,6 +126,7 @@ const District = () => {
                         label='State'
                         onChange={(event) => setStateId(event.target.value)}
                         value={stateId}
+                        required
                      >
                         {stateData.map((state, key) => (
                            <MenuItem
@@ -150,6 +151,7 @@ const District = () => {
                      variant='standard'
                      onChange={(event) => setDistrictName(event.target.value)}
                      value={districtName}
+                     required
                   />
                   <Button
                      sx={{ px: 5 }}

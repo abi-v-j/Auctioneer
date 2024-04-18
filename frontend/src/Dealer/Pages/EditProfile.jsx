@@ -44,7 +44,7 @@ const MyProfile = () => {
         <div>
             <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-                <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 300, height: 400, mt: 5, display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <Card sx={{ p: 5, backgroundColor: 'aliceblue', width: 350, height: 400, mt: 5, display: 'flex', gap: 2, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Typography variant='h4' textAlign={'center'} sx={{ p: 2 }} className='dancing-script'>Edit Profile</Typography>
                     <Stack>
                         <TextField id="standard-basic" label="Name" variant="standard" value={Name} onChange={(event) => setName(event.target.value)} />

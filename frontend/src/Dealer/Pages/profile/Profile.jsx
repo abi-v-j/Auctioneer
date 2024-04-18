@@ -11,8 +11,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../Component/posts/Posts"
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Card } from "@mui/material";
+import { Button, Card, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import './GuestStyle.css'
+
 
 const Profile = () => {
   const [rows, setRows] = useState([])
@@ -47,7 +49,7 @@ const Profile = () => {
          
           className="cover"
         >
-          Auctioneer
+        <Typography variant='h1' textAlign={'center'} sx={{ p: 2, }} className='dancing-script'>Auctioneer</Typography>
         </Card>
         <img
         src={myProfile.profileimgsrc}

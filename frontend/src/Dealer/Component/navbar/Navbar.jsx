@@ -26,20 +26,14 @@ const Navbar = ({ setColor, color }) => {
    return (
       <div className='navbar'>
          <div className='left'>
-            <Link
-               className='Link'
-               to='/'
-               style={{ textDecoration: 'none' }}
+            <Typography
+               variant='h4'
+               textAlign={'center'}
+               sx={{ p: 2 }}
+               className='dancing-script'
             >
-               <Typography
-                  variant='h4'
-                  textAlign={'center'}
-                  sx={{ p: 2 }}
-                  className='dancing-script'
-               >
-                  Auctioneer
-               </Typography>
-            </Link>
+               Auctioneer
+            </Typography>
             <Link to='/Dealer/'
                className='Link'
 
@@ -72,16 +66,16 @@ const Navbar = ({ setColor, color }) => {
                   }}
                >
                   <Box sx={{ m: 2, width: 180, height: 215, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                  <Link to={'/Dealer/EditProfile'}>
-                     <Button sx={{ width: '100%' }}> Edit Profile</Button>
+                     <Link to={'/Dealer/EditProfile'}>
+                        <Button sx={{ width: '100%' }}> Edit Profile</Button>
                      </Link>
                      <Link to={'/Dealer/Changepassword'}>
-                     <Button sx={{ width: '100%' }}>Change Password</Button>
+                        <Button sx={{ width: '100%' }}>Change Password</Button>
                      </Link>
-                     <Link to={'/Dealer/EditProfile'}>
-                        <Button sx={{ width: '100%' }}>My Winnings</Button>
+                     <Link to={'/'} style={{ width: '100%' }}>
+
+                        <Button variant='outlined' sx={{ width: '100%' }} fullWidth>LogOut</Button>
                      </Link>
-                     <Button variant='outlined' sx={{ width: '100%' }}>LogOut</Button>
                   </Box>
                </Popover>
                {/* <span>{currentUser.name}</span> */}
