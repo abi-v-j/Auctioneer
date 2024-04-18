@@ -84,7 +84,7 @@ const Feedback = () => {
 
                 marginTop: 5
             }}>
-                <Card sx={{ p: 5, backgroundColor: 'lightblue', height: 400, width: 600 }} component={'form'} >
+                <Card sx={{ p: 5, backgroundColor: 'aliceblue', height: 300, width: 600 }} component={'form'} >
 
                     <Typography variant='h5'>Feedback</Typography>
                     <Stack

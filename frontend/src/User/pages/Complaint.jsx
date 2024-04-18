@@ -85,7 +85,7 @@ const Complaint = () => {
             
             marginTop: 5
         }}>
-            <Card sx={{ p: 5, backgroundColor: 'lightblue', height: 200 ,width:600 }} component={'form'} onSubmit={handleSubmit}>
+            <Card sx={{ p: 5, backgroundColor: 'aliceblue', height: 300 ,width:600 }} component={'form'} onSubmit={handleSubmit}>
                 <Typography variant='h5'>Complaint</Typography>
                 <Stack
                     spacing={5}

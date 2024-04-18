@@ -29,11 +29,11 @@ const ViewLot = () => {
          headerName: 'Name',
          flex: 3,
       },
-      // {
-      //    field: 'quantity',
-      //    headerName: 'Quality',
-      //    flex: 3,
-      // },
+      {
+         field: 'price',
+         headerName: 'Price',
+         flex: 3,
+      },
       {
          field: 'Action',
          headerName: 'Action',
